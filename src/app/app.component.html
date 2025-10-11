@@ -1,8 +1,10 @@
-<a href="https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=chat:read">Mit Twitch verbinden</a>
+<app-topbar></app-topbar>
 
+				<input [(ngModel)]="currentChannel" (keydown.code.enter)="onSwitchChannel()">
 <br>
-@for (msg of messages; track $index) {
-				<app-chat
-				[message]="msg"></app-chat>
+<div class="chat-container"  #chat>
+				@for (msg of messages; track $index) {
+								<app-chat [message]="msg"></app-chat>
 
-}
+				}
+</div>

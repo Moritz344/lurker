@@ -1,10 +1,6 @@
 :root {
     --background-color: #121212;
     --text-color: #E0E0E0;
-    --header-footer-background: #1F1F1F;
-    --link-color: #BB86FC;
-    --button-background: #BB86FC;
-    --button-hover-background: #3700B3;
 }
 
 
@@ -21,27 +17,7 @@ header {
     text-align: center;
 }
 
-a {
-    color: #BB86FC;
-    text-decoration: none;
-}
 
-a:hover {
-    text-decoration: underline;
-}
-
-button {
-    background-color: #BB86FC;
-    color: #121212;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #3700B3;
-}
 
 .card {
     background-color: #1E1E1E;
