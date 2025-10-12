@@ -7,12 +7,15 @@
 				overflow-x: hidden;
 }
 
+.chat-entry{
+				position: relative;
+}
+
 input{
 				background: transparent;
 				border: 1px solid white;
 				color: white;
 				outline: none;
-				
 }
 
 ::-webkit-scrollbar {

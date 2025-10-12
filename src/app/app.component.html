@@ -1,5 +1,4 @@
 <app-topbar></app-topbar>
-
 				<input [(ngModel)]="currentChannel" (keydown.code.enter)="onSwitchChannel()">
 <br>
 <div class="chat-container"  #chat>
@@ -7,4 +6,7 @@
 								<app-chat [message]="msg"></app-chat>
 
 				}
+				<div class="chat-entry">
+								<input [(ngModel)]="userChatMessage" (keydown.code.enter)="onSendMessage()" placeholder="hey">
+				</div>
 </div>

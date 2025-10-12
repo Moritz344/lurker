@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 
 @Injectable({
  providedIn: 'root'
@@ -10,6 +11,8 @@ export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
+
+	constructor(private http: HttpClient) {}
 
   connect(token: string, username: string, channel: string) {
     this.disconnect();
@@ -45,6 +48,28 @@ export class TwitchChatService implements OnDestroy {
       console.log('Twitch Chat getrennt');
     });
   }
+
+
+
+	sendMessage(channel: string,senderId: string,broadcastId: string,message: string,token: string) {
+					console.log(channel,senderId,broadcastId);
+					const url = 'https://api.twitch.tv/helix/chat/messages'
+
+					const headers = new HttpHeaders({
+									'Authorization': `Bearer ${token}`,
+									'Client-ID': 'ds3ban6ylu8w882wox7f1xyr9s7v56',
+									'Content-Type': 'application/json'
+					});
+
+					const body = {
+									channel: channel,
+									message: message,
+									sender_id: senderId,
+									broadcaster_id: broadcastId
+					};
+
+					return this.http.post(url, body, { headers });
+	}
 
 
   disconnect() {

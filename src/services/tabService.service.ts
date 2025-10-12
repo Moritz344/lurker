@@ -1,9 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+ providedIn: 'root'
+})
 
-export class TwitchChatService implements OnDestroy {
+
+export class TabService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
@@ -15,6 +18,10 @@ export class TwitchChatService implements OnDestroy {
 
     this.socket.addEventListener('open', () => {
       console.log('Twitch Chat verbunden');
+      console.log('oauth:',token);
+      console.log('user:',username);
+      console.log('channel:',channel);
+
       this.socket!.send(`PASS oauth:${token}`);
       this.socket!.send(`NICK ${username}`);
       this.socket!.send(`JOIN #${channel}`);
@@ -22,7 +29,6 @@ export class TwitchChatService implements OnDestroy {
 
     this.socket.addEventListener('message', (event) => {
       const raw = event.data as string;
-
       if (raw.startsWith('PING')) {
         this.socket!.send('PONG :tmi.twitch.tv');
         return;
@@ -39,6 +45,7 @@ export class TwitchChatService implements OnDestroy {
       console.log('Twitch Chat getrennt');
     });
   }
+
 
   disconnect() {
     if (this.socket) {

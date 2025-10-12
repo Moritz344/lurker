@@ -30,7 +30,8 @@ export class AppComponent implements OnInit{
 	scrollAuto: boolean = true;
 	scrollInterval = 100;
 	userScrolling: boolean = false;
-	currentChannel: string = "papaplatte";
+	currentChannel: string = "CDawg";
+	userChatMessage: string = "";
 
 	constructor(private route: ActivatedRoute,private settings: SettingsService,
 						 private chat: TwitchChatService) {}
@@ -64,6 +65,23 @@ export class AppComponent implements OnInit{
 					this.chat.disconnect();
 					this.loadChatMessages(this.currentChannel);
 	}
+
+	onSendMessage() {
+    this.settings.getUserId(this.accessToken).pipe(
+        switchMap((userIdResult: any) => {
+            const senderId = userIdResult.data[0].id;
+            return this.settings.getBroadCasterId(this.accessToken, this.currentChannel).pipe(
+                switchMap((broadcasterIdResult: any) => {
+                    const broadcasterId = broadcasterIdResult.data[0].id;
+                    return this.chat.sendMessage(this.currentChannel, senderId, broadcasterId, this.userChatMessage, this.accessToken);
+                })
+            );
+        })
+    ).subscribe(result => {
+    }, error => {
+        console.error('Error sending message:', error);
+    });
+}
 
 	scrollStop() {
 					this.scrollAuto = false;

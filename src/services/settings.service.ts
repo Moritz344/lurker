@@ -14,6 +14,11 @@ export class SettingsService{
 
 	username: string = "";
 	usernameSubject = new BehaviorSubject<string>(this.username);
+	senderId: string = "";
+	senderIdSubject = new BehaviorSubject<string>(this.senderId);
+
+	broadcasterId: string = "";
+	broadCasterIdSubject = new BehaviorSubject<string>(this.senderId);
 
   constructor(private http: HttpClient) { }
 
@@ -33,8 +38,27 @@ export class SettingsService{
 				 this.usernameSubject.next(this.username);
  }
 
+
  getUserName() {
 				 return this.usernameSubject.asObservable();
+ }
+
+ getUserId(token: string) {
+    const url = 'https://api.twitch.tv/helix/users';
+    const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+          'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
+   });
+	 return this.http.get(url, { headers });
+ }
+
+ getBroadCasterId(token: string,channel: string) {
+				const url = 'https://api.twitch.tv/helix/users?login='
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`,
+          'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
+        });
+				return this.http.get(url + channel, { headers });
  }
 
  getUserInfo(): Observable<string> {
