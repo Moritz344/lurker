@@ -3,10 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// 613 646
 function createWindow() {
   const win = new BrowserWindow({
-    width: 600,
-    height: 600,
+    width: 613,
+    height: 646,
     frame: false,
     webPreferences: {
       nodeIntegration: false,

@@ -1,0 +1,57 @@
+
+button:hover{
+  background-color: var(--panel-dark);
+}
+
+button{
+  border-radius: 10px;
+}
+
+.container{
+  position: relative;
+  z-index: 9999;
+  background-color: var(--bg-color);
+  border-radius: 0px !important;
+  height: 430px;
+  overflow: hidden;
+
+}
+
+.options{
+				display: grid;
+				grid-template-columns: repeat(1,1fr);
+				width: 100px;
+				height: 100px;
+				margin-top: 50px;
+}
+.options button{
+				font-size: 20px;
+}
+
+.content-container{
+				position: absolute;
+				top: 0px;
+				right: 0px;
+				width: 400px;
+				height: 500px;
+				background-color: var(--border-color);
+}
+
+
+.exit{
+  position: absolute;
+  right:10px;
+  top: 5px;
+}
+
+button{
+				background: transparent;
+				border: none;
+				color: white;
+				border-radius: 10px;
+}
+button:hover{
+				background-color: black;
+}
+
+

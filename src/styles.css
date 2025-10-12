@@ -1,11 +1,20 @@
 :root {
-    --background-color: #121212;
-    --text-color: #E0E0E0;
+  --bg-color: #1E1E1E;
+  --surface-color: #1e1e1e;
+  --accent-color: #00bfa6;
+  --accent-hover: #00e6c3;
+  --text-color: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --border-color: #2a2a2a;
+  --error-color: #ff4d4d;
+  --radius: 10px;
+  --transition: 0.25s ease;
+	--input-color: #2C2C2C;
 }
 
 
 body {
-    background-color: #121212;
+    background-color: var(--bg-color);
     color: #E0E0E0;
     font-family: 'Arial', sans-serif;
     line-height: 1.5;
@@ -28,3 +37,6 @@ header {
 }
 
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

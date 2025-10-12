@@ -1,0 +1,24 @@
+<div class="container">
+				<div class="exit">
+								<button (click)="onClose()"><img src="close.svg"></button>
+				</div>
+
+
+
+				<div class="options">
+								<button (click)="onSettings('general')">General</button>
+								<button (click)="onSettings('account')">Account</button>
+								<button (click)="onSettings('about')">About</button>
+				</div>
+
+				<div class="content-container">
+								@if (settingsOption === "general") {
+												<app-general></app-general>
+									}@else if(settingsOption === "account") {
+												<app-account></app-account>
+									}@else if(settingsOption === "about") {
+												<app-about></app-about>
+									}
+
+    </div>
+</div>

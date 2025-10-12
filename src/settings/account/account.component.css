@@ -1,0 +1,35 @@
+.container{
+				display: flex;
+				justify-content: center;
+				height: 500px;
+				width: 500px;
+}
+
+button{
+				width: 50px;
+				height: 20px;
+}
+
+.buttons{
+				position: absolute;
+				left: 10px;
+				top: 10px;
+}
+
+.name{
+				display: grid;
+				grid-template-columns: repeat(1,1fr);
+				margin-top: 50px;
+}
+
+.name button{
+				background: transparent;
+				color: white;
+				border: none;
+				width: 490px;
+				text-align: left;
+}
+
+.name button:hover{
+				background-color: var(--surface-color);
+}

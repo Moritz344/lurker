@@ -14,11 +14,10 @@ export class SettingsService{
 
 	username: string = "";
 	usernameSubject = new BehaviorSubject<string>(this.username);
-	senderId: string = "";
-	senderIdSubject = new BehaviorSubject<string>(this.senderId);
 
-	broadcasterId: string = "";
-	broadCasterIdSubject = new BehaviorSubject<string>(this.senderId);
+	currentChannel: string = ""
+	currentChannelSubject = new BehaviorSubject<string>(this.currentChannel);
+
 
   constructor(private http: HttpClient) { }
 
@@ -38,6 +37,14 @@ export class SettingsService{
 				 this.usernameSubject.next(this.username);
  }
 
+ setCurrentChannel(name: string) {
+				 this.currentChannel = name;
+				 this.currentChannelSubject.next(this.currentChannel);
+ }
+
+ getCurrentChannel() {
+				 return this.currentChannelSubject.asObservable();
+ }
 
  getUserName() {
 				 return this.usernameSubject.asObservable();

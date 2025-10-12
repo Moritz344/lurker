@@ -1,13 +1,14 @@
 <div class="container">
-				<button>
-								<img src="settings.svg">
+				<button (click)="onSettings()"title="Settings">
+								<img src="settings.svg" >
 				</button>
 
-				<button (click)="onLogin($event)">
+				<button title="Login" (click)="onLogin($event)">
 								<img src="profile.svg">
 
 								<a ></a>
 				</button>
 
+				<input [(ngModel)]="currentChannel" (keydown.code.enter)="onSwitchChannel()">
 
 </div>

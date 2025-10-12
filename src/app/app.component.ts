@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild,ElementRef,HostListener } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef,HostListener,OnChanges } from '@angular/core';
 import { RouterOutlet, ActivatedRoute } from '@angular/router';
 import { SettingsService } from '../services/settings.service';
 import { TwitchChatService } from '../services/twitchChat.service';
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
 	standalone: true,
-  imports: [RouterOutlet,ChatComponent,TopbarComponent,FormsModule],
+  imports: [RouterOutlet,ChatComponent,TopbarComponent,FormsModule,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -27,14 +27,15 @@ export class AppComponent implements OnInit{
 	accessToken: any ;
 	sub?: Subscription;
 	messages: string[] = [];
-	scrollAuto: boolean = true;
+	scrollAuto: boolean = false;
 	scrollInterval = 100;
 	userScrolling: boolean = false;
 	currentChannel: string = "CDawg";
 	userChatMessage: string = "";
+	y = 0;
 
 	constructor(private route: ActivatedRoute,private settings: SettingsService,
-						 private chat: TwitchChatService) {}
+						 private chat: TwitchChatService,) {}
 
 	loadUserToken() {
 					this.route.fragment.subscribe(fragment => {
@@ -60,8 +61,8 @@ export class AppComponent implements OnInit{
 								}, 10);
 	}
 
-	onSwitchChannel() {
-					console.log(this.currentChannel);
+	onSwitchChannel(name: string) {
+					this.currentChannel = name;
 					this.chat.disconnect();
 					this.loadChatMessages(this.currentChannel);
 	}
@@ -78,24 +79,31 @@ export class AppComponent implements OnInit{
             );
         })
     ).subscribe(result => {
+				this.userChatMessage = "";
     }, error => {
         console.error('Error sending message:', error);
     });
 }
 
-	scrollStop() {
-					this.scrollAuto = false;
-	}
+  scrollToBottom() {
+    if (this.scrollAuto) {
+      const chat = this.chatBox.nativeElement;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  }
 
 	@HostListener("wheel",['$event'])
 	onScroll(event: WheelEvent) {
-				this.scrollAuto = false;
-				this.userScrolling = true;
+    const chat = this.chatBox.nativeElement;
 
-				console.log("scroll height",event.pageY);
-				if (event.pageY >= 400) {
-								this.scrollAuto = true;
-				}
+		const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+
+
+		if (event.deltaY < 0) {
+						this.scrollAuto = false;
+		}else if (atBottom) {
+						this.scrollAuto = true;
+		}
 	}
 
   @HostListener('mouseup', ['$event'])
@@ -105,6 +113,7 @@ export class AppComponent implements OnInit{
 	}
 
 	loadChatMessages(channel: string) {
+				   this.scrollToBottom();
 					 this.settings.getUserName().pipe(
 				   switchMap(username =>
 								   this.settings.getAccessToken().pipe(
@@ -114,16 +123,23 @@ export class AppComponent implements OnInit{
 					 ).subscribe(({ token, username }) => {
     		   			this.chat.connect(token, username, channel);
 								if (!this.sub || this.sub.closed) {
-												this.sub = this.chat.messages$.subscribe(msg => this.messages.push(msg));
+												this.sub = this.chat.messages$.subscribe(msg => this.messages.push(new Date().getHours() + ":" + new Date().getMinutes()+ " " + msg  ));
 								}
 				   });
 
 	}
 
 	ngOnInit() {
+					this.settings.getCurrentChannel().subscribe(result => {
+									this.currentChannel = result;
+									this.onSwitchChannel(this.currentChannel);
+
+					});
 					this.scrollChatbox();
 					this.loadUserToken();
 					this.loadChatMessages(this.currentChannel);
 	}
+
+
 
 }
