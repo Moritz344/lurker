@@ -52,7 +52,6 @@ export class TwitchChatService implements OnDestroy {
 
 
 	sendMessage(channel: string,senderId: string,broadcastId: string,message: string,token: string) {
-					console.log(channel,senderId,broadcastId);
 					const url = 'https://api.twitch.tv/helix/chat/messages'
 
 					const headers = new HttpHeaders({

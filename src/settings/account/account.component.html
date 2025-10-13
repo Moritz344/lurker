@@ -1,9 +1,12 @@
 <div class="container">
 				<div class="buttons">
-								<button title="Login" (click)="onLogin($event)">Login</button>
+								<button title="Login" (click)="onLogin()">Login</button>
+								<button title="Logout" (click)="onLogout()">Logout</button>
 				</div>
 
-				<div class="name">
-								<button> {{ username }}</button>
-				</div>
+				@if (username) {
+								<div class="name" >
+												<button> {{ username }}</button>
+								</div>
+				}
 </div>

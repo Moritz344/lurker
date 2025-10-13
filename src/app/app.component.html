@@ -1,11 +1,15 @@
 <app-topbar></app-topbar>
+<div class="channel-name">
+				<span > {{ currentChannel }}'s chat</span>
+</div>
 <br>
 <div class="chat-container"  #chat>
 				@for (msg of messages; track $index) {
-								<app-chat [message]="msg"></app-chat>
+								<app-chat [message]="msg" [color]="userColor"></app-chat>
 
 				}
 </div>
 <div class="chat-entry">
-				<input [(ngModel)]="userChatMessage" (keydown.code.enter)="onSendMessage()" >
+				<input [placeholder]="placeholderString" [(ngModel)]="userChatMessage" (keydown.code.enter)="onSendMessage()" >
 </div>
+
