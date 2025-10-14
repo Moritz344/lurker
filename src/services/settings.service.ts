@@ -59,6 +59,7 @@ export class SettingsService{
    });
 	 return this.http.get(url, { headers }).pipe(
         map((response: any) => {
+								console.log(response);
             return response.data.length > 0 ? response.data[0].id : null;
         })
     );

@@ -7,16 +7,21 @@ import { switchMap, map } from 'rxjs/operators';
 import { ChatComponent } from '../chat/chat.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog} from '@angular/material/dialog';
+import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 
 // TODO: chat colors
 // TODO: better tv emotes
 // TODO: Tabsystem
 // TODO: check if token is valid: https://dev.twitch.tv/docs/authentication/#user-access-tokens
+// TODO: emoji picker
+// TODO: textarea instead of input
 
 @Component({
   selector: 'app-root',
 	standalone: true,
-  imports: [RouterOutlet,ChatComponent,TopbarComponent,FormsModule,],
+  imports: [RouterOutlet,ChatComponent,TopbarComponent,FormsModule,MatDialogModule,DialogBoxComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -31,7 +36,7 @@ export class AppComponent implements OnInit,OnDestroy{
 	scrollAuto: boolean = false;
 	scrollInterval = 100;
 	userScrolling: boolean = false;
-	currentChannel: string = "pennti";
+	currentChannel: string = "Tolkin";
 	userChatMessage: string = "";
 	userColor: string = "white";
 	placeholderString: string = "";
@@ -42,7 +47,7 @@ export class AppComponent implements OnInit,OnDestroy{
 	loginStatus: boolean = true;
 
 	constructor(private router: Router, private route: ActivatedRoute,private settings: SettingsService,
-						 private chat: TwitchChatService,) {
+						 private chat: TwitchChatService, private dialog: MatDialog,) {
 				    	this.checkIfLoggedIn();
 
 						 }
@@ -52,7 +57,9 @@ export class AppComponent implements OnInit,OnDestroy{
 								setInterval(() => {
 												if (this.scrollAuto) {
 												const element = this.chatBox.nativeElement;
-      	  							element.scrollTop += 10;
+												if (element.scrollTop > 0) {
+																element.scrollTop += 10;
+												}
 					}
 								}, 10);
 	}
@@ -62,6 +69,14 @@ export class AppComponent implements OnInit,OnDestroy{
 					this.currentChannel = name;
 					this.chat.disconnect();
 					this.loadChatMessages(this.currentChannel);
+	}
+
+	onChooseChannel() {
+					this.dialog.open(DialogBoxComponent, {
+									width: '400px',
+									height: '200px',
+									panelClass: 'container'
+					});
 	}
 
 	onSendMessage() {
@@ -89,6 +104,7 @@ export class AppComponent implements OnInit,OnDestroy{
     ).subscribe((result: any) => {
 				if (result.data[0].drop_reason) {
 								alert(result.data[0].drop_reason.message);
+								return;
 				}
 				this.userChatMessage = "";
     }, error => {

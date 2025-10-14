@@ -1,0 +1,13 @@
+<div class="container">
+				<div class="items">
+								<span>Type in a channel name:</span>
+								<input [(ngModel)]="inputValue" (keydown.code.enter)="onSave()" placeholder="...">
+				</div>
+
+				<div class="button-layout">
+								<button (click)="onSave()">Ok</button>
+								<button (click)="onClose()">Cancel</button>
+				</div>
+
+				<button class="close-x" (click)="onClose()"><img src="close.svg"></button>
+</div>

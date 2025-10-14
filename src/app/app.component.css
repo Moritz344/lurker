@@ -2,26 +2,35 @@
 .chat-container{
 				flex-direction: column;
 				height: 85%;
-				overflow-y: scroll;
-				overflow-x: hidden;
+				overflow-y: auto;
 				margin: 10px;
-				margin-top: -10px;
 }
 
 .channel-name{
-				display: flex;
-				justify-content: center;
-				margin-bottom: 0px;
+				position: absolute;
+				top: 25px;
+				right: 0px;
+				width: 100%;
+				text-align: center;
+				background-color: var(--input-color);
+				overflow: hidden;
+				cursor: pointer;
 }
+
+
+
+
 
 .chat-entry{
 				position: absolute;
 				overflow: hidden;
 				width: 100%;
-				bottom: 0px;
+				top: 95%;
+				bottom: 0;
 }
 
-.chat-entry input{
+
+.chat-entry textarea{
 				font-size: 20px;
 				color: white;
 				overflow:hidden;
@@ -32,35 +41,25 @@
 				overflow: hidden;
 				resize: none;
 				width: 100%;
-				height: 30px;
+				height: 50px;
 
 }
 
 
 
-textarea::-webkit-scrollbar{
-				width: 0px;
-}
 
-
-
-::-webkit-scrollbar {
+.chat-container::-webkit-scrollbar {
     width: 12px;
-    height: 200px;
 }
 
-::-webkit-scrollbar-track {
+.chat-container::-webkit-scrollbar-track {
     background: transparent;
-    border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb {
+.chat-container::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 10px;
-    height: 50px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.chat-container::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-

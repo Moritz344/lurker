@@ -1,4 +1,14 @@
 .container {
 				text-align: left;
 				white-space: wrap;
+				border-radius: 5px;
+}
+
+.container:hover{
+				background-color: var(--border-color);
+}
+
+
+::-webkit-scrollbar{
+				display: none;
 }
