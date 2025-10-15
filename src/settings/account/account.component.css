@@ -5,28 +5,42 @@
 				width: 500px;
 }
 
+.account-header {
+				margin-right: 100px;
+}
+
+
 button{
-				width: 50px;
-				height: 20px;
+				background: var(--secondary);
+				border: none;
+				color: white;
+				font-size: 20px;
+}
+
+button:hover{
+				background-color: var(--secondary-hover);
 }
 
 .buttons{
 				position: absolute;
 				left: 10px;
-				top: 10px;
+				top: 100px;
 }
+
 
 .name{
 				display: grid;
 				grid-template-columns: repeat(1,1fr);
-				margin-top: 50px;
+				position: absolute;
+				top: 50px;
+				left: 0px;
+				width: 350px;
 }
 
 .name button{
 				background: transparent;
 				color: white;
 				border: none;
-				width: 490px;
 				text-align: left;
 }
 

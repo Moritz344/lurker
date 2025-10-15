@@ -1,8 +1,9 @@
 import { Component,Input,OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chat',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })

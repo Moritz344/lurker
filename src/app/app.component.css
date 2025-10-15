@@ -17,6 +17,13 @@
 				cursor: pointer;
 }
 
+.channel-name span{
+				color: var(--primary);
+}
+
+.channel-name span:hover{
+				color: var(--primary-hover)
+}
 
 
 

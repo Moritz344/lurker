@@ -10,6 +10,16 @@
   --radius: 10px;
   --transition: 0.25s ease;
 	--input-color: #2C2C2C;
+	--primary: #7C3AED;
+  --primary-hover: #8B5CF6;
+  --secondary: #2D2D33;
+  --secondary-hover: #3C3C42;
+  --success: #22C55E;
+  --success-hover: #4ADE80;
+  --danger: #EF4444;
+  --danger-hover: #F87171;
+  --ghost: rgba(255, 255, 255, 0.1);
+  --ghost-hover: rgba(255, 255, 255, 0.2);
 }
 
 

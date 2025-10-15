@@ -1,0 +1,11 @@
+
+.container{
+				display: flex;
+				justify-content: center;
+				height: 500px;
+				width: 500px;
+}
+
+.account-header {
+				margin-right: 100px;
+}

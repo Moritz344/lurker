@@ -1,12 +1,13 @@
 <div class="container">
-				<div class="buttons">
-								<button title="Login" (click)="onLogin()">Login</button>
-								<button title="Logout" (click)="onLogout()">Logout</button>
-				</div>
-
-				@if (username) {
-								<div class="name" >
-												<button> {{ username }}</button>
+				<h1 class="account-header">Account</h1>
+								<div class="buttons">
+												<button title="Login" (click)="onLogin()">Login</button>
+												<button title="Logout" (click)="onLogout()">Logout</button>
+								@if (username) {
+												<div class="name" >
+																<button> {{ username }}</button>
+												</div>
+								}
 								</div>
-				}
+
 </div>

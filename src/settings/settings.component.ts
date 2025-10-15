@@ -16,7 +16,7 @@ import { AboutComponent } from './about/about.component';
 export class SettingsComponent {
 
 				currentChannel: string = "";
-				settingsOption: string = "";
+				settingsOption: string = "general";
 
 				constructor(private dialogRef: MatDialogRef<SettingsComponent>,
 									  private settings: SettingsService) {}

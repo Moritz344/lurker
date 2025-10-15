@@ -1,13 +1,15 @@
 <div class="container">
 				<div class="items">
-								<span>Type in a channel name:</span>
-								<input [(ngModel)]="inputValue" (keydown.code.enter)="onSave()" placeholder="...">
+								<span>Type in a channel name</span>
+								<input [(ngModel)]="inputValue" (keydown.code.enter)="onSave()" spellcheck=false [placeholder]="currentChannel">
 				</div>
 
 				<div class="button-layout">
-								<button (click)="onSave()">Ok</button>
-								<button (click)="onClose()">Cancel</button>
+								<button (click)="onSave()" class="ok">Ok</button>
+								<button (click)="onClose()" class="cancel">Cancel</button>
 				</div>
 
-				<button class="close-x" (click)="onClose()"><img src="close.svg"></button>
+				<button class="close-x" (click)="onClose()">
+								<img src="close.svg">
+				</button>
 </div>
