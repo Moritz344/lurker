@@ -5,16 +5,17 @@
 <br>
 <div class="chat-container"  #chat>
 				@for (msg of messages; track $index) {
-								<app-chat [message]="msg" [color]="userColor"></app-chat>
+								<app-chat [message]="msg"></app-chat>
 
 				}
 </div>
 
 <div class="chat-entry">
  				<textarea
+				#chatEntry
  				spellcheck="false"
  				[placeholder]="placeholderString"
  				[(ngModel)]="userChatMessage"
- 				(keydown.code.enter)="onSendMessage()"
+ 				(keydown)="onSendMessage($event)"
  				></textarea>
  </div>

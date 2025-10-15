@@ -50,6 +50,22 @@ export class SettingsService{
 				 return this.currentChannelSubject.asObservable();
  }
 
+ getUserColor(token: string,user_id: string) {
+				  console.log(token,user_id);
+					const url = 'https://api.twitch.tv/helix/chat/color?user_id=' + user_id;
+
+					const headers = new HttpHeaders({
+									'Authorization': `Bearer ${token}`,
+									'Client-ID': 'ds3ban6ylu8w882wox7f1xyr9s7v56',
+									'Content-Type': 'application/json'
+					});
+
+					return this.http.get( url, { headers });
+	}
+
+ setUserId(id: string) {
+				 localStorage.setItem("user_id",id);
+ }
 
  getUserId(token: string) {
     const url = 'https://api.twitch.tv/helix/users';
@@ -57,9 +73,10 @@ export class SettingsService{
           'Authorization': `Bearer ${token}`,
           'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
    });
+
+
 	 return this.http.get(url, { headers }).pipe(
         map((response: any) => {
-								console.log(response);
             return response.data.length > 0 ? response.data[0].id : null;
         })
     );
@@ -99,7 +116,7 @@ export class SettingsService{
 }
 
 
- getUserInfo(): Observable<string> {
+getUserInfo(): Observable<string> {
     const url = 'https://api.twitch.tv/helix/users';
 
     return this.getAccessToken().pipe(

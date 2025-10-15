@@ -35,7 +35,15 @@ export class TwitchChatService implements OnDestroy {
       if (raw.startsWith('PING')) {
         this.socket!.send('PONG :tmi.twitch.tv');
         return;
+
       }
+      if (raw.includes('COLOR')) {
+				const colorMatch = raw.match(/:(\w+)!.* COLOR (#\w+)/);
+    		if (colorMatch) {
+    		  const [, user, color] = colorMatch;
+    		  console.log(`Benutzer: ${user}, Farbe: ${color}`);
+    		}
+  }
 
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
       if (match) {
@@ -50,6 +58,8 @@ export class TwitchChatService implements OnDestroy {
   }
 
 
+	getUserColor() {
+	}
 
 	sendMessage(channel: string,senderId: string,broadcastId: string,message: string,token: string) {
 					const url = 'https://api.twitch.tv/helix/chat/messages'

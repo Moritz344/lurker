@@ -17,6 +17,7 @@ import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 // TODO: check if token is valid: https://dev.twitch.tv/docs/authentication/#user-access-tokens
 // TODO: emoji picker
 // TODO: textarea instead of input
+// TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 })
 export class AppComponent implements OnInit,OnDestroy{
   @ViewChild('chat') chatBox!: ElementRef;
+  @ViewChild('chatEntry') entry!: ElementRef;
 
   title = 'chatter';
 	username: string = "";
@@ -38,7 +40,6 @@ export class AppComponent implements OnInit,OnDestroy{
 	userScrolling: boolean = false;
 	currentChannel: string = "Tolkin";
 	userChatMessage: string = "";
-	userColor: string = "white";
 	placeholderString: string = "";
 	private loginSub?: Subscription;
 	private getLoginSub?: Subscription;
@@ -79,37 +80,46 @@ export class AppComponent implements OnInit,OnDestroy{
 					});
 	}
 
-	onSendMessage() {
-		this.settings.checkAccessTokenValidity(this.accessToken).subscribe( result => {
-						//console.log("token is valid?",result,this.accessToken);
-						if (!result) {
-										alert("Your token is not valid.");
-										this.logout();
+
+	onSendMessage(event: KeyboardEvent) {
+		if (event.key === 'Enter' && event.shiftKey){
+								this.userChatMessage += '\n';
+								return;
+    }
+
+    if (event.key === 'Enter'){
+				event.preventDefault();
+				this.settings.checkAccessTokenValidity(this.accessToken).subscribe( result => {
+								//console.log("token is valid?",result,this.accessToken);
+								if (!result) {
+												alert("Your token is not valid.");
+												this.logout();
+												return;
+								}
+				})
+    		// TODO: handle drop reasons: like followers only mode
+    		this.settings.getUserId(this.accessToken).pipe(
+    		    switchMap((userIdResult: any) => {
+    		        const senderId = userIdResult;
+								console.log("got sender id");
+    		        return this.settings.getBroadCasterId(this.accessToken, this.currentChannel).pipe(
+    		            switchMap((broadcasterIdResult: any) => {
+    		                const broadcasterId = broadcasterIdResult;
+										    console.log("got broadcaster id");
+    		                return this.chat.sendMessage(this.currentChannel, senderId, broadcasterId, this.userChatMessage, this.accessToken);
+    		            })
+    		        );
+    		    })
+    		).subscribe((result: any) => {
+						if (result.data[0].drop_reason) {
+										alert(result.data[0].drop_reason.message);
 										return;
 						}
-		})
-    // TODO: handle drop reasons: like followers only mode
-    this.settings.getUserId(this.accessToken).pipe(
-        switchMap((userIdResult: any) => {
-            const senderId = userIdResult;
-						console.log("got sender id");
-            return this.settings.getBroadCasterId(this.accessToken, this.currentChannel).pipe(
-                switchMap((broadcasterIdResult: any) => {
-                    const broadcasterId = broadcasterIdResult;
-								    console.log("got broadcaster id");
-                    return this.chat.sendMessage(this.currentChannel, senderId, broadcasterId, this.userChatMessage, this.accessToken);
-                })
-            );
-        })
-    ).subscribe((result: any) => {
-				if (result.data[0].drop_reason) {
-								alert(result.data[0].drop_reason.message);
-								return;
-				}
-				this.userChatMessage = "";
-    }, error => {
-        console.error('Error sending message:', error);
-    });
+						this.userChatMessage = "";
+    		}, error => {
+    		    console.error('Error sending message:', error);
+    		});
+     }  
 }
 
   scrollToBottom() {
@@ -153,10 +163,14 @@ export class AppComponent implements OnInit,OnDestroy{
 												if (!this.sub || this.sub.closed) {
 																this.sub = this.chat.messages$.subscribe(msg => this.messages.push( msg  ));
 												}
+
+
+
 								}
 
 												console.log(token,username);
 				   });
+
 
 	}
 
@@ -203,6 +217,7 @@ export class AppComponent implements OnInit,OnDestroy{
 	}
 
 	ngOnInit() {
+
 					this.getLoginSub = this.settings.getLoginStatus().subscribe(result => {
 								  if (result) {
 													this.loginStatus = true;
@@ -210,6 +225,10 @@ export class AppComponent implements OnInit,OnDestroy{
 												  this.loadUserToken();
 												  this.scrollChatbox();
 												  this.loadChatMessages(this.currentChannel);
+													const token = localStorage.getItem("twitch_token") || "";
+												  this.settings.getUserId(token).subscribe( id => {
+																this.settings.setUserId(id);
+													});
 									}else{
 													this.loginStatus = false;
 													this.placeholderString = "Login to send a message";
