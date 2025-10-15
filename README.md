@@ -1,17 +1,20 @@
-# Lurker
+ <h1 align="center"> <img src="https://github.com/user-attachments/assets/807fe443-8e20-4c34-8cfd-28f79da34883"> Lurker </h1>
+
 an opensource app for listening and writing twitch chat messages.
 
-<img width="1068" height="810" alt="preview" src="https://github.com/user-attachments/assets/607931fd-eef5-4aa9-bc8e-d9cbe539305c" />
+<img width="985" height="747" alt="demo_picture" src="https://github.com/user-attachments/assets/96ed09e0-365b-47e4-906a-174330c2d983" />
 
 
 # TODOS
 - [ ] Tabsystem
-- [ ] twitch user colors
-- [ ] support 7tv emotes
-- [ ] view user info
-- [ ] settings menu
+- [ ] Twitch user colors
+- [ ] Support 7tv emotes
+- [ ] View user info
+- [ ] Settings menu
 - [x] View and send chat messages
 - [x] Switch between streamer
- 
+- [x] User chat color
+
 # Author
 - Moritz344
+
