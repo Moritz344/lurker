@@ -5,6 +5,11 @@ an opensource app for listening and writing twitch chat messages.
 <img width="985" height="747" alt="demo_picture" src="https://github.com/user-attachments/assets/96ed09e0-365b-47e4-906a-174330c2d983" />
 
 
+> [!WARNING]
+> **This app is currently in development and may occasionally be unstable or unusable.**
+
+
+
 # TODOS
 - [ ] Tabsystem
 - [ ] Twitch user colors
@@ -17,4 +22,5 @@ an opensource app for listening and writing twitch chat messages.
 
 # Author
 - Moritz344
+
 
