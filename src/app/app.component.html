@@ -1,7 +1,19 @@
 <app-topbar></app-topbar>
 <div class="channel-name">
 				<span (click)="onChooseChannel()" >{{ currentChannel }}'s chat</span>
+
+				<div class="dropdown">
+				<button class="vertical-menu" (click)="onVerticalMenu()"><img src="vertical.svg"></button>
+				</div>
 </div>
+
+@if(showVerticalMenuOptions){
+				<div class="dropdown-content">
+								<button>Make an Announcment</button>
+								<button>Create a Poll</button>
+								<button>Make a Prediction </button>
+				</div>
+}
 <br>
 <div class="chat-container"  #chat>
 				@for (msg of messages; track $index) {

@@ -26,6 +26,7 @@ import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 // TODO: emoji picker
 // TODO: textarea instead of input
 // TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
+// TODO: make announcments,create polls,predictions  
 
 @Component({
   selector: "app-root",
@@ -60,6 +61,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
 
+	showVerticalMenuOptions: boolean = false;
+
   loginStatus: boolean = true;
 
   constructor(
@@ -82,6 +85,10 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }, 10);
   }
+
+	onVerticalMenu() {
+				this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
+	}
 
   onSwitchChannel(name: string) {
     this.messages.length = 0;

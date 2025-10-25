@@ -6,6 +6,28 @@
 				margin: 10px;
 }
 
+.vertical-menu{
+				background: transparent;
+				border: none;
+				outline: none;
+				position: absolute;
+				top:0px;
+				right: 10px;
+}
+
+.dropdown-content{
+				display: grid;
+				position: absolute;
+				top: 25px;
+				right: 40px;
+				z-index: 1000;
+}
+
+
+.vertical-menu:hover{
+				background-color: var(--ghost-hover);
+}
+
 .channel-name{
 				position: absolute;
 				top: 25px;
