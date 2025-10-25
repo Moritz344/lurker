@@ -102,8 +102,25 @@ export class AppComponent implements OnInit, OnDestroy {
       width: "400px",
       height: "200px",
       panelClass: "container",
+
+			data: {
+							message: "Type in a channel name",
+							function: "change_channel_name"
+			}
     });
   }
+
+	onAnnouncement() {
+					this.dialog.open(DialogBoxComponent, {
+									width: "400px",
+									height: "200px",
+									panelClass: "container",
+									data: {
+													message: "What should be the announcement?",
+													function: "announcement"
+									}
+					});
+	}
 
   onSendMessage(event: KeyboardEvent) {
     if (event.key === "Enter" && event.shiftKey) {
@@ -210,7 +227,6 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         }
 
-        console.log(token, username);
       });
   }
 
@@ -297,7 +313,6 @@ export class AppComponent implements OnInit, OnDestroy {
         if (result) {
           this.currentChannel = result;
           this.onSwitchChannel(this.currentChannel);
-          console.log("current channel:", result);
         }
       });
   }

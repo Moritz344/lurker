@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable, Subject,of,throwError } from "rxjs";
+import { HttpClient, HttpHeaders,HttpErrorResponse } from "@angular/common/http";
+import { switchMap, map, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -48,6 +49,24 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getUserColor() {}
+
+	sendAnnouncement(broadcaster_id: string,moderator_id: string,message: string,color: string,token: string ) {
+					const url = `https://api.twitch.tv/helix/chat/announcements?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`
+
+          const headers = new HttpHeaders({
+           Authorization: `Bearer ${token}`,
+           "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+           "Content-Type": "application/json",
+         });
+
+				const body = {
+    		  message: message,
+    		};
+
+    return this.http.post(url, body, { headers });
+
+
+	}
 
   sendMessage(
     channel: string,

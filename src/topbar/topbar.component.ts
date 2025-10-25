@@ -55,8 +55,8 @@ export class TopbarComponent {
 
   onLogin() {
     this.settings.setLoginStatus(true);
-    const url =
-      "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=chat:read user:write:chat";
-    window.location.href = url;
-  }
+const url =
+  "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=chat:edit moderator:manage:announcements moderation:read channel:manage:moderators";
+window.location.href = url;
+   }
 }
