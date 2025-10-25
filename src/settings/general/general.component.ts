@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+
+// TODO: change font size
+// TODO: change message timestamp format
 
 @Component({
-  selector: 'app-general',
+  selector: "app-general",
   imports: [],
-  templateUrl: './general.component.html',
-  styleUrl: './general.component.css'
+  templateUrl: "./general.component.html",
+  styleUrl: "./general.component.css",
 })
-export class GeneralComponent {
-
-}
+export class GeneralComponent {}

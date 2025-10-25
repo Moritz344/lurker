@@ -1,4 +1,29 @@
-.container{
-				display: flex;
-				justify-content: center;
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.interface h1 {
+    margin-bottom: 0px;
+}
+
+.interface {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+}
+
+.chat {
+    position: absolute;
+    top: 200px;
+    left: 10px;
+}
+
+.chat h1 {
+    margin-bottom: 0px;
+}
+
+input {
+    border: 1px solid white;
+    width: 100px;
 }

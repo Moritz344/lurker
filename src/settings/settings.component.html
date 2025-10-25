@@ -1,29 +1,58 @@
 <div class="container">
-				<div class="exit">
-								<button (click)="onClose()"><img src="close.svg"></button>
-				</div>
-
-
-				<div class="submit-buttons">
-						<button (click)="onClose()"class="ok">Ok</button>
-						<button (click)="onClose()"class="cancel">Cancel</button>
-				</div>
-
-				<div class="options">
-								<button (click)="onSettings('general')">General</button>
-								<button (click)="onSettings('account')">Account</button>
-								<button (click)="onSettings('about')">About</button>
-				</div>
-
-				<div class="content-container">
-								@if (settingsOption === "general") {
-												<app-general></app-general>
-									}@else if(settingsOption === "account") {
-												<app-account></app-account>
-									}@else if(settingsOption === "about") {
-												<app-about></app-about>
-									}
-
+    <div class="exit">
+        <button (click)="onClose()"><img src="close.svg" /></button>
     </div>
 
+    @if (settingsOption !== "account") {
+        <div class="submit-buttons">
+            <button (click)="onClose()" class="ok">Ok</button>
+            <button (click)="onClose()" class="cancel">Cancel</button>
+        </div>
+    }
+
+    <div class="options">
+        <button
+            [ngStyle]="{
+                'background-color':
+                    settingsOption === 'general'
+                        ? 'var(--secondary-hover)'
+                        : 'transparent',
+            }"
+            (click)="onSettings('general')"
+        >
+            General
+        </button>
+        <button
+            (click)="onSettings('account')"
+            [ngStyle]="{
+                'background-color':
+                    settingsOption === 'account'
+                        ? 'var(--secondary-hover)'
+                        : 'transparent',
+            }"
+        >
+            Account
+        </button>
+        <button
+            (click)="onSettings('about')"
+            [ngStyle]="{
+                'background-color':
+                    settingsOption === 'about'
+                        ? 'var(--secondary-hover)'
+                        : 'transparent',
+            }"
+        >
+            About
+        </button>
+    </div>
+
+    <div class="content-container">
+        @if (settingsOption === "general") {
+            <app-general></app-general>
+        } @else if (settingsOption === "account") {
+            <app-account></app-account>
+        } @else if (settingsOption === "about") {
+            <app-about></app-about>
+        }
+    </div>
 </div>

@@ -1,67 +1,64 @@
 :root {
-  --bg-color: #1E1E1E;
-  --surface-color: #1e1e1e;
-  --accent-color: #00bfa6;
-  --accent-hover: #00e6c3;
-  --text-color: #e0e0e0;
-  --text-muted: #a0a0a0;
-  --border-color: #2a2a2a;
-  --error-color: #ff4d4d;
-  --radius: 10px;
-  --transition: 0.25s ease;
-	--input-color: #2C2C2C;
-	--primary: #7C3AED;
-  --primary-hover: #8B5CF6;
-  --secondary: #2D2D33;
-  --secondary-hover: #3C3C42;
-  --success: #22C55E;
-  --success-hover: #4ADE80;
-  --danger: #EF4444;
-  --danger-hover: #F87171;
-  --ghost: rgba(255, 255, 255, 0.1);
-  --ghost-hover: rgba(255, 255, 255, 0.2);
+    --bg-color: #1e1e1e;
+    --surface-color: #1e1e1e;
+    --accent-color: #00bfa6;
+    --accent-hover: #00e6c3;
+    --text-color: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #2a2a2a;
+    --error-color: #ff4d4d;
+    --radius: 10px;
+    --transition: 0.25s ease;
+    --input-color: #2c2c2c;
+    --primary: #7c3aed;
+    --primary-hover: #8b5cf6;
+    --secondary: #2d2d33;
+    --secondary-hover: #3c3c42;
+    --success: #22c55e;
+    --success-hover: #4ade80;
+    --danger: #ef4444;
+    --danger-hover: #f87171;
+    --ghost: rgba(255, 255, 255, 0.1);
+    --ghost-hover: rgba(255, 255, 255, 0.2);
 }
 
-
-
- .mat-mdc-dialog-container {
-  --mdc-dialog-container-shape: 0px;
+.mat-mdc-dialog-container {
+    --mdc-dialog-container-shape: 0px;
 }
 
 body {
     background-color: var(--bg-color);
-    color: #E0E0E0;
-    font-family: 'Arial', sans-serif;
+    color: #e0e0e0;
+    font-family: "Arial", sans-serif;
     line-height: 1.5;
 }
 
-button{
-				outline: none;
+button {
+    outline: none;
 }
 
-input{
-				background-color: var(--input-color);
-				outline: none;
-				resize: none;
-				border: none;
-				color: white;
-				overflow: hidden;
+input {
+    background-color: var(--input-color);
+    outline: none;
+    resize: none;
+    border: none;
+    color: white;
+    overflow: hidden;
 }
 
-textarea{
-				background-color: var(--input-color);
-				outline: none;
-				resize: none;
-				border: none;
-				color: white;
-				overflow: hidden;
-				font-size: 20px;
+textarea {
+    background-color: var(--input-color);
+    outline: none;
+    resize: none;
+    border: none;
+    color: white;
+    overflow: hidden;
+    font-size: 20px;
 }
-
 
 ::-webkit-scrollbar {
     width: 12px;
-    height: 0px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -78,9 +75,11 @@ textarea{
     background: #555;
 }
 
-
-
-
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

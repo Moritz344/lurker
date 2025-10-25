@@ -1,13 +1,19 @@
 <div class="container">
-				<button (click)="onSettings()"title="Settings">
-								<img src="settings.svg" >
-				</button>
+    <button (click)="onSettings()" title="Settings">
+        <img src="settings.svg" />
+    </button>
 
-				<button title="Login" (click)="onLogin()">
-								<img src="profile.svg">
+    @if (showLoginButton) {
+        <button title="Login" (click)="onLogin()">
+            <img src="profile.svg" />
 
-								<a ></a>
-				</button>
+            <a></a>
+        </button>
+    } @else {
+        <button title="Logout" (click)="onLogout()">
+            <img src="profile.svg" />
 
-
+            <a></a>
+        </button>
+    }
 </div>

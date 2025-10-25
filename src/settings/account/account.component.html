@@ -1,13 +1,35 @@
 <div class="container">
-				<h1 class="account-header">Account</h1>
-								<div class="buttons">
-												<button title="Login" (click)="onLogin()">Login</button>
-												<button title="Logout" (click)="onLogout()">Logout</button>
-								@if (username) {
-												<div class="name" >
-																<button> {{ username }}</button>
-												</div>
-								}
-								</div>
+    <h1 class="account-header">Account</h1>
 
+    @if (username) {
+        <div class="user-card">
+            <div class="top">
+                <img [src]="account_profile_picture" width="100" height="100" />
+                <div class="items">
+                    <strong>
+                        <span>{{ username }}</span>
+                    </strong>
+                    <div class="desc">
+                        <p>
+                            {{ account_description }}
+                        </p>
+                    </div>
+                    <div class="extra-info">
+                        <span>Created at: {{ account_created_at }}</span>
+                        <br />
+                        <span>View count: {{ account_view_count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button title="Login" (click)="onLogin()">Login</button>
+            <button title="Logout" (click)="onLogout()">Logout</button>
+        </div>
+    } @else {
+        <div class="logout-text">
+            <strong>You are not logged in!</strong>
+            <button title="Login" (click)="onLogin()">Login</button>
+        </div>
+    }
 </div>

@@ -1,11 +1,44 @@
-
-.container{
-				display: flex;
-				justify-content: center;
-				height: 500px;
-				width: 500px;
+.container {
+    display: flex;
+    justify-content: center;
+    height: 500px;
+    width: 500px;
 }
 
-.account-header {
-				margin-right: 100px;
+.about-header {
+    margin-right: 100px;
+}
+
+.header {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+}
+
+.header h1 {
+    margin-bottom: 0px;
+}
+
+.header p {
+    margin-top: 0px;
+    color: grey;
+}
+
+.info {
+    position: absolute;
+    top: 150px;
+    left: 10px;
+}
+
+.info h1 {
+    margin-bottom: 0px;
+}
+
+a {
+    color: white;
+}
+
+.info p {
+    margin-top: 0px;
+    color: grey;
 }

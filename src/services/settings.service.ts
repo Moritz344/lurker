@@ -1,134 +1,127 @@
-import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { Observable,of,BehaviorSubject} from 'rxjs';
-import { switchMap, map,catchError } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable, of, BehaviorSubject } from "rxjs";
+import { switchMap, map, catchError } from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class SettingsService{
+export class SettingsService {
+  loginStatus: boolean = false;
+  loginStatusSubject = new BehaviorSubject<boolean>(this.loginStatus);
 
-	loginStatus: boolean = false;
-	loginStatusSubject = new BehaviorSubject<boolean>(this.loginStatus);
+  currentChannel: string = "";
+  currentChannelSubject = new BehaviorSubject<string>(this.currentChannel);
 
-	currentChannel: string = ""
-	currentChannelSubject = new BehaviorSubject<string>(this.currentChannel);
+  constructor(private http: HttpClient) {}
 
+  setLoginStatus(isLogged: boolean) {
+    this.loginStatus = isLogged;
+    this.loginStatusSubject.next(this.loginStatus);
+  }
+  getLoginStatus() {
+    return this.loginStatusSubject.asObservable();
+  }
 
-  constructor(private http: HttpClient) { }
+  setAccessToken(token: string) {
+    localStorage.setItem("twitch_token", token);
+  }
 
-	setLoginStatus(isLogged: boolean) {
-					this.loginStatus = isLogged;
-					this.loginStatusSubject.next(this.loginStatus);
-	}
-	getLoginStatus() {
-					return this.loginStatusSubject.asObservable();;
-	}
+  getAccessToken() {
+    return of(localStorage.getItem("twitch_token"));
+  }
 
+  setUserName(username: string) {
+    localStorage.setItem("username", username);
+  }
+  getUserName() {
+    return of(localStorage.getItem("username"));
+  }
 
-	setAccessToken(token: string) {
-					localStorage.setItem('twitch_token',token);
-	}
+  setCurrentChannel(name: string) {
+    this.currentChannel = name;
+    this.currentChannelSubject.next(this.currentChannel);
+  }
 
-	getAccessToken() {
-					return of(localStorage.getItem('twitch_token'));
-	}
+  getCurrentChannel() {
+    return this.currentChannelSubject.asObservable();
+  }
 
- setUserName(username: string) {
-				 localStorage.setItem('username',username);
- }
- getUserName() {
-				 return of (localStorage.getItem('username'));
- }
+  getUserColor(token: string, user_id: string) {
+    console.log(token, user_id);
+    const url = "https://api.twitch.tv/helix/chat/color?user_id=" + user_id;
 
- setCurrentChannel(name: string) {
-				 this.currentChannel = name;
-				 this.currentChannelSubject.next(this.currentChannel);
- }
-
- getCurrentChannel() {
-				 return this.currentChannelSubject.asObservable();
- }
-
- getUserColor(token: string,user_id: string) {
-				  console.log(token,user_id);
-					const url = 'https://api.twitch.tv/helix/chat/color?user_id=' + user_id;
-
-					const headers = new HttpHeaders({
-									'Authorization': `Bearer ${token}`,
-									'Client-ID': 'ds3ban6ylu8w882wox7f1xyr9s7v56',
-									'Content-Type': 'application/json'
-					});
-
-					return this.http.get( url, { headers });
-	}
-
- setUserId(id: string) {
-				 localStorage.setItem("user_id",id);
- }
-
- getUserId(token: string) {
-    const url = 'https://api.twitch.tv/helix/users';
     const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`,
-          'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
-   });
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
 
+    return this.http.get(url, { headers });
+  }
 
-	 return this.http.get(url, { headers }).pipe(
-        map((response: any) => {
-            return response.data.length > 0 ? response.data[0].id : null;
-        })
-    );
- }
+  setUserId(id: string) {
+    localStorage.setItem("user_id", id);
+  }
 
- getBroadCasterId(token: string,channel: string) {
-				const url = 'https://api.twitch.tv/helix/users?login='
-        const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`,
-          'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
-        });
-				return this.http.get(url + channel, { headers }).pipe(
-								map((response: any) => {
-												console.log(response);
-        				    return response.data.length > 0 ? response.data[0].id : null;
-        				})
-    );
-
- }
-
- checkAccessTokenValidity(token: string): Observable<boolean> {
-    const url = 'https://api.twitch.tv/helix/users';
+  getUserId(token: string) {
+    const url = "https://api.twitch.tv/helix/users";
     const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Client-Id': 'ds3ban6ylu8w882wox7f1xyr9s7v56'
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
     });
 
     return this.http.get(url, { headers }).pipe(
-        map(response => true),
-        catchError(error => {
-            if (error.status === 401) {
-                return of(false);
-            }
-            return of(false);
-        })
-    );
-}
-
-
-getUserInfo(): Observable<string> {
-    const url = 'https://api.twitch.tv/helix/users';
-
-    return this.getAccessToken().pipe(
-      switchMap(token => {
-        const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`,
-          'Client-Id': "ds3ban6ylu8w882wox7f1xyr9s7v56"
-        });
-        return this.http.get<any>(url, { headers });
+      map((response: any) => {
+        return response.data.length > 0 ? response.data[0].id : null;
       }),
-      map(response => response.data[0].display_name)
     );
   }
 
+  getBroadCasterId(token: string, channel: string) {
+    const url = "https://api.twitch.tv/helix/users?login=";
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+    return this.http.get(url + channel, { headers }).pipe(
+      map((response: any) => {
+        console.log(response);
+        return response.data.length > 0 ? response.data[0].id : null;
+      }),
+    );
+  }
+
+  checkAccessTokenValidity(token: string): Observable<boolean> {
+    const url = "https://api.twitch.tv/helix/users";
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+
+    return this.http.get(url, { headers }).pipe(
+      map((response) => true),
+      catchError((error) => {
+        if (error.status === 401) {
+          return of(false);
+        }
+        return of(false);
+      }),
+    );
+  }
+
+  getUserInfo(): Observable<string> {
+    const url = "https://api.twitch.tv/helix/users";
+
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+          "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+        });
+        return this.http.get<any>(url, { headers });
+      }),
+      map((response) => response.data),
+    );
+  }
 }

@@ -1,49 +1,86 @@
-.container{
-				display: flex;
-				justify-content: center;
-				height: 500px;
-				width: 500px;
+.container {
+    display: flex;
+    justify-content: center;
+    height: 500px;
+    width: 500px;
 }
 
 .account-header {
-				margin-right: 100px;
+    margin-right: 100px;
 }
 
-
-button{
-				background: var(--secondary);
-				border: none;
-				color: white;
-				font-size: 20px;
+.user-card {
+    position: absolute;
+    left: 10px;
+    top: 80px;
+    width: 370px;
+    height: 280px;
+    overflow-y: hidden;
 }
 
-button:hover{
-				background-color: var(--secondary-hover);
+.items {
+    height: 300px;
 }
 
-.buttons{
-				position: absolute;
-				left: 10px;
-				top: 100px;
+.top {
+    padding: 10px;
 }
 
-
-.name{
-				display: grid;
-				grid-template-columns: repeat(1,1fr);
-				position: absolute;
-				top: 50px;
-				left: 0px;
-				width: 350px;
+.extra-info {
+    position: absolute;
+    top: 150px;
 }
 
-.name button{
-				background: transparent;
-				color: white;
-				border: none;
-				text-align: left;
+.desc {
+    overflow-x: scroll;
 }
 
-.name button:hover{
-				background-color: var(--surface-color);
+.top img {
+    float: left;
+    margin-right: 10px;
+    border-radius: 100%;
+}
+
+button {
+    background: var(--secondary);
+    border: none;
+    color: white;
+    font-size: 20px;
+}
+
+button:hover {
+    background-color: var(--secondary-hover);
+}
+
+.buttons {
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
+}
+
+.logout-text {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    font-size: 30px;
+}
+
+.name {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    width: 350px;
+}
+
+.name button {
+    background: transparent;
+    color: white;
+    border: none;
+    text-align: left;
+}
+
+.name button:hover {
+    background-color: var(--surface-color);
 }
