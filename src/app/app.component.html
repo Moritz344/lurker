@@ -1,33 +1,33 @@
 <app-topbar></app-topbar>
 <div class="channel-name">
-				<span (click)="onChooseChannel()" >{{ currentChannel }}'s chat</span>
+    <span (click)="onChooseChannel()">{{ currentChannel }}'s chat</span>
 
-				<div class="dropdown">
-				<button class="vertical-menu" (click)="onVerticalMenu()"><img src="vertical.svg"></button>
-				</div>
+    <div class="dropdown">
+        <button class="vertical-menu" (click)="onVerticalMenu()">
+            <img src="vertical.svg" />
+        </button>
+    </div>
 </div>
 
-@if(showVerticalMenuOptions){
-				<div class="dropdown-content">
-								<button (click)="onAnnouncement()">Make an Announcment</button>
-								<button>Create a Poll</button>
-								<button>Make a Prediction </button>
-				</div>
+@if (showVerticalMenuOptions) {
+    <div class="dropdown-content">
+        <button (click)="onAnnouncement()">Make an Announcment</button>
+        <button (click)="onCreatePoll()">Create a Poll</button>
+    </div>
 }
-<br>
-<div class="chat-container"  #chat>
-				@for (msg of messages; track $index) {
-								<app-chat [message]="msg"></app-chat>
-
-				}
+<br />
+<div class="chat-container" #chat>
+    @for (msg of messages; track $index) {
+        <app-chat [message]="msg"></app-chat>
+    }
 </div>
 
 <div class="chat-entry">
- 				<textarea
-				#chatEntry
- 				spellcheck="false"
- 				[placeholder]="placeholderString"
- 				[(ngModel)]="userChatMessage"
- 				(keydown)="onSendMessage($event)"
- 				></textarea>
- </div>
+    <textarea
+        #chatEntry
+        spellcheck="false"
+        [placeholder]="placeholderString"
+        [(ngModel)]="userChatMessage"
+        (keydown)="onSendMessage($event)"
+    ></textarea>
+</div>

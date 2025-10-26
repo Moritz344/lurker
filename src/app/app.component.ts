@@ -19,14 +19,11 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 
-// TODO: chat colors
 // TODO: better tv emotes
 // TODO: Tabsystem
-// TODO: check if token is valid: https://dev.twitch.tv/docs/authentication/#user-access-tokens
 // TODO: emoji picker
-// TODO: textarea instead of input
 // TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
-// TODO: make announcments,create polls,predictions  
+// TODO: channel points
 
 @Component({
   selector: "app-root",
@@ -46,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("chat") chatBox!: ElementRef;
   @ViewChild("chatEntry") entry!: ElementRef;
 
-  title = "chatter";
+  title = "Lurker";
   username: string = "";
   accessToken: any;
   sub?: Subscription;
@@ -54,14 +51,14 @@ export class AppComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "Tolkin";
+  currentChannel: string = "pennti";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
 
-	showVerticalMenuOptions: boolean = false;
+  showVerticalMenuOptions: boolean = false;
 
   loginStatus: boolean = true;
 
@@ -86,9 +83,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 10);
   }
 
-	onVerticalMenu() {
-				this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
-	}
+  onVerticalMenu() {
+    this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
+  }
 
   onSwitchChannel(name: string) {
     this.messages.length = 0;
@@ -103,24 +100,39 @@ export class AppComponent implements OnInit, OnDestroy {
       height: "200px",
       panelClass: "container",
 
-			data: {
-							message: "Type in a channel name",
-							function: "change_channel_name"
-			}
+      data: {
+        message: "Type in a channel name",
+        function: "change_channel_name",
+      },
     });
   }
 
-	onAnnouncement() {
-					this.dialog.open(DialogBoxComponent, {
-									width: "400px",
-									height: "200px",
-									panelClass: "container",
-									data: {
-													message: "What should be the announcement?",
-													function: "announcement"
-									}
-					});
-	}
+  onCreatePoll() {
+    this.dialog.open(DialogBoxComponent, {
+      width: "400px",
+      height: "300px",
+      panelClass: "container",
+
+      data: {
+        message: "Create a Poll",
+        function: "create_poll",
+      },
+    });
+  }
+
+  onCreatePrediction() {}
+
+  onAnnouncement() {
+    this.dialog.open(DialogBoxComponent, {
+      width: "400px",
+      height: "200px",
+      panelClass: "container",
+      data: {
+        message: "What should be the announcement?",
+        function: "announcement",
+      },
+    });
+  }
 
   onSendMessage(event: KeyboardEvent) {
     if (event.key === "Enter" && event.shiftKey) {
@@ -226,7 +238,6 @@ export class AppComponent implements OnInit, OnDestroy {
             );
           }
         }
-
       });
   }
 

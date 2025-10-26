@@ -1,86 +1,96 @@
-.container{
-  position: relative;
-  z-index: 9999;
-  background-color: var(--bg-color);
-  border-radius: 0px ;
-  overflow: hidden;
-  border: 1px solid var(--bg-color);
-	height: 300px;
-
+.container {
+    position: relative;
+    z-index: 9999;
+    background-color: var(--bg-color);
+    border-radius: 0px;
+    overflow: hidden;
+    border: 1px solid var(--bg-color);
+    height: 300px;
 }
 
-
-
-.items{
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-				text-align: center;
-				margin-top: 50px;
+.items {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 50px;
 }
 
-span{
-				font-size: 20px;
+.poll {
+    display: grid;
+    grid-template-columns: repeat(2, 100px);
+    position: absolute;
+    gap: 0px;
+    left: -0px;
+    top: 120px;
+}
+.poll input {
+    width: 90px;
 }
 
-input{
-				width: 200px;
-				border: none;
-				margin-top: 20px;
-				margin-left: 100px;
-				font-size: 20px;
+span {
+    font-size: 20px;
 }
 
-.close-x{
-				position: absolute;
-				top:7px;
-				right:7px;
-				background: transparent;
-				align-items: center;
-}
-.close-x img{
-				align-items: center;
-				justify-content: center;
+input {
+    width: 200px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 100px;
+    font-size: 20px;
 }
 
-.cancel{
-				background-color: var(--danger);
+.close-x {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background: transparent;
+    align-items: center;
 }
-.cancel:hover{
-				background-color: var(--danger-hover);
-}
-
-.ok{
-				background-color: var(--success);
-}
-
-.ok:hover{
-				background-color: var(--success-hover);
+.close-x img {
+    align-items: center;
+    justify-content: center;
 }
 
-
-button{
-				background: var(--secondary);
-				border: none;
-				color: white;
-				font-size: 20px;
+.close-x:hover {
+    background-color: var(--ghost-hover);
 }
 
-button:hover{
-				background-color: var(--secondary-hover);
+.cancel {
+    background-color: var(--danger);
+}
+.cancel:hover {
+    background-color: var(--danger-hover);
 }
 
-.button-layout{
-				display: grid;
-				grid-template-columns: repeat(2,1fr);
-				gap: 10px;
-				position: absolute;
-				bottom: 10px;
-				right: 10px;
+.ok {
+    background-color: var(--success);
 }
 
-
-input:hover{
-				border: 0.5px solid white;
+.ok:hover {
+    background-color: var(--success-hover);
 }
 
+button {
+    background: var(--secondary);
+    border: none;
+    color: white;
+    font-size: 20px;
+}
+
+button:hover {
+    background-color: var(--secondary-hover);
+}
+
+.button-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+input:hover {
+    border: 0.5px solid white;
+}

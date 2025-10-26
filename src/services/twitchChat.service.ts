@@ -1,6 +1,10 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { Observable, Subject,of,throwError } from "rxjs";
-import { HttpClient, HttpHeaders,HttpErrorResponse } from "@angular/common/http";
+import { Observable, Subject, of, throwError } from "rxjs";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from "@angular/common/http";
 import { switchMap, map, catchError } from "rxjs/operators";
 
 @Injectable({
@@ -50,23 +54,63 @@ export class TwitchChatService implements OnDestroy {
 
   getUserColor() {}
 
-	sendAnnouncement(broadcaster_id: string,moderator_id: string,message: string,color: string,token: string ) {
-					const url = `https://api.twitch.tv/helix/chat/announcements?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`
+  sendAnnouncement(
+    broadcaster_id: string,
+    moderator_id: string,
+    message: string,
+    color: string,
+    token: string,
+  ) {
+    const url = `https://api.twitch.tv/helix/chat/announcements?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
 
-          const headers = new HttpHeaders({
-           Authorization: `Bearer ${token}`,
-           "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
-           "Content-Type": "application/json",
-         });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
 
-				const body = {
-    		  message: message,
-    		};
+    const body = {
+      message: message,
+    };
 
     return this.http.post(url, body, { headers });
+  }
 
+  sendPoll(
+    duration: number,
+    title: string,
+    broadcaster_id: string,
+    token: string,
+    choices: string[],
+  ) {
+    const url = `https://api.twitch.tv/helix/polls`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
 
-	}
+    const choiceObject = choices.map((choice) => ({ title: choice }));
+
+    console.log("Broadcaster", broadcaster_id);
+    console.log("Choices", choiceObject);
+
+    const body = {
+      duration: duration,
+      title: title,
+      broadcaster_id: broadcaster_id,
+      choices: choiceObject,
+    };
+
+    return this.http.post(url, body, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        alert(
+          "Poll could not be created. You have to be an affiliate or twitch partner",
+        );
+        return throwError(error);
+      }),
+    );
+  }
 
   sendMessage(
     channel: string,
