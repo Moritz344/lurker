@@ -24,6 +24,7 @@ import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 // TODO: emoji picker
 // TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
 // TODO: channel points
+// TODO: stream information
 
 @Component({
   selector: "app-root",
@@ -59,6 +60,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private currChannelSub?: Subscription;
 
   showVerticalMenuOptions: boolean = false;
+  streamTitel: string = "";
+  channelNameHover: boolean = true;
 
   loginStatus: boolean = true;
 
@@ -83,11 +86,19 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 10);
   }
 
+  onChannelNameHover() {
+    this.channelNameHover = true;
+  }
+  onChannelNameLeave() {
+    this.channelNameHover = false;
+  }
+
   onVerticalMenu() {
     this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
   }
 
   onSwitchChannel(name: string) {
+    this.fetchStreamInfos(name);
     this.messages.length = 0;
     this.currentChannel = name;
     this.chat.disconnect();
@@ -120,7 +131,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCreatePrediction() {}
+  fetchStreamInfos(channel: string) {
+    const token: any = localStorage.getItem("twitch_token");
+    this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
+      this.streamTitel = result.data[0]["title"];
+    });
+  }
 
   onAnnouncement() {
     this.dialog.open(DialogBoxComponent, {
@@ -300,6 +316,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const user: any = localStorage.getItem("username");
+    this.fetchStreamInfos(user);
     this.getLoginSub = this.settings.getLoginStatus().subscribe((result) => {
       if (result) {
         this.loginStatus = true;
