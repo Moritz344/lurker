@@ -25,6 +25,7 @@ import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 // TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
 // TODO: channel points
 // TODO: stream information
+// TODO: option to show streamers that user follows
 
 @Component({
   selector: "app-root",
@@ -97,12 +98,24 @@ export class AppComponent implements OnInit, OnDestroy {
     this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
   }
 
+  onDisableVerticalMenu() {
+    this.showVerticalMenuOptions = false;
+  }
+
+  onSwitchChannelOverVerticalMenu() {
+    this.onChooseChannel();
+  }
+
   onSwitchChannel(name: string) {
     this.fetchStreamInfos(name);
     this.messages.length = 0;
     this.currentChannel = name;
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
+  }
+
+  onClearChat() {
+    this.messages.length = 0;
   }
 
   onChooseChannel() {
@@ -134,7 +147,10 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchStreamInfos(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
-      this.streamTitel = result.data[0]["title"];
+      if (result.data.length > 1) {
+        this.streamTitel = result.data[0]["title"] || "";
+        console.log(this.streamTitel, channel);
+      }
     });
   }
 
@@ -306,7 +322,7 @@ export class AppComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
               //console.log("token is valid?",result,this.accessToken);
               if (!result) {
-                alert("Your token is not valid.");
+                alert("Your token is not valid. Try logging in again.");
                 this.logout();
               }
             });
@@ -317,11 +333,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const user: any = localStorage.getItem("username");
-    this.fetchStreamInfos(user);
+
     this.getLoginSub = this.settings.getLoginStatus().subscribe((result) => {
       if (result) {
         this.loginStatus = true;
-        this.placeholderString = "Send a message";
+        this.placeholderString = "Send a message as " + user;
         this.loadUserToken();
         this.scrollChatbox();
         this.loadChatMessages(this.currentChannel);
@@ -344,6 +360,9 @@ export class AppComponent implements OnInit, OnDestroy {
           this.onSwitchChannel(this.currentChannel);
         }
       });
+    if (user) {
+      this.fetchStreamInfos(user);
+    }
   }
 
   ngOnDestroy() {

@@ -163,6 +163,13 @@ export class TwitchChatService implements OnDestroy {
     localStorage.removeItem("user_id");
   }
 
+  UserRelog() {
+    this.Userlogout();
+    const url =
+      "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=chat:edit moderator:manage:announcements moderation:read channel:manage:moderators channel:manage:polls user:write:chat chat:read";
+    window.location.href = url;
+  }
+
   ngOnDestroy() {
     this.disconnect();
   }

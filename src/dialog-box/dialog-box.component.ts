@@ -46,10 +46,12 @@ export class DialogBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+    const user: any = localStorage.getItem("username");
+    this.currentChannel = user;
     this.settings.getCurrentChannel().subscribe((result) => {
       this.currentChannel = result;
       this.inputValue = result;
-      this.checkIfUserIsOwner(result);
+      this.checkIfUserIsOwner(this.currentChannel);
     });
   }
 

@@ -77,49 +77,46 @@ export class SettingsService {
       }),
     );
   }
-  
-	checkIfUserIsModerator(channel: string) {
-								let isUserMod: boolean = false;
-								const token: any = localStorage.getItem("twitch_token");
-								const username: any = localStorage.getItem("username");
-								this.getBroadCasterId(token,channel).subscribe(result => {
-												const user_id: any = localStorage.getItem("user_id");
-												this.getModerators(result,user_id,token).subscribe((data: any) => {
-																for (let i=0;i<data.data.length;i++) {
-																				if (data.data[i].user_name === username) {
-																								isUserMod = true;
-																								break;
-																				}else{
-																								isUserMod = false;
-																								break;
-																				}
-																}
-												});
 
-								});
-								return isUserMod;
-				}
+  checkIfUserIsModerator(channel: string) {
+    let isUserMod: boolean = false;
+    const token: any = localStorage.getItem("twitch_token");
+    const username: any = localStorage.getItem("username");
+    this.getBroadCasterId(token, channel).subscribe((result) => {
+      const user_id: any = localStorage.getItem("user_id");
+      this.getModerators(result, user_id, token).subscribe((data: any) => {
+        for (let i = 0; i < data.data.length; i++) {
+          if (data.data[i].user_name === username) {
+            isUserMod = true;
+            break;
+          } else {
+            isUserMod = false;
+            break;
+          }
+        }
+      });
+    });
+    return isUserMod;
+  }
 
-	getModerators(broadcaster_id: string,user_id: string,token: string) {
-					const url = `https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${broadcaster_id}`;
+  getModerators(broadcaster_id: string, user_id: string, token: string) {
+    const url = `https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${broadcaster_id}`;
 
-				  const headers = new HttpHeaders({
-    		    Authorization: `Bearer ${token}`,
-    		    "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
-    		  });
-
-					return this.http.get(url, { headers });
-
-
-	}
-
-  getBroadCasterId(token: string, channel: string) {
-    const url = "https://api.twitch.tv/helix/users?login=";
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
     });
-    return this.http.get(url + channel, { headers }).pipe(
+
+    return this.http.get(url, { headers });
+  }
+
+  getBroadCasterId(token: string, channel: string) {
+    const url = "https://api.twitch.tv/helix/users?login=" + channel || "";
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+    return this.http.get(url, { headers }).pipe(
       map((response: any) => {
         return response.data.length > 0 ? response.data[0].id : null;
       }),

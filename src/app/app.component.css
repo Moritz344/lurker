@@ -1,7 +1,7 @@
 .chat-container {
     flex-direction: column;
     height: 85%;
-    overflow-y: auto;
+    overflow-x: hidden;
     margin: 10px;
 }
 
@@ -31,12 +31,24 @@
     background-color: var(--input-color);
 }
 
+button {
+    border: none;
+    color: white;
+    background-color: var(--input-color);
+    text-align: left;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
 .dropdown-content {
     display: grid;
     position: absolute;
     top: 25px;
     right: 40px;
     z-index: 1000;
+    width: 200px;
 }
 
 .vertical-menu:hover {
