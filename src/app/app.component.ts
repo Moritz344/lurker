@@ -147,9 +147,11 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchStreamInfos(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
-      if (result.data.length > 1) {
-        this.streamTitel = result.data[0]["title"] || "";
+      if (result.data.length >= 1) {
+        this.streamTitel = result.data[0]["title"];
         console.log(this.streamTitel, channel);
+      } else {
+        this.streamTitel = "";
       }
     });
   }
