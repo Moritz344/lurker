@@ -20,16 +20,24 @@
     --danger-hover: #f87171;
     --ghost: rgba(255, 255, 255, 0.1);
     --ghost-hover: rgba(255, 255, 255, 0.2);
+    --default-font: "New Times New Roman";
+    --default-fontSize: 20px;
 }
 
 .mat-mdc-dialog-container {
     --mdc-dialog-container-shape: 0px;
 }
 
+* {
+    font-family: var(--default-font);
+    font-size: var(--default-fontSize);
+}
+
 body {
     background-color: var(--bg-color);
     color: #e0e0e0;
-    font-family: "Arial", sans-serif;
+    font-family: var(--default-font);
+    font-size: var(--default-fontSize);
     line-height: 1.5;
 }
 
@@ -39,6 +47,7 @@ button {
 
 input {
     background-color: var(--input-color);
+    font-family: var(--default-font);
     outline: none;
     resize: none;
     border: none;
@@ -48,6 +57,7 @@ input {
 
 textarea {
     background-color: var(--input-color);
+    font-family: var(--default-font);
     outline: none;
     resize: none;
     border: none;

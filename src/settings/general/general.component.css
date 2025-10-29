@@ -7,6 +7,21 @@
     margin-bottom: 0px;
 }
 
+.dropdowns {
+    position: absolute;
+    top: 10px;
+    line-height: 50px;
+    right: -250px;
+    margin-left: 60px;
+    margin-top: 20px;
+}
+
+select {
+    width: 100px;
+    margin-left: 200px;
+    text-align: left;
+}
+
 .interface {
     position: absolute;
     top: 50px;

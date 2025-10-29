@@ -66,6 +66,49 @@ export class AppComponent implements OnInit, OnDestroy {
 
   loginStatus: boolean = true;
 
+  applyUserSettings() {
+    const settings: any = localStorage.getItem("settings");
+    const settingsJson = JSON.parse(settings);
+    document.documentElement.style.setProperty(
+      "--default-font",
+      settingsJson[0].font,
+    );
+  }
+  ngOnInit() {
+    this.applyUserSettings();
+    const user: any = localStorage.getItem("username");
+
+    this.getLoginSub = this.settings.getLoginStatus().subscribe((result) => {
+      if (result) {
+        this.loginStatus = true;
+        this.placeholderString = "Send a message as " + user;
+        this.loadUserToken();
+        this.scrollChatbox();
+        this.loadChatMessages(this.currentChannel);
+        const token = localStorage.getItem("twitch_token") || "";
+        this.settings.getUserId(token).subscribe((id) => {
+          this.settings.setUserId(id);
+        });
+      } else {
+        this.loginStatus = false;
+        this.placeholderString = "Login to send a message";
+      }
+      console.log("login:", this.loginStatus);
+    });
+
+    this.currChannelSub = this.settings
+      .getCurrentChannel()
+      .subscribe((result) => {
+        if (result) {
+          this.currentChannel = result;
+          this.onSwitchChannel(this.currentChannel);
+        }
+      });
+    if (user) {
+      this.fetchStreamInfos(user);
+    }
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -181,7 +224,7 @@ export class AppComponent implements OnInit, OnDestroy {
         .subscribe((result) => {
           //console.log("token is valid?",result,this.accessToken);
           if (!result) {
-            alert("Your token is not valid.");
+            alert("Your token is not valid. Please login again.");
             this.logout();
             return;
           }
@@ -288,7 +331,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.chat.Userlogout();
+    this.chat.UserRelog();
+    this.loadUserToken();
     this.settings.setLoginStatus(false);
   }
 
@@ -331,40 +375,6 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       }
     });
-  }
-
-  ngOnInit() {
-    const user: any = localStorage.getItem("username");
-
-    this.getLoginSub = this.settings.getLoginStatus().subscribe((result) => {
-      if (result) {
-        this.loginStatus = true;
-        this.placeholderString = "Send a message as " + user;
-        this.loadUserToken();
-        this.scrollChatbox();
-        this.loadChatMessages(this.currentChannel);
-        const token = localStorage.getItem("twitch_token") || "";
-        this.settings.getUserId(token).subscribe((id) => {
-          this.settings.setUserId(id);
-        });
-      } else {
-        this.loginStatus = false;
-        this.placeholderString = "Login to send a message";
-      }
-      console.log("login:", this.loginStatus);
-    });
-
-    this.currChannelSub = this.settings
-      .getCurrentChannel()
-      .subscribe((result) => {
-        if (result) {
-          this.currentChannel = result;
-          this.onSwitchChannel(this.currentChannel);
-        }
-      });
-    if (user) {
-      this.fetchStreamInfos(user);
-    }
   }
 
   ngOnDestroy() {

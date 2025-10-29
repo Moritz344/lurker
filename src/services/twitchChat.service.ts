@@ -158,9 +158,7 @@ export class TwitchChatService implements OnDestroy {
 
   Userlogout() {
     this.disconnect();
-    localStorage.removeItem("username");
-    localStorage.removeItem("twitch_token");
-    localStorage.removeItem("user_id");
+    localStorage.clear();
   }
 
   UserRelog() {

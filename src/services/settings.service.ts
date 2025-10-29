@@ -47,6 +47,10 @@ export class SettingsService {
     return this.currentChannelSubject.asObservable();
   }
 
+  applyUserSettings(settings: any) {
+    console.log(settings);
+  }
+
   getUserColor(token: string, user_id: string) {
     console.log(token, user_id);
     const url = "https://api.twitch.tv/helix/chat/color?user_id=" + user_id;

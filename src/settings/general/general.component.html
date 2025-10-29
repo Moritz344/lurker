@@ -4,33 +4,51 @@
     <div class="interface">
         <h1>Interface</h1>
         Theme:
-        <select>
-            <option>Dark</option>
-            <option>Light</option>
-        </select>
+
         <br />
-        Font: <input /><select>
-            <option>Arial</option></select
-        ><br />
-        Font Size: <input />
-        <select>
-            <option>10px</option>
-            <option>20px</option>
-            <option>30px</option>
-        </select>
+        Font:
+        <input [(ngModel)]="currentFont" (change)="updateSettings()" />
+        <div class="dropdowns">
+            <select [(ngModel)]="currentTheme" (change)="updateSettings()">
+                <option>Dark</option>
+                <option>Light</option>
+            </select>
+            <select
+                style=""
+                [(ngModel)]="currentFont"
+                (change)="updateSettings()"
+            >
+                <option>Arial</option>
+                <option>Verdana</option>
+                <option>Helvetica</option>
+                <option>Times New Roman</option>
+                <option>Courier New</option>
+                <option>Trebuchet MS</option>
+                <option>Comic Sans MS</option>
+                <option>Impact</option>
+            </select>
+            <select [(ngModel)]="currentFontSize" (change)="updateSettings()">
+                <option value="10px">10px</option>
+                <option value="20px">20px (Default)</option>
+                <option value="30px">30px</option>
+            </select>
+            <select>
+                <option>h:mm</option>
+            </select>
+            <select>
+                <option>enable</option>
+                <option>disable</option>
+            </select>
+        </div>
+        <br />
+        UI Font Size:
+        <input [(ngModel)]="currentFontSize" (change)="updateSettings()" />
     </div>
 
     <div class="chat">
         <h1>Chat</h1>
         Timestamp format:
-        <select>
-            <option>h:mm</option>
-        </select>
         <br />
         Chat colors:
-        <select>
-            <option>enable</option>
-            <option>disable</option>
-        </select>
     </div>
 </div>
