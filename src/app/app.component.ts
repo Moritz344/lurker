@@ -69,10 +69,12 @@ export class AppComponent implements OnInit, OnDestroy {
   applyUserSettings() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
-    document.documentElement.style.setProperty(
-      "--default-font",
-      settingsJson[0].font,
-    );
+    if (settingsJson) {
+      document.documentElement.style.setProperty(
+        "--default-font",
+        settingsJson[0].font,
+      );
+    }
   }
   ngOnInit() {
     this.applyUserSettings();
