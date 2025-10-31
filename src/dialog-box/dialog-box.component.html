@@ -8,6 +8,29 @@
                 spellcheck="false"
                 [placeholder]="currentChannel"
             />
+            <details>
+                <summary>Show Follows</summary>
+
+                <div class="follows">
+                    @for (follow of followList; track $index) {
+                        <span (click)="insertStreamerName(follow)">{{
+                            follow
+                        }}</span>
+                    }
+                    <div class="arrows">
+                        <button
+                            (click)="loadDataForChooseChannelName('backwards')"
+                        >
+                            <img class="backwards" src="arrow.svg" />
+                        </button>
+                        <button
+                            (click)="loadDataForChooseChannelName('forwards')"
+                        >
+                            <img class="forwards" src="arrow.svg" />
+                        </button>
+                    </div>
+                </div>
+            </details>
         } @else if (data.function === "announcement") {
             <input
                 [(ngModel)]="inputValueAnnouncement"

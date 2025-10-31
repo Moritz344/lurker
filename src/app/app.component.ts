@@ -53,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "pennti";
+  currentChannel: string = "MontanaBlack88";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
@@ -88,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.scrollChatbox();
         this.loadChatMessages(this.currentChannel);
         const token = localStorage.getItem("twitch_token") || "";
-        this.settings.getUserId(token).subscribe((id) => {
+        this.settings.getUserId().subscribe((id) => {
           this.settings.setUserId(id);
         });
       } else {
@@ -147,10 +147,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.showVerticalMenuOptions = false;
   }
 
-  onSwitchChannelOverVerticalMenu() {
-    this.onChooseChannel();
-  }
-
   onSwitchChannel(name: string) {
     this.fetchStreamInfos(name);
     this.messages.length = 0;
@@ -166,7 +162,7 @@ export class AppComponent implements OnInit, OnDestroy {
   onChooseChannel() {
     this.dialog.open(DialogBoxComponent, {
       width: "400px",
-      height: "200px",
+      height: "320px",
       panelClass: "container",
 
       data: {
@@ -194,7 +190,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
       if (result.data.length >= 1) {
         this.streamTitel = result.data[0]["title"];
-        console.log(this.streamTitel, channel);
       } else {
         this.streamTitel = "";
       }
@@ -233,7 +228,7 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       // TODO: handle drop reasons: like followers only mode
       this.settings
-        .getUserId(this.accessToken)
+        .getUserId()
         .pipe(
           switchMap((userIdResult: any) => {
             const senderId = userIdResult;

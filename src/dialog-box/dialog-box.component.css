@@ -5,7 +5,35 @@
     border-radius: 0px;
     overflow: hidden;
     border: 1px solid var(--bg-color);
-    height: 300px;
+    height: 320px;
+}
+
+.backwards {
+    transform: rotate(180deg);
+}
+
+.follows {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: scroll;
+    overflow-y: hidden;
+    text-align: left;
+    padding: 10px;
+    gap: 10px;
+}
+
+.follows span:hover {
+    background-color: var(--ghost-hover);
+    cursor: pointer;
+}
+
+.arrows {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 50px;
 }
 
 .items {

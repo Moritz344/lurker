@@ -68,8 +68,25 @@ export class SettingsService {
     localStorage.setItem("user_id", id);
   }
 
-  getUserId(token: string) {
+	getUserColorStatus() {
+					const settings: any = localStorage.getItem("settings");
+					if (!settings) { return };
+					const settingsJSON = JSON.parse(settings);
+					let chatColorState = settingsJSON[0]["chatColorState"];
+
+					return chatColorState;
+	}
+
+	getUserTimestampFormat() {
+					const settings: any = localStorage.getItem("settings");
+					if (!settings) { return };
+					const settingsJSON = JSON.parse(settings);
+					return settingsJSON[0]["timeStampFormat"];
+	}
+
+  getUserId() {
     const url = "https://api.twitch.tv/helix/users";
+		const token: any = localStorage.getItem("twitch_token");
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
@@ -153,7 +170,7 @@ export class SettingsService {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
-        });
+        })
         return this.http.get<any>(url, { headers });
       }),
       map((response) => response.data),

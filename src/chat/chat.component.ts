@@ -1,5 +1,6 @@
 import { Component,Input,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-chat',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class ChatComponent implements OnInit{
 				@Input() message: string = "";
 
-				currentDate = new Date().getHours() + ":" + new Date().getMinutes()+ " " ;
+				currentDate: string = "";
 				currentName: string = ""
 				currentMessage: string = "";
 				userColorArray: string[]  = [
@@ -34,14 +35,39 @@ export class ChatComponent implements OnInit{
 				];
 				userColor: string = "white";
 
-				constructor() {}
+				constructor(public settings: SettingsService) {}
+
 
 				ngOnInit() {
 								const splitMessage = this.message.split(":");
 								this.currentName = splitMessage[0];
 								this.currentMessage = splitMessage[1];
 
-								this.userColor = this.userColorArray[Math.floor(Math.random() * this.userColorArray.length)];
+								let state = this.settings.getUserColorStatus();
+								if (state == "disabled") {
+												this.userColor = "white";
+								}else {
+												this.userColor = this.userColorArray[Math.floor(Math.random() * this.userColorArray.length)];
+								}
+
+								let timestampFormat = this.settings.getUserTimestampFormat();
+								if (timestampFormat == undefined) { timestampFormat === "h:mm"; }
+
+								let hours = "";
+								if (Number(new Date().getHours()) < 10) {
+												hours = new Date().getHours()  + ":" + "0";
+								}else {
+												hours = new Date().getHours().toString() + ":";
+								}
+								if (timestampFormat !== "disabled") {
+												this.currentDate = hours + new Date().getMinutes();
+								}
+
+								if (timestampFormat == "h:mm:ss") {
+												this.currentDate += ":" + new Date().getSeconds() + " ";
+								}else if (timestampFormat == "h:mm") {
+												this.currentDate += " ";
+								}
 
 				}
 

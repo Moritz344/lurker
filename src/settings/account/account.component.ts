@@ -33,10 +33,21 @@ export class AccountComponent implements OnInit {
     this.account_created_at = localStorage.getItem("created_at");
   }
 
-  onLogin() {
+ onLogin() {
+    const client_id = "";
+		const scopes = [
+    'chat:edit',
+    'moderator:manage:announcements',
+    'moderation:read',
+    'channel:manage:moderators',
+    'channel:manage:polls',
+    'user:write:chat',
+    'chat:read',
+    'user:read:follows'
+    ].join(' ');
     this.settings.setLoginStatus(true);
     const url =
-      "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=chat:edit moderator:manage:announcements moderation:read channel:manage:moderators channel:manage:polls user:write:chat chat:read";
+     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=${scopes}`;
     window.location.href = url;
   }
 

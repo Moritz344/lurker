@@ -52,6 +52,31 @@ export class TwitchChatService implements OnDestroy {
     });
   }
 
+  getUserFollows(
+    user_id: string,
+    first: number,
+    afterString: string,
+    beforeString: string,
+  ) {
+    console.log(beforeString);
+    let url = `https://api.twitch.tv/helix/channels/followed?user_id=${user_id}&first=${first}`;
+    if (afterString !== "") {
+      url = `https://api.twitch.tv/helix/channels/followed?user_id=${user_id}&first=${first}&after=${afterString}`;
+    }
+    if (beforeString !== "") {
+      url = `https://api.twitch.tv/helix/channels/followed?user_id=${user_id}&first=${first}&before=${beforeString}`;
+    }
+    const token: any = localStorage.getItem("twitch_token");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.get(url, { headers });
+  }
+
   getStreamInfo(channel: string, token: string) {
     const url = "https://api.twitch.tv/helix/streams?user_login=" + channel;
 

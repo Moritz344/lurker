@@ -2,50 +2,60 @@
     <h1>General</h1>
 
     <div class="interface">
+				<div class="inputs">
+								<input [(ngModel)]="currentFont" (change)="updateSettings()" />
+								<input [(ngModel)]="currentFontSize" (change)="updateSettings()" />
+				</div>
         <h1>Interface</h1>
         Theme:
 
         <br />
         Font:
-        <input [(ngModel)]="currentFont" (change)="updateSettings()" />
         <div class="dropdowns">
             <select [(ngModel)]="currentTheme" (change)="updateSettings()">
-                <option>Dark</option>
-                <option>Light</option>
+                <option value="" disable selected hidden>Standard</option>
+                <option value="standard">Standard</option>
             </select>
             <select
                 style=""
                 [(ngModel)]="currentFont"
                 (change)="updateSettings()"
             >
-                <option>Arial</option>
-                <option>Verdana</option>
-                <option>Helvetica</option>
-                <option>Times New Roman</option>
-                <option>Courier New</option>
-                <option>Trebuchet MS</option>
-                <option>Comic Sans MS</option>
-                <option>Impact</option>
+								<option value="" disable selected hidden>Arial</option>
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Impact">Impact</option>
             </select>
             <select [(ngModel)]="currentFontSize" (change)="updateSettings()">
+								<option value="" disable selected hidden>20px</option>
                 <option value="10px">10px</option>
                 <option value="20px">20px (Default)</option>
                 <option value="30px">30px</option>
             </select>
-            <select>
-                <option>h:mm</option>
-            </select>
-            <select>
-                <option>enable</option>
-                <option>disable</option>
-            </select>
         </div>
         <br />
         UI Font Size:
-        <input [(ngModel)]="currentFontSize" (change)="updateSettings()" />
     </div>
 
     <div class="chat">
+						<div class="chat-selects">
+								<select [(ngModel)]="currentTimeStampFormat" (change)="updateSettings()">
+            		    <option value="" disable selected hidden>h:mm</option>
+            		    <option value="disabled">disabled</option>
+            		    <option value="h:mm">h:mm</option>
+            		    <option value="h:mm:ss">h:mm:ss</option>
+            		</select>
+            		<select [(ngModel)]="currentChatColorState" (change)="updateSettings()">
+            		    <option value="" disable selected hidden>enabled</option>
+            		    <option value="enabled">enabled</option>
+            		    <option value="disabled">disabled</option>
+            		</select>
+						</div>
         <h1>Chat</h1>
         Timestamp format:
         <br />

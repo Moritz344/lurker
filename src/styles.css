@@ -20,7 +20,7 @@
     --danger-hover: #f87171;
     --ghost: rgba(255, 255, 255, 0.1);
     --ghost-hover: rgba(255, 255, 255, 0.2);
-    --default-font: "New Times New Roman";
+    --default-font: "Arial";
     --default-fontSize: 20px;
 }
 
@@ -39,6 +39,12 @@ body {
     font-family: var(--default-font);
     font-size: var(--default-fontSize);
     line-height: 1.5;
+}
+
+select{
+				outline: none;
+				background-color: var(--bg-color);
+				color: white;
 }
 
 button {

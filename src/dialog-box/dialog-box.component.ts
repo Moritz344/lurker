@@ -19,6 +19,9 @@ export class DialogBoxComponent implements OnInit {
   currentChannel: string = "";
   inputValueAnnouncement: string = "";
   isOwner = false;
+  followData: any;
+  followList: string[] = [];
+  nextPageCursor: string = "";
 
   inputValuePollTitle: string = "";
   inputValueChoice_1: string = "";
@@ -45,6 +48,39 @@ export class DialogBoxComponent implements OnInit {
     });
   }
 
+  insertStreamerName(channel: string) {
+    this.inputValue = channel;
+  }
+
+  loadDataForChooseChannelName(direction: string) {
+    this.followList.length = 0;
+    const userId: any = localStorage.getItem("user_id");
+    if (direction === "forwards" || direction === "") {
+      this.chat
+        .getUserFollows(userId, 6, this.nextPageCursor, "")
+        .subscribe((result: any) => {
+          this.followData = result;
+          this.setFollowerList();
+        });
+    } else if (direction === "backwards") {
+      this.chat
+        .getUserFollows(userId, 6, "", this.nextPageCursor)
+        .subscribe((result: any) => {
+          this.followData = result;
+          this.setFollowerList();
+        });
+    }
+  }
+
+  setFollowerList() {
+    if (this.followData && this.followData.data) {
+      for (let follow of this.followData.data) {
+        this.followList.push(follow.broadcaster_name);
+      }
+    }
+    this.nextPageCursor = this.followData.pagination.cursor;
+  }
+
   ngOnInit() {
     const user: any = localStorage.getItem("username");
     this.currentChannel = user;
@@ -53,6 +89,8 @@ export class DialogBoxComponent implements OnInit {
       this.inputValue = result;
       this.checkIfUserIsOwner(this.currentChannel);
     });
+
+    this.loadDataForChooseChannelName("");
   }
 
   onCreatePoll() {
