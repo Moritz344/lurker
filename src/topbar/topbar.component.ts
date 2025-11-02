@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
+import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-topbar",
@@ -28,6 +29,7 @@ export class TopbarComponent {
     private dialog: MatDialog,
     private settings: SettingsService,
     private chat: TwitchChatService,
+    private router: Router,
   ) {
     this.settings.getLoginStatus().subscribe((result) => {
       if (result) {
@@ -54,20 +56,6 @@ export class TopbarComponent {
   }
 
   onLogin() {
-    const client_id = "";
-		const scopes = [
-    'chat:edit',
-    'moderator:manage:announcements',
-    'moderation:read',
-    'channel:manage:moderators',
-    'channel:manage:polls',
-    'user:write:chat',
-    'chat:read',
-    'user:read:follows'
-    ].join(' ');
-    this.settings.setLoginStatus(true);
-    const url =
-     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200&scope=${scopes}`;
-    window.location.href = url;
+    this.router.navigate(["auth"]);
   }
 }

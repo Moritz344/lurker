@@ -56,7 +56,6 @@ export class ChatComponent implements OnInit {
     if (timestampFormat == undefined) {
       timestampFormat = "h:mm";
     }
-    console.log(timestampFormat);
 
     let hours = "";
     if (Number(new Date().getHours()) < 10) {

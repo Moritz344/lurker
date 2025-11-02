@@ -5,6 +5,11 @@
     margin: 10px;
 }
 
+a {
+    text-decoration: none;
+    color: white;
+}
+
 .vertical-menu {
     background: transparent;
     border: none;

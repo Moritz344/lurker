@@ -18,6 +18,7 @@ import { FormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
+import { SettingsComponent } from "../settings/settings.component";
 
 // TODO: better tv emotes
 // TODO: Tabsystem
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
-  channelNameHover: boolean = true;
+  channelNameHover: boolean = false;
 
   loginStatus: boolean = true;
 
@@ -79,24 +80,11 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
-
-    this.getLoginSub = this.settings.getLoginStatus().subscribe((result) => {
-      if (result) {
-        this.loginStatus = true;
-        this.placeholderString = "Send a message as " + user;
-        this.loadUserToken();
-        this.scrollChatbox();
-        this.loadChatMessages(this.currentChannel);
-        const token = localStorage.getItem("twitch_token") || "";
-        this.settings.getUserId().subscribe((id) => {
-          this.settings.setUserId(id);
-        });
-      } else {
-        this.loginStatus = false;
-        this.placeholderString = "Login to send a message";
-      }
-      console.log("login:", this.loginStatus);
+    this.loadChatMessages(this.currentChannel);
+    this.settings.getUserId().subscribe((id) => {
+      this.settings.setUserId(id);
     });
+    this.scrollChatbox();
 
     this.currChannelSub = this.settings
       .getCurrentChannel()
@@ -106,9 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.onSwitchChannel(this.currentChannel);
         }
       });
-    if (user) {
-      this.fetchStreamInfos(user);
-    }
+    this.fetchStreamInfos(this.currentChannel);
   }
 
   constructor(
@@ -137,6 +123,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   onChannelNameLeave() {
     this.channelNameHover = false;
+  }
+
+  onOpenStreamInBrowser() {
+    const url = "https://twitch.tv/" + this.currentChannel;
+    this.settings.openExternalLink(url);
   }
 
   onVerticalMenu() {
@@ -188,11 +179,13 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchStreamInfos(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
+      console.log(channel, token, result);
       if (result.data.length >= 1) {
         this.streamTitel = result.data[0]["title"];
       } else {
         this.streamTitel = "";
       }
+      console.log(this.streamTitel);
     });
   }
 
@@ -214,12 +207,15 @@ export class AppComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const token: any = localStorage.getItem("twitch_token");
+    this.accessToken = token;
+
     if (event.key === "Enter") {
       event.preventDefault();
       this.settings
         .checkAccessTokenValidity(this.accessToken)
         .subscribe((result) => {
-          //console.log("token is valid?",result,this.accessToken);
+          console.log("token is valid?", result, this.accessToken);
           if (!result) {
             alert("Your token is not valid. Please login again.");
             this.logout();
@@ -316,15 +312,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   checkIfLoggedIn() {
-    this.loginSub = this.settings.getAccessToken().subscribe((result: any) => {
-      if (!result) {
-        this.settings.setLoginStatus(false);
-        this.placeholderString = "Login to send a message";
-      } else {
-        this.settings.setLoginStatus(true);
-        this.placeholderString = "Send a message";
-      }
-    });
+    const token: any = localStorage.getItem("twitch_token");
+    const username: any = localStorage.getItem("username");
+    if (!token) {
+      this.settings.setLoginStatus(false);
+      this.placeholderString = "Login to send a message";
+    } else {
+      this.settings.setLoginStatus(true);
+      this.placeholderString = "Send a message as " + username;
+    }
   }
 
   logout() {
