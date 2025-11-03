@@ -48,17 +48,11 @@
 
     <div class="content-container">
         @if (settingsOption === "general") {
-						@defer {
 								<app-general></app-general>
-						}
         } @else if (settingsOption === "account") {
-						@defer {
 								<app-account></app-account>
-						}
         } @else if (settingsOption === "about") {
-						@defer {
 								<app-about></app-about>
-						}
         }
     </div>
 </div>

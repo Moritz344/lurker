@@ -1,5 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld("electronAPI", {
+  openExternalLink: (url) => ipcRenderer.invoke("open-external-link", url),
+  openDialog: (message) => ipcRenderer.invoke("open-dialog", message),
 });
-

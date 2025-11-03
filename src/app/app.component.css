@@ -1,6 +1,6 @@
 .chat-container {
     flex-direction: column;
-    height: 85%;
+    height: 83%;
     overflow-x: hidden;
     margin: 10px;
 }
@@ -15,7 +15,7 @@ a {
     border: none;
     outline: none;
     position: absolute;
-    top: 0px;
+    top: 3px;
     right: 10px;
 }
 
@@ -35,6 +35,7 @@ a {
     padding: 5px;
     background-color: var(--input-color);
 }
+
 
 button {
     border: none;
