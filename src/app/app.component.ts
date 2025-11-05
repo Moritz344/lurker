@@ -60,6 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private loginSub?: Subscription;
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
+		streamerData: any;
 
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
@@ -88,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.currChannelSub = this.settings
       .getCurrentChannel()
-      .subscribe((result) => {
+      .subscribe((result: any) => {
         if (result) {
           this.currentChannel = result;
           this.onSwitchChannel(this.currentChannel);
@@ -179,6 +180,7 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchStreamInfos(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
+						this.streamerData = result.data[0];
       console.log(channel, token, result);
       if (result.data.length >= 1) {
         this.streamTitel = result.data[0]["title"];
@@ -256,7 +258,7 @@ export class AppComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error("Error sending message:", error);
-          },
+          }
         );
     }
   }

@@ -8,11 +8,13 @@ import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 @Component({
   selector: "app-topbar",
   imports: [
     MatDialogModule,
+    MatToolbarModule,
     MatButtonModule,
     SettingsComponent,
     CommonModule,
@@ -49,8 +51,6 @@ export class TopbarComponent {
       width: "500px",
       panelClass: "container",
     });
-
-
   }
 
   onSwitchChannel() {

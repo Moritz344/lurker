@@ -1,6 +1,6 @@
 .chat-container {
     flex-direction: column;
-    height: 83%;
+    height: 85%;
     overflow-x: hidden;
     margin: 10px;
 }
@@ -11,9 +11,6 @@ a {
 }
 
 .vertical-menu {
-    background: transparent;
-    border: none;
-    outline: none;
     position: absolute;
     top: 3px;
     right: 10px;
@@ -22,10 +19,11 @@ a {
 .stream-info {
     position: fixed;
     display: flex;
+				opacity: 0.9;
     justify-content: center;
     justify-items: center;
     align-items: center;
-    top: 0;
+    top: -30px;
     left: 0;
     right: 0;
     z-index: 1000;
@@ -37,43 +35,36 @@ a {
 }
 
 
-button {
-    border: none;
-    color: white;
-    background-color: var(--input-color);
-    text-align: left;
-}
-
-button:hover {
-    background-color: var(--primary-hover);
-}
 
 .dropdown-content {
     display: grid;
+				background-color: var(--input-color);
     position: absolute;
-    top: 25px;
-    right: 40px;
+    top: 30px;
+    right: 45px;
     z-index: 1000;
     width: 200px;
 }
 
-.vertical-menu:hover {
-    background-color: var(--ghost-hover);
+.dropdown-content button{
+				text-align: left;
+				padding: 10px;
 }
+
+
 
 .channel-name {
     position: absolute;
-    top: 25px;
+    top: 5px;
     right: 0px;
     width: 100%;
     text-align: center;
-    background-color: var(--input-color);
     overflow: hidden;
     cursor: pointer;
 }
 
 .channel-name span {
-    color: var(--primary);
+    color: var(--material-primary);
 }
 
 .channel-name span:hover {

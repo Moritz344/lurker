@@ -44,17 +44,6 @@
     border-radius: 100%;
 }
 
-button {
-    background: var(--secondary);
-    border: none;
-    color: white;
-    font-size: 20px;
-}
-
-button:hover {
-    background-color: var(--secondary-hover);
-}
-
 .buttons {
     position: absolute;
     right: 10px;
@@ -77,13 +66,4 @@ button:hover {
     width: 350px;
 }
 
-.name button {
-    background: transparent;
-    color: white;
-    border: none;
-    text-align: left;
-}
 
-.name button:hover {
-    background-color: var(--surface-color);
-}

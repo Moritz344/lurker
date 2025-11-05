@@ -22,6 +22,14 @@
     --ghost-hover: rgba(255, 255, 255, 0.2);
     --default-font: "Arial";
     --default-fontSize: 20px;
+
+				--material-background: #938F99;
+				--material-background_2: #938F96;
+				--material-error:#E46962;
+				--material-secondary:#958DA5;
+				--material-primary:#6750A4;
+
+
 }
 
 .mat-mdc-dialog-container {
@@ -49,6 +57,19 @@ select{
 
 button {
     outline: none;
+				background-color:transparent;
+				border:none;
+				color: white;
+				transition: 0.3s ease;
+}
+
+img{
+								justify-content: center;
+								align-items: center;
+}
+
+button:hover{
+								background-color: var(--material-primary);
 }
 
 input {
@@ -99,3 +120,6 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

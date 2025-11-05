@@ -1,15 +1,6 @@
 .container{
-				display: flex;
-				justify-content: left;
-}
-
-button{
-				background: transparent;
-				border: none;
-}
-
-button:hover{
-				background-color: rgba(23,23,23);
+								position:absolute;
+								left:0px;
 }
 
 
