@@ -1,12 +1,15 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require("electron");
 const path = require("path");
 
+let openUserCardWindow;
+let openSettingsWindow;
+
 // 613 646
 function createWindow() {
   const win = new BrowserWindow({
-    width: 613,
-    height: 646,
-    frame: false,
+    width: 800,
+    height: 600,
+    frame: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -14,10 +17,10 @@ function createWindow() {
     },
   });
 
-  ipcMain.handle("open-dialog", (event, data) => {
-    const dialogWindow = new BrowserWindow({
-      width: 400,
-      height: 300,
+  ipcMain.handle("open-user-card", (event, data) => {
+    openUserCardWindow = new BrowserWindow({
+      width: 500,
+      height: 400,
       parent: win,
       modal: true,
       webPreferences: {
@@ -27,11 +30,49 @@ function createWindow() {
       },
     });
 
-    dialogWindow.loadURL("http://localhost:4200/settings");
+    openUserCardWindow.loadURL("http://localhost:4200/user");
 
-    dialogWindow.webContents.on("did-finish-load", () => {
-      dialogWindow.webContents.send("data", data);
+    openUserCardWindow.webContents.on("did-finish-load", () => {
+      openUserCardWindow.webContents.send("data", data);
     });
+  });
+
+  ipcMain.handle("open-settings", (event, data) => {
+    openSettingsWindow = new BrowserWindow({
+      width: 510,
+      height: 450,
+      parent: win,
+      modal: true,
+      webPreferences: {
+        contextIsolation: true,
+        enableRemoteModule: false,
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+
+    openSettingsWindow.loadURL("http://localhost:4200/settings");
+
+    openSettingsWindow.webContents.on("did-finish-load", () => {
+      openSettingsWindow.webContents.send("data", data);
+    });
+  });
+
+  ipcMain.handle("close-window", (event, window_name) => {
+
+    if (window_name == "settings") {
+												if (openSettingsWindow) {
+												openSettingsWindow.close();
+												openSettingsWindow = null;
+
+												}
+				}else{
+								if (openUserCardWindow) {
+								openUserCardWindow.close();
+								openUserCardWindow = null;
+
+								}
+				}
+
   });
 
   if (process.env.ELECTRON_DEV) {

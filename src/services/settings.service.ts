@@ -55,9 +55,17 @@ export class SettingsService {
     return await (window as any).electronAPI.openExternalLink(url);
   }
 
-  async openDialog(message: string) {
-    return await (window as any).electronAPI.openDialog(message);
+  async openUserCard() {
+    return await (window as any).electronAPI.openUserCard();
   }
+  async openSettings() {
+    return await (window as any).electronAPI.openSettings();
+  }
+
+  async closeWindow(window_name: string) {
+    return await (window as any).electronAPI.closeWindow(window_name);
+  }
+	
 
   getUserColor(token: string, user_id: string) {
     console.log(token, user_id);

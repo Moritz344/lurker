@@ -1,0 +1,111 @@
+
+.chat-container {
+    flex-direction: column;
+    height: 85%;
+    overflow-x: hidden;
+    margin: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.vertical-menu {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
+
+.stream-info {
+    position: fixed;
+    display: flex;
+				opacity: 0.9;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    top: -30px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin-top: 60px;
+}
+.stream-info span {
+    padding: 5px;
+    background-color: var(--input-color);
+}
+
+
+
+.dropdown-content {
+    display: grid;
+				background-color: var(--input-color);
+    position: absolute;
+    top: 30px;
+    right: 45px;
+    z-index: 1000;
+    width: 200px;
+}
+
+.dropdown-content button{
+				text-align: left;
+				padding: 10px;
+}
+
+
+
+.channel-name {
+    position: absolute;
+    top: 5px;
+    right: 0px;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.channel-name span {
+    color: var(--material-primary);
+}
+
+.channel-name span:hover {
+    color: var(--primary-hover);
+}
+
+.chat-entry {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    top: 95%;
+    bottom: 0;
+}
+
+.chat-entry textarea {
+    font-size: 20px;
+    color: white;
+    overflow: hidden;
+    background-color: var(--input-color);
+    color: white;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    resize: none;
+    width: 100%;
+    height: 50px;
+}
+
+.chat-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

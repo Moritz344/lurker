@@ -1,16 +1,21 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SettingsService } from "../services/settings.service";
+import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
+import { RouterModule, } from '@angular/router';
+import { FormsModule} from '@angular/forms';
+import { ComponentFactoryResolver, Injector } from '@angular/core';
+import { UserCardComponent } from '../user-card/user-card.component';
 
 @Component({
   selector: "app-chat",
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule,RouterModule,UserCardComponent],
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.css",
 })
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
-
+		title = "Lurker"
   currentDate: string = "";
   currentName: string = "";
   currentMessage: string = "";
@@ -35,7 +40,16 @@ export class ChatComponent implements OnInit {
   ];
   userColor: string = "white";
 
-  constructor(public settings: SettingsService) {}
+  constructor(public settings: SettingsService,
+													public resolver: ComponentFactoryResolver,
+													public injector: Injector,
+													public router: Router) {}
+
+		onUserCard() {
+								this.settings.openUserCard();
+
+		}
+
 
   ngOnInit() {
     const splitMessage = this.message.split(":");

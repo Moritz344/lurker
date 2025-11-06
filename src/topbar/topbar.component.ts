@@ -47,10 +47,11 @@ export class TopbarComponent {
   }
 
   onSettings() {
-    this.dialog.open(SettingsComponent, {
-      width: "500px",
-      panelClass: "container",
-    });
+    //this.dialog.open(SettingsComponent, {
+    //  width: "500px",
+    //  panelClass: "container",
+    //});
+				this.settings.openSettings();
   }
 
   onSwitchChannel() {

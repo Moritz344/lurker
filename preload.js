@@ -2,5 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   openExternalLink: (url) => ipcRenderer.invoke("open-external-link", url),
-  openDialog: (message) => ipcRenderer.invoke("open-dialog", message),
+  openUserCard: () => ipcRenderer.invoke("open-user-card"),
+  openSettings: () => ipcRenderer.invoke("open-settings"),
+  closeWindow: (window_name) => ipcRenderer.invoke("close-window",window_name),
 });

@@ -24,7 +24,6 @@ export class SettingsComponent {
   settingsOption: string = "general";
 
   constructor(
-    private dialogRef: MatDialogRef<SettingsComponent>,
     private settings: SettingsService,
   ) {}
 
@@ -37,6 +36,6 @@ export class SettingsComponent {
   }
 
   onClose() {
-    this.dialogRef.close();
+										this.settings.closeWindow("settings");
   }
 }

@@ -17,8 +17,8 @@ export class GeneralComponent implements OnInit {
   currentTheme: string = "";
   currentFontSize: string = "";
   currentFont: string = "";
-	currentTimeStampFormat: string = "";
-	currentChatColorState: string = "";
+	 currentTimeStampFormat: string = "";
+	 currentChatColorState: string = "";
 
   saveSettings = [{}];
 
@@ -28,8 +28,8 @@ export class GeneralComponent implements OnInit {
         theme: this.currentTheme,
         font: this.currentFont,
         fontSize: this.currentFontSize,
-				timeStampFormat: this.currentTimeStampFormat,
-				chatColorState: this.currentChatColorState,
+								timeStampFormat: this.currentTimeStampFormat,
+								chatColorState: this.currentChatColorState,
       },
     ];
     localStorage.setItem("settings", JSON.stringify(this.saveSettings));
@@ -54,6 +54,7 @@ export class GeneralComponent implements OnInit {
   loadDefault() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
+				console.log(settingsJson);
     if (settingsJson) {
       this.currentFont = settingsJson[0].font;
       this.currentFontSize = settingsJson[0].fontSize;
@@ -66,12 +67,10 @@ export class GeneralComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings.getLoginStatus().subscribe((isLoggedIn) => {
-      if (isLoggedIn) {
         this.loadDefault();
         const settings: any = localStorage.getItem("settings");
         this.saveSettings = settings;
         this.applyUserSettings(this.saveSettings);
-      }
     });
   }
 

@@ -1,0 +1,50 @@
+<div class="channel-name">
+    <app-topbar></app-topbar>
+    <span
+        (mouseenter)="onChannelNameHover()"
+        (mouseleave)="onChannelNameLeave()"
+        (click)="onChooseChannel()"
+        >{{ currentChannel }}'s chat </span
+    >
+
+    <div class="dropdown">
+        <button class="vertical-menu" (click)="onVerticalMenu()">
+            <img src="vertical.svg" />
+        </button>
+    </div>
+</div>
+
+@if (showVerticalMenuOptions) {
+    <div class="dropdown-content">
+        <button (click)="onAnnouncement()">Make an Announcment</button>
+        <button (click)="onCreatePoll()">Create a Poll</button>
+        <button (click)="onChooseChannel()">Switch Channel</button>
+        <button (click)="onClearChat()">Clear Chat</button>
+        <button (click)="onOpenStreamInBrowser()">
+            Open Stream In Browser
+        </button>
+    </div>
+}
+
+@if (channelNameHover && streamTitel) {
+    <div class="stream-info">
+        <span>{{ streamTitel }}</span>
+    </div>
+}
+
+<br />
+<div class="chat-container" (click)="onDisableVerticalMenu()" #chat>
+    @for (msg of messages; track $index) {
+        <app-chat [message]="msg"></app-chat>
+    }
+</div>
+
+<div class="chat-entry">
+    <textarea
+        #chatEntry
+        spellcheck="false"
+        [placeholder]="placeholderString"
+        [(ngModel)]="userChatMessage"
+        (keydown)="onSendMessage($event)"
+    ></textarea>
+</div>

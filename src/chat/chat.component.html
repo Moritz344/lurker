@@ -1,6 +1,6 @@
 <div class="container">
 				<span style="color: grey" >{{ currentDate }}</span>
-				<span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span>:
+				<a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
 				<span style="color: white">{{ currentMessage }}</span><br>
 </div>
 
