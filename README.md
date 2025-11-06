@@ -2,7 +2,7 @@
 
 an opensource app for listening and writing twitch chat messages.
 
-<img width="985" height="747" alt="demo_picture" src="https://github.com/user-attachments/assets/96ed09e0-365b-47e4-906a-174330c2d983" />
+<img width="1092" height="795" alt="lurker" src="https://github.com/user-attachments/assets/3a0113c0-30b8-4e2a-8704-f4a1fc7194cc" />
 
 
 > [!WARNING]
@@ -12,7 +12,6 @@ an opensource app for listening and writing twitch chat messages.
 
 # TODOS
 - [ ] Tabsystem
-- [ ] Twitch user colors
 - [ ] Support 7tv emotes
 - [ ] View user info
 - [ ] Settings menu
