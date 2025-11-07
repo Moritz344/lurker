@@ -182,6 +182,22 @@ export class SettingsService {
     );
   }
 
+
+
+		getUserCardInfo(name: string) {
+    const url = "https://api.twitch.tv/helix/users?login=" + name;
+				const token:any = localStorage.getItem("twitch_token");
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+
+
+
+
+				return this.http.get(url, { headers });
+		}
+
   getUserInfo(): Observable<string> {
     const url = "https://api.twitch.tv/helix/users";
 

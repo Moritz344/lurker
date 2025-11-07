@@ -1,4 +1,30 @@
+
 <div class="container">
-								user-card works!
+								<div class="top">
+																<span class="id"> ID: {{ infos.id }}</span>
+																<img width="100" height="100" [src]="infos.profile_image_url">
+																<div class="layout">
+																								<span class="username"> <strong> {{ infos.display_name }} </strong> </span>
+																								@if (infos.description) {
+																																<p class="desc"> {{ infos.description }} </p>
+																								}@else{
+																								}
+																								<span class="created">Created: {{ infos.created_at}}</span>
+																								<span class="view-count">views: {{ infos.view_count}}</span>
+																								@if (infos.type) {
+																																<span class="view-count">type: {{ infos.type}}</span>
+																								}
+																</div>
+								</div>
+
+								<br>
+
+								<div class="bottom">
+																<div class="message">
+																								<span>{{ infos.current_date }}</span>
+																								<span [ngStyle]="{ 'color': infos.user_color}"> {{ infos.display_name}}: </span>
+																								<span>{{ infos.last_message }}</span>
+																</div>
+								</div>
 </div>
 

@@ -35,6 +35,7 @@ function createWindow() {
     openUserCardWindow.webContents.on("did-finish-load", () => {
       openUserCardWindow.webContents.send("data", data);
     });
+
   });
 
   ipcMain.handle("open-settings", (event, data) => {

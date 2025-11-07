@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "MontanaBlack88";
+  currentChannel: string = "BastiGHG";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;

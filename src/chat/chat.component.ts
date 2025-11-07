@@ -43,10 +43,18 @@ export class ChatComponent implements OnInit {
   constructor(public settings: SettingsService,
 													public resolver: ComponentFactoryResolver,
 													public injector: Injector,
-													public router: Router) {}
+													public router: Router,
+													) {}
 
 		onUserCard() {
-								this.settings.openUserCard();
+								this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
+																response.data[0]["last_message"] = this.currentMessage;
+																response.data[0]["current_date"] = this.currentDate;
+																response.data[0]["user_color"] = this.userColor;
+																localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
+																this.settings.openUserCard();
+								});
+
 
 		}
 
