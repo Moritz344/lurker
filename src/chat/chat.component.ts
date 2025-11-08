@@ -80,9 +80,6 @@ export class ChatComponent implements OnInit {
     this.foundEmotes = words.filter(word => this.emojiSet.has(word));
 
     if (this.foundEmotes) {
-      const index = this.emojis.findIndex(emoji => emoji.name == this.foundEmotes[0]);
-      this.foundEmoteIndex = index;
-
       const processedMessage: string[] = words.map(word => {
       const emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
       if (emojiIndex !== -1) {
