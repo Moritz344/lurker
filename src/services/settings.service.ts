@@ -55,6 +55,10 @@ export class SettingsService {
     return await (window as any).electronAPI.openExternalLink(url);
   }
 
+  async openEmojiPicker() {
+    return await (window as any).electronAPI.openEmojiPicker();
+  }
+
   async openUserCard() {
     return await (window as any).electronAPI.openUserCard();
   }
@@ -140,7 +144,6 @@ export class SettingsService {
 		}
 
 		timeoutUser() {
-								
 		}
 
   checkIfUserIsModerator(channel: string) {

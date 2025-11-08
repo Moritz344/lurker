@@ -50,5 +50,6 @@
         [(ngModel)]="userChatMessage"
         (keydown)="onSendMessage($event)"
     ></textarea>
+    <button (click)="onEmojiPicker()"class="emoji"><img src="emoji.svg"></button>
 
 </div>

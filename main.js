@@ -57,9 +57,8 @@ function createWindow() {
       openSettingsWindow.webContents.send("data", data);
     });
   });
-
-  ipcMain.handle("open-chatter-list", (event, data) => {
-    openSettingsWindow = new BrowserWindow({
+  ipcMain.handle("open-emoji-picker", (event, data) => {
+    openEmojiPicker = new BrowserWindow({
       width: 510,
       height: 450,
       parent: win,
@@ -71,7 +70,24 @@ function createWindow() {
       },
     });
 
-    openSettingsWindow.loadURL("http://localhost:4200/chatter");
+    openEmojiPicker.loadURL("http://localhost:4200/emoji");
+
+  });
+
+  ipcMain.handle("open-chatter-list", (event, data) => {
+    openChatterList = new BrowserWindow({
+      width: 510,
+      height: 450,
+      parent: win,
+      modal: true,
+      webPreferences: {
+        contextIsolation: true,
+        enableRemoteModule: false,
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+
+    openChatterList.loadURL("http://localhost:4200/chatter");
 
   });
 

@@ -82,7 +82,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-		checkIfModerator() {
+		checkIfModerator() {}
+
+		onEmojiPicker() {
+								this.settings.openEmojiPicker();
 		}
 
   ngOnInit() {

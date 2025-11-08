@@ -1,20 +1,25 @@
 .container {
     display: flex;
     justify-content: center;
+    overflow: hidden;
+}
+
+body{
+								overflow: hidden;
 }
 
 .interface h1 {
     margin-bottom: 0px;
 }
 .inputs{
-    position: absolute;
+  position: absolute;
 		display: grid;
 		grid-template-rows: repeat(1,1fr);
-    top: 50px;
+  top: 50px;
 		gap: 10px;
-    right: -130px;
-    margin-left: 60px;
-    margin-top: 20px;
+  right: -130px;
+  margin-left: 60px;
+  margin-top: 20px;
 		z-index: 1000;
 }
 
@@ -22,27 +27,27 @@
 		display: grid;
 		grid-template-rows: repeat(1,1fr);
 		gap: 10px;
-    position: absolute;
-    top: 25px;
-    right: -250px;
-    margin-left: 60px;
+  position: absolute;
+  top: 25px;
+  right: -250px;
+  margin-left: 60px;
 }
 
 .chat-selects{
 		display: grid;
 		grid-template-rows: repeat(1,1fr);
 		gap: 10px;
-    position: absolute;
-    top: 20px;
+  position: absolute;
+  top: 20px;
 		left: 5px;
-    margin-left: 60px;
-    margin-top: 20px;
+  margin-left: 60px;
+  margin-top: 20px;
 }
 
 select {
-    width: 100px;
-    margin-left: 200px;
-    text-align: left;
+  width: 100px;
+  margin-left: 200px;
+  text-align: left;
 		height: 30px;
 }
 

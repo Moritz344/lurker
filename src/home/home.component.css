@@ -47,6 +47,13 @@ a {
     width: 200px;
 }
 
+
+.emoji{
+								position:absolute;
+								right: 0px;
+								bottom: 0px;
+}
+
 .dropdown-content button{
 				text-align: left;
 				padding: 10px;

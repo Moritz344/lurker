@@ -1,14 +1,9 @@
 <div class="container">
-    <div class="exit">
-        <button (click)="onClose()"><img src="close.svg" /></button>
-    </div>
 
-    @if (settingsOption !== "account") {
-        <div class="submit-buttons">
-            <button (click)="onClose()" class="ok">Ok</button>
-            <button (click)="onClose()" class="cancel">Cancel</button>
-        </div>
-    }
+   <div class="submit-buttons">
+       <button (click)="onClose()" class="ok">Ok</button>
+       <button (click)="onClose()" class="cancel">Cancel</button>
+   </div>
 
     <div class="options">
         <button

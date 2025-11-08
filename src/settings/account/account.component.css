@@ -46,8 +46,18 @@
 
 .buttons {
     position: absolute;
-    right: 10px;
-    bottom: 80px;
+				left: 10px;
+    bottom: 40px;
+				display: grid;
+				gap: 10px;
+				grid-template-columns: repeat(2,1fr);
+}
+.buttons button{
+				background-color: var(--material-background);
+}
+.buttons button:hover{
+				background-color: var(--material-primary);
+
 }
 
 .logout-text {
