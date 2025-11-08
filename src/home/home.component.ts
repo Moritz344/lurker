@@ -57,14 +57,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "NORMAN";
+  currentChannel: string = "pennti";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
-		streamerData: any;
+	streamerData: any;
 
+  globalEmojiNames: { name: string; url: string }[] = [];
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
   channelNameHover: boolean = false;
@@ -85,10 +86,25 @@ export class HomeComponent implements OnInit, OnDestroy {
 		checkIfModerator() {}
 
 		onEmojiPicker() {
-								this.settings.openEmojiPicker();
+        this.settings.openEmojiPicker();
 		}
 
+   private handleStorageChange = (event: StorageEvent) => {
+      this.userChatMessage += event.newValue || ''; 
+  };
+
+  loadEmojisForChat() {
+    this.chat.getGlobalEmotes().subscribe((response: any  ) => {
+      for (let i=0;i<response.data.length;i++) {
+        this.globalEmojiNames.push( {name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"]});
+      }
+    });
+  }
+
   ngOnInit() {
+    const emoji: any = localStorage.getItem("emoji") || '';
+    window.addEventListener('storage', this.handleStorageChange);
+
     this.checkIfModerator();
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
@@ -117,6 +133,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private chat: TwitchChatService,
     private dialog: MatDialog,
   ) {
+    this.loadEmojisForChat();
     this.checkIfLoggedIn();
   }
 
@@ -396,5 +413,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else if (this.currChannelSub) {
       this.currChannelSub.unsubscribe();
     }
+    window.removeEventListener('storage', this.handleStorageChange);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { Observable, Subject, of, throwError } from "rxjs";
+import { Observable, Subject, of, throwError,BehaviorSubject } from "rxjs";
 import {
   HttpClient,
   HttpHeaders,
@@ -89,8 +89,30 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
+  getGlobalEmotes() {
+    const url = `https://api.twitch.tv/helix/chat/emotes/global`;
+    const token: any = localStorage.getItem("twitch_token");
 
-		getChatters(broadcaster_id:string,moderator_id: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+
+    return this.http.get(url, { headers });
+
+
+  }
+
+
+  setEmoji(name: string) {
+    let emoji = localStorage.setItem("emoji",name);
+  }
+
+
+
+	getChatters(broadcaster_id:string,moderator_id: string) {
     const url = `https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
     const token: any = localStorage.getItem("twitch_token");
 
@@ -102,7 +124,7 @@ export class TwitchChatService implements OnDestroy {
 
     return this.http.get(url, { headers });
 
-		}
+	}
 
 
   sendAnnouncement(

@@ -1,0 +1,37 @@
+.tabs{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  background-color: var(--input-color);
+}
+
+button{
+  background-color: var(--ghost);
+}
+
+button:hover{
+  background-color: var(--material-primary);
+}
+
+.global-tab{
+  display: grid;
+  grid-template-columns: repeat(11,1fr);
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+.search-bar{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  
+  
+
+}
+
+.global-tab button{
+  background: transparent;
+}
+
+.global-tab button:hover{
+  background-color: var(--material-primary);
+}

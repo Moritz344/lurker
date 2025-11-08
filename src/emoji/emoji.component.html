@@ -1,1 +1,27 @@
-<p>emoji works!</p>
+<div class="top">
+  <div class="search-bar">
+    <input spellcheck=false [(ngModel)]="searchValue"  placeholder="Search...">
+  </div>
+  <div class="tabs">
+    <button [ngStyle]="{ 'background-color': currentTab == 'global' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onGlobalTab()">Global</button>
+    <button [ngStyle]="{ 'background-color': currentTab == 'emoji' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onEmojiTab()">Emoji</button>
+  </div>
+  @if (currentTab == "global") {
+    <div class="global-tab">
+        @for (x of globalEmotes; track $index) {
+          @if (x['name'].includes(searchValue) || searchValue == '' ) {
+            <button (click)="onEmote(x['name'])"title="{{ x['name'] }}"><img [src]="x['images']['url_1x']"></button>
+
+          }
+        }
+    </div>
+
+  }@else if (currentTab == "emoji") {
+    <div class="emoji-tab">
+        <span>this is the emoji tab</span>
+    </div>
+
+  }
+
+</div>
+

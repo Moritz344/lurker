@@ -1,6 +1,12 @@
 <div class="container">
-    <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
-				<a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
-				<span style="color: white">{{ currentMessage }}</span><br>
+      <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
+		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
+		  <span style="color: white">
+      @if (foundEmotes.length > 0) {
+      <span [innerHTML]="emoteMessage"></span>
+      }@else{
+      {{ currentMessage }}
+      }
+      </span><br>
 </div>
 

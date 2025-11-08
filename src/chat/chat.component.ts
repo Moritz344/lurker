@@ -6,6 +6,7 @@ import { RouterModule, } from '@angular/router';
 import { FormsModule} from '@angular/forms';
 import { ComponentFactoryResolver, Injector } from '@angular/core';
 import { UserCardComponent } from '../user-card/user-card.component';
+import { TwitchChatService } from '../services/twitchChat.service';
 
 @Component({
   selector: "app-chat",
@@ -15,10 +16,16 @@ import { UserCardComponent } from '../user-card/user-card.component';
 })
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
-		title = "Lurker"
+  @Input() emojis: {name:string,url:string}[] = [];
+
+	title = "Lurker"
   currentDate: string = "";
   currentName: string = "";
   currentMessage: string = "";
+  emojiSet: Set<string> = new Set();
+  foundEmotes: any;
+  foundEmoteIndex: number = 0;
+  emoteMessage: string = "";
   userColorArray: string[] = [
     "#FFA500", // Orange
     "#FF4500", // Orangered
@@ -37,14 +44,17 @@ export class ChatComponent implements OnInit {
     "#32CD32", // LimeGreen
     "#7B68EE", // MediumSlateBlue
     "#FF1493", // DeepPink
-  ];
+  ]
   userColor: string = "white";
 
   constructor(public settings: SettingsService,
-													public resolver: ComponentFactoryResolver,
-													public injector: Injector,
-													public router: Router,
-													) {}
+							public resolver: ComponentFactoryResolver,
+							public chat: TwitchChatService,
+							public injector: Injector,
+							public router: Router,
+							) {
+
+  }
 
 		onUserCard() {
 								this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
@@ -58,8 +68,40 @@ export class ChatComponent implements OnInit {
 
 		}
 
+  checkMessage() {
+    for (const emoji of this.emojis) {
+      this.emojiSet.add(emoji.name);
+    }   
+
+    const messageParts = this.message.split(': ');
+    const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
+
+    const words = userMessage.split(/\s+/);
+    this.foundEmotes = words.filter(word => this.emojiSet.has(word));
+
+    if (this.foundEmotes) {
+      const index = this.emojis.findIndex(emoji => emoji.name == this.foundEmotes[0]);
+      this.foundEmoteIndex = index;
+
+      const processedMessage: string[] = words.map(word => {
+      const emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
+      if (emojiIndex !== -1) {
+        return `<img src="${this.emojis[emojiIndex].url}" title="${word}" style="width: 20px; height: 20px;">`;
+      }
+      return word;
+    });
+
+      this.emoteMessage = processedMessage.join(' ');
+      
+ 
+    }
+
+
+
+  }
 
   ngOnInit() {
+    this.checkMessage();
     const splitMessage = this.message.split(":");
     this.currentName = splitMessage[0];
     this.currentMessage = splitMessage[1];
