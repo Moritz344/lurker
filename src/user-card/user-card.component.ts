@@ -22,6 +22,9 @@ export class UserCardComponent implements OnInit{
 																this.infos = settingsJson;
 								}
 
+								onTimeout() {
+									
+								}
 
 								ngOnInit() {
 								}

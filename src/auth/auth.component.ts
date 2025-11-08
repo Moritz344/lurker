@@ -91,6 +91,7 @@ export class AuthComponent implements OnInit {
       "chat:edit",
       "moderator:manage:announcements",
       "moderation:read",
+						"moderator:read:chatters",
       "channel:manage:moderators",
       "channel:manage:polls",
       "user:write:chat",

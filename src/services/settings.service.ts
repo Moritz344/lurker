@@ -58,6 +58,12 @@ export class SettingsService {
   async openUserCard() {
     return await (window as any).electronAPI.openUserCard();
   }
+
+		async openChatterList() {
+    return await (window as any).electronAPI.openChatterList();
+
+		}
+
   async openSettings() {
     return await (window as any).electronAPI.openSettings();
   }
@@ -118,6 +124,24 @@ export class SettingsService {
       }),
     );
   }
+
+		deleteChatMessage(broadcaster_id: string,moderator_id: string) {
+				const url = `https://api.twitch.tv/helix/moderation/chat?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`
+    const token: any = localStorage.getItem("twitch_token");
+
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+
+				return this.http.delete(url, { headers });
+
+		}
+
+		timeoutUser() {
+								
+		}
 
   checkIfUserIsModerator(channel: string) {
     let isUserMod: boolean = false;

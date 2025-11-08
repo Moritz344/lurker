@@ -19,6 +19,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import { SettingsComponent } from "../settings/settings.component";
+import { CommonModule } from '@angular/common';
 
 // TODO: better tv emotes
 // TODO: Tabsystem
@@ -36,9 +37,10 @@ import { SettingsComponent } from "../settings/settings.component";
     RouterOutlet,
     ChatComponent,
     TopbarComponent,
-    FormsModule,
     MatDialogModule,
     DialogBoxComponent,
+				CommonModule,
+				FormsModule
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
@@ -55,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "BastiGHG";
+  currentChannel: string = "NORMAN";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
@@ -79,9 +81,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+		checkIfModerator() {
+		}
+
   ngOnInit() {
+    this.checkIfModerator();
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
+				this.username = user;
     this.loadChatMessages(this.currentChannel);
     this.settings.getUserId().subscribe((id) => {
       this.settings.setUserId(id);
@@ -119,6 +127,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }, 10);
   }
+
+		onChatterList() {
+										this.settings.openChatterList();
+		}
 
   onChannelNameHover() {
     this.channelNameHover = true;

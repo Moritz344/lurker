@@ -1,0 +1,11 @@
+.container{
+								display: grid;
+								grid-template-columns: repeat(1,1fr);
+								gap: 4px;
+								padding: 10px;
+								overflow: scroll;
+}
+
+.user{
+								margin-top: 0px;
+}

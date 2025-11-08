@@ -89,7 +89,21 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
-  getUserColor() {}
+
+		getChatters(broadcaster_id:string,moderator_id: string) {
+    const url = `https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
+    const token: any = localStorage.getItem("twitch_token");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.get(url, { headers });
+
+		}
+
 
   sendAnnouncement(
     broadcaster_id: string,

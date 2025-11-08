@@ -58,6 +58,23 @@ function createWindow() {
     });
   });
 
+  ipcMain.handle("open-chatter-list", (event, data) => {
+    openSettingsWindow = new BrowserWindow({
+      width: 510,
+      height: 450,
+      parent: win,
+      modal: true,
+      webPreferences: {
+        contextIsolation: true,
+        enableRemoteModule: false,
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+
+    openSettingsWindow.loadURL("http://localhost:4200/chatter");
+
+  });
+
   ipcMain.handle("close-window", (event, window_name) => {
 
     if (window_name == "settings") {

@@ -4,6 +4,10 @@
 				border-radius: 5px;
 }
 
+span{
+								font-size: var(--message-size);
+}
+
 .container:hover{
 				background-color: var(--border-color);
 }
@@ -11,4 +15,8 @@
 
 ::-webkit-scrollbar{
 				display: none;
+}
+
+.name{
+								cursor: pointer;
 }

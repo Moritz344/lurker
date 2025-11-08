@@ -7,11 +7,14 @@
         >{{ currentChannel }}'s chat </span
     >
 
+   <button *ngIf="username == currentChannel"class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
+
     <div class="dropdown">
         <button class="vertical-menu" (click)="onVerticalMenu()">
             <img src="vertical.svg" />
         </button>
     </div>
+
 </div>
 
 @if (showVerticalMenuOptions) {
