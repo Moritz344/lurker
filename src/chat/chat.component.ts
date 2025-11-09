@@ -44,8 +44,13 @@ export class ChatComponent implements OnInit {
     "#32CD32", // LimeGreen
     "#7B68EE", // MediumSlateBlue
     "#FF1493", // DeepPink
-  ]
+  ];
   userColor: string = "white";
+
+  hoverEmojiGlobal: {name: string,url: string}[]= [];
+  showGlobalEmojiDesc: boolean = false;
+  hoverEmojiGlobalX = 0;
+  hoverEmojiGlobalY = 0;
 
   constructor(public settings: SettingsService,
 							public resolver: ComponentFactoryResolver,
@@ -55,48 +60,6 @@ export class ChatComponent implements OnInit {
 							) {
 
   }
-
-		onUserCard() {
-								this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
-																response.data[0]["last_message"] = this.currentMessage;
-																response.data[0]["current_date"] = this.currentDate;
-																response.data[0]["user_color"] = this.userColor;
-																localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
-																this.settings.openUserCard();
-								});
-
-
-		}
-
-  checkMessage() {
-    for (const emoji of this.emojis) {
-      this.emojiSet.add(emoji.name);
-    }   
-
-    const messageParts = this.message.split(': ');
-    const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
-
-    const words = userMessage.split(/\s+/);
-    this.foundEmotes = words.filter(word => this.emojiSet.has(word));
-
-    if (this.foundEmotes) {
-      const processedMessage: string[] = words.map(word => {
-      const emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
-      if (emojiIndex !== -1) {
-        return `<img src="${this.emojis[emojiIndex].url}" title="${word}" style="width: 20px; height: 20px;">`;
-      }
-      return word;
-    });
-
-      this.emoteMessage = processedMessage.join(' ');
-      
- 
-    }
-
-
-
-  }
-
   ngOnInit() {
     this.checkMessage();
     const splitMessage = this.message.split(":");
@@ -134,4 +97,63 @@ export class ChatComponent implements OnInit {
       this.currentDate += " ";
     }
   }
+
+	onUserCard() {
+								this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
+																response.data[0]["last_message"] = this.currentMessage;
+																response.data[0]["current_date"] = this.currentDate;
+																response.data[0]["user_color"] = this.userColor;
+																localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
+																this.settings.openUserCard();
+								});
+
+
+	}
+
+  checkMessage() {
+    for (const emoji of this.emojis) {
+      this.emojiSet.add(emoji.name);
+    }   
+
+    const messageParts = this.message.split(': ');
+    const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
+
+    const words = userMessage.split(/\s+/);
+    this.foundEmotes = words.filter(word => this.emojiSet.has(word));
+
+    if (this.foundEmotes) {
+      const processedMessage: string[] = words.map(word => {
+      const emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
+      if (emojiIndex !== -1) {
+        return `<img src="${this.emojis[emojiIndex].url}"" style="width: 20px; height: 20px;">`;
+      }
+      return word;
+    });
+
+      this.emoteMessage = processedMessage.join(' ');
+      
+ 
+    }
+
+
+
+  }
+
+
+  OnMouseEnterGlobal() {
+      //this.hoverEmojiGlobal.push({name: name,url:url});
+      this.showGlobalEmojiDesc = true;
+  }
+
+  OnMouseLeaveGlobal() {
+    this.showGlobalEmojiDesc = false;
+  }
+  
+  updateHoverPositionGlobal(event: MouseEvent) {
+    this.hoverEmojiGlobalX = event.pageX - 10 
+    this.hoverEmojiGlobalY = event.pageY + 20
+  }
+
+
+
 }

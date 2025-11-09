@@ -10,7 +10,14 @@
     <div class="global-tab">
         @for (x of globalEmotes; track $index) {
           @if (x['name'].includes(searchValue) || searchValue == '' ) {
-            <button (click)="onEmote(x['name'])"title="{{ x['name'] }}"><img [src]="x['images']['url_1x']"></button>
+            <button
+                (mousemove)="updateHoverPositionGlobal($event)"
+                (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                (mouseleave)="OnMouseLeaveGlobal()"
+                (click)="onEmote(x['name'])"
+                >
+                <img [src]="x['images']['url_1x']">
+            </button>
 
           }
         }
@@ -22,6 +29,13 @@
     </div>
 
   }
+
+  @if(showEmojiDesc) {
+    <div class="emoji-desc" [ngStyle]="{ top: hoverY + 'px', left: hoverX + 'px' }">
+      <img [src]="hoverEmojiUrl">
+      <span>{{ hoverEmojiName }}</span>
+    </div>
+    }
 
 </div>
 

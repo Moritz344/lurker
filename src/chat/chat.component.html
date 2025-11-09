@@ -3,10 +3,20 @@
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
 		  <span style="color: white">
       @if (foundEmotes.length > 0) {
-      <span [innerHTML]="emoteMessage"></span>
+      <span [innerHTML]="emoteMessage"
+      (mouseenter)="OnMouseEnterGlobal()"
+      (mousemove)="updateHoverPositionGlobal($event)"
+      (mouseleave)="OnMouseLeaveGlobal()"></span>
       }@else{
       {{ currentMessage }}
       }
       </span><br>
+
+      @if (showGlobalEmojiDesc) {
+        <div class="emoji-desc" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
+          <span [innerHTML]="emoteMessage"></span>
+        </div>
+
+        }
 </div>
 

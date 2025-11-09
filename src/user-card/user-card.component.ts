@@ -1,4 +1,4 @@
-import { Component,Input,OnInit } from '@angular/core';
+import { Component,Input,OnInit,OnDestroy } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,25 +9,34 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './user-card.component.html',
   styleUrl: './user-card.component.css'
 })
-export class UserCardComponent implements OnInit{
+export class UserCardComponent implements OnInit,OnDestroy{
 
-								title = "";
-								infos: any;
+		title = "";
+		infos: any;
 
 
-								constructor(public settings: SettingsService,
-																			) {
-																const b: any = localStorage.getItem("next-user-card");
-    												const settingsJson = JSON.parse(b);
-																this.infos = settingsJson;
-								}
+		constructor(public settings: SettingsService) {
+								const b: any = localStorage.getItem("next-user-card");
+    						const settingsJson = JSON.parse(b);
+                this.infos = settingsJson;
+		}
+    
+    onUserCard() {
+        // https://www.twitch.tv/popout/norman/viewercard/Troid23156
+        this.settings.openExternalLink("https://twitch.tv/popout/norman/viewercard/" + this.infos.display_name );
+    }
 
-								onTimeout() {
-									
-								}
 
-								ngOnInit() {
-								}
+    ngOnDestroy() {
+      localStorage.removeItem("next-user-card");
+    }
+    
+		onTimeout() {
+			
+		}
+
+		ngOnInit() {
+		}
 
 
 

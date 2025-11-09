@@ -15,6 +15,12 @@ export class EmojiComponent implements OnInit{
       currentTab: string = "global";
       globalEmotes: any;
       searchValue: string = "";
+      showEmojiDesc: boolean = false;
+
+      hoverEmojiName: string = "";
+      hoverEmojiUrl: string = "";
+      hoverX: number = 0;
+      hoverY: number = 0;
 
 			constructor(public chat: TwitchChatService) {}
     
@@ -35,5 +41,22 @@ export class EmojiComponent implements OnInit{
       onEmojiTab() {
         this.currentTab = "emoji";
       }
+    
+      OnMouseEnterGlobal(name: string,url: string) {
+          this.hoverEmojiName = name;
+          this.hoverEmojiUrl = url;
+          this.showEmojiDesc = true;
+
+      }
+
+      OnMouseLeaveGlobal() {
+        this.showEmojiDesc = false;
+      }
+      
+      updateHoverPositionGlobal(event: MouseEvent) {
+        this.hoverX = event.pageX - 100 
+        this.hoverY = event.pageY + 20
+      }
+
 
 }

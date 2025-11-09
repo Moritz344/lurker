@@ -23,9 +23,12 @@ button:hover{
   display: flex;
   justify-content: center;
   padding: 10px;
-  
-  
+}
 
+.emoji-desc{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px;
 }
 
 .global-tab button{

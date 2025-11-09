@@ -16,18 +16,28 @@ span,p,strong{
 }
 
 .id{
-								position: absolute;
-								right: 10px;
-								top: 10px;
+		position: absolute;
+		right: 10px;
+		top: 10px;
+    font-size: 15px;
+    color: grey;
+
 
 }
 
-.layout span{
+.open-user-card{
+  position: absolute;
+  right: 10px;
+  top: 140px;
+  font-size: 17px;
 }
 
 .desc{
 								margin-top: 0px;
 								margin-bottom: 0px;
+                overflow: scroll;
+                overflow-x: hidden;
+                max-height: 60px;
 }
 
 .layout{

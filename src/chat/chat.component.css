@@ -20,3 +20,8 @@ span{
 .name{
 								cursor: pointer;
 }
+.emoji-desc{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+}
