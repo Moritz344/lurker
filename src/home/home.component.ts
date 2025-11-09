@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private currChannelSub?: Subscription;
 	streamerData: any;
 
-  globalEmojiNames: { name: string; url: string }[] = [];
+  globalEmojiNames: { name: string; url: string,url_2: string }[] = [];
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
   channelNameHover: boolean = false;
@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadEmojisForChat() {
     this.chat.getGlobalEmotes().subscribe((response: any  ) => {
       for (let i=0;i<response.data.length;i++) {
-        this.globalEmojiNames.push( {name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"]});
+        this.globalEmojiNames.push( {name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"],url_2: response.data[i]["images"]["url_2x"]});
       }
     });
   }
@@ -108,7 +108,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.checkIfModerator();
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
-				this.username = user;
+		this.username = user;
     this.loadChatMessages(this.currentChannel);
     this.settings.getUserId().subscribe((id) => {
       this.settings.setUserId(id);

@@ -13,8 +13,9 @@
       </span><br>
 
       @if (showGlobalEmojiDesc) {
+        
         <div class="emoji-desc" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
-          <span [innerHTML]="emoteMessage"></span>
+          <img [src]="emojis[emojiIndex].url_2">
         </div>
 
         }

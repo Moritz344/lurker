@@ -16,7 +16,9 @@ import { TwitchChatService } from '../services/twitchChat.service';
 })
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
-  @Input() emojis: {name:string,url:string}[] = [];
+  @Input() emojis: {name:string,url:string,url_2: string}[] = [];
+
+  //BUG : wenn es merhere emotes gibt in einer nachricht ist das hoverEmoji immer das letzte gesendete
 
 	title = "Lurker"
   currentDate: string = "";
@@ -24,7 +26,7 @@ export class ChatComponent implements OnInit {
   currentMessage: string = "";
   emojiSet: Set<string> = new Set();
   foundEmotes: any;
-  foundEmoteIndex: number = 0;
+  emojiIndex: number = 0;
   emoteMessage: string = "";
   userColorArray: string[] = [
     "#FFA500", // Orange
@@ -47,7 +49,6 @@ export class ChatComponent implements OnInit {
   ];
   userColor: string = "white";
 
-  hoverEmojiGlobal: {name: string,url: string}[]= [];
   showGlobalEmojiDesc: boolean = false;
   hoverEmojiGlobalX = 0;
   hoverEmojiGlobalY = 0;
@@ -123,9 +124,9 @@ export class ChatComponent implements OnInit {
 
     if (this.foundEmotes) {
       const processedMessage: string[] = words.map(word => {
-      const emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
-      if (emojiIndex !== -1) {
-        return `<img src="${this.emojis[emojiIndex].url}"" style="width: 20px; height: 20px;">`;
+      this.emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
+      if (this.emojiIndex !== -1) {
+        return `<img src="${this.emojis[this.emojiIndex].url}">`;
       }
       return word;
     });
@@ -141,7 +142,6 @@ export class ChatComponent implements OnInit {
 
 
   OnMouseEnterGlobal() {
-      //this.hoverEmojiGlobal.push({name: name,url:url});
       this.showGlobalEmojiDesc = true;
   }
 
