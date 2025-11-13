@@ -17,8 +17,8 @@ import { FormsModule } from "@angular/forms";
 })
 export class AppComponent implements OnInit {
 
-								constructor() {}
+				constructor() {}
 
-								ngOnInit() {}
+				ngOnInit() {}
 
 }

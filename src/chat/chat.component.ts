@@ -18,7 +18,6 @@ export class ChatComponent implements OnInit {
   @Input() message: string = "";
   @Input() emojis: {name:string,url:string,url_2: string}[] = [];
 
-  //BUG : wenn es merhere emotes gibt in einer nachricht ist das hoverEmoji immer das letzte gesendete
 
 	title = "Lurker"
   currentDate: string = "";
@@ -27,7 +26,7 @@ export class ChatComponent implements OnInit {
   emojiSet: Set<string> = new Set();
   foundEmotes: any;
   emojiIndex: number = 0;
-  emoteMessage: string = "";
+  emoteMessage: string[] = [];
   userColorArray: string[] = [
     "#FFA500", // Orange
     "#FF4500", // Orangered
@@ -52,6 +51,8 @@ export class ChatComponent implements OnInit {
   showGlobalEmojiDesc: boolean = false;
   hoverEmojiGlobalX = 0;
   hoverEmojiGlobalY = 0;
+  processedMessageEmoji: string[] = [];
+  hoverEmoji: string = "";
 
   constructor(public settings: SettingsService,
 							public resolver: ComponentFactoryResolver,
@@ -116,6 +117,8 @@ export class ChatComponent implements OnInit {
       this.emojiSet.add(emoji.name);
     }   
 
+    let foundEmotesImages: {url: ''}[] = [];
+
     const messageParts = this.message.split(': ');
     const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
 
@@ -123,17 +126,17 @@ export class ChatComponent implements OnInit {
     this.foundEmotes = words.filter(word => this.emojiSet.has(word));
 
     if (this.foundEmotes) {
-      const processedMessage: string[] = words.map(word => {
-      this.emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
-      if (this.emojiIndex !== -1) {
-        return `<img src="${this.emojis[this.emojiIndex].url}">`;
-      }
-      return word;
+      this.processedMessageEmoji = words.map(word => {
+        this.emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
+        if (this.emojiIndex !== -1) {
+          //foundEmotesImages.push(`<img src="${this.emojis[this.emojiIndex].url}">`)
+          return `<img src="${this.emojis[this.emojiIndex].url}">`;
+        }
+        return word;
     });
 
-      this.emoteMessage = processedMessage.join(' ');
+      this.emoteMessage = this.processedMessageEmoji;
       
- 
     }
 
 
@@ -141,7 +144,8 @@ export class ChatComponent implements OnInit {
   }
 
 
-  OnMouseEnterGlobal() {
+  OnMouseEnterGlobal(item: any) {
+      this.hoverEmoji = item;
       this.showGlobalEmojiDesc = true;
   }
 

@@ -5,6 +5,7 @@
   <div class="tabs">
     <button [ngStyle]="{ 'background-color': currentTab == 'global' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onGlobalTab()">Global</button>
     <button [ngStyle]="{ 'background-color': currentTab == 'emoji' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onEmojiTab()">Emoji</button>
+    <button [ngStyle]="{ 'background-color': currentTab == 'Channel_Emotes' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onChannelTab()">Channel</button>
   </div>
   @if (currentTab == "global") {
     <div class="global-tab">

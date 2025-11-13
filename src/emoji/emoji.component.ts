@@ -41,6 +41,10 @@ export class EmojiComponent implements OnInit{
       onEmojiTab() {
         this.currentTab = "emoji";
       }
+
+      onChannelTab() {
+        this.currentTab = "Channel_Emotes";
+      }
     
       OnMouseEnterGlobal(name: string,url: string) {
           this.hoverEmojiName = name;

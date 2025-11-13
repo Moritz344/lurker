@@ -221,6 +221,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.streamTitel = "";
       }
       console.log(this.streamTitel);
+      console.log(result);
     });
   }
 
