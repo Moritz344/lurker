@@ -12,11 +12,18 @@ button:hover{
   background-color: var(--material-primary);
 }
 
-.global-tab{
+.tab{
   display: grid;
   grid-template-columns: repeat(11,1fr);
   margin: 10px;
   overflow-x: hidden;
+}
+.tab button{
+  background: transparent;
+}
+
+.tab button:hover{
+  background-color: var(--material-primary);
 }
 
 .search-bar{
@@ -31,10 +38,3 @@ button:hover{
   padding: 10px;
 }
 
-.global-tab button{
-  background: transparent;
-}
-
-.global-tab button:hover{
-  background-color: var(--material-primary);
-}

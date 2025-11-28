@@ -4,11 +4,10 @@
   </div>
   <div class="tabs">
     <button [ngStyle]="{ 'background-color': currentTab == 'global' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onGlobalTab()">Global</button>
-    <button [ngStyle]="{ 'background-color': currentTab == 'emoji' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onEmojiTab()">Emoji</button>
     <button [ngStyle]="{ 'background-color': currentTab == 'Channel_Emotes' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onChannelTab()">Channel</button>
   </div>
   @if (currentTab == "global") {
-    <div class="global-tab">
+    <div class="tab">
         @for (x of globalEmotes; track $index) {
           @if (x['name'].includes(searchValue) || searchValue == '' ) {
             <button
@@ -24,12 +23,26 @@
         }
     </div>
 
-  }@else if (currentTab == "emoji") {
-    <div class="emoji-tab">
-        <span>this is the emoji tab</span>
-    </div>
+  }@else if (currentTab == "Channel_Emotes") {
+    <div class="tab">
+        @for (x of channelEmotes; track $index) {
+            @if (x['name'].includes(searchValue) || searchValue == '' ) {
+              <button
+                  (mousemove)="updateHoverPositionGlobal($event)"
+                  (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                  (mouseleave)="OnMouseLeaveGlobal()"
+                  (click)="onEmote(x['name'])"
+                  >
+                  <img [src]="x['images']['url_1x']">
+              </button>
 
-  }
+              }
+
+          }
+
+      <img [src]="channelEmotes.template">
+    </div>
+    }
 
   @if(showEmojiDesc) {
     <div class="emoji-desc" [ngStyle]="{ top: hoverY + 'px', left: hoverX + 'px' }">

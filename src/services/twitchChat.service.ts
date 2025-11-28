@@ -89,6 +89,19 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
+  getChannelEmotes(broadcaster_id: string) {
+    console.log("channel emotes:",broadcaster_id);
+    const url = `https://api.twitch.tv/helix/chat/emotes?broadcaster_id=${broadcaster_id}`;
+    const token: any = localStorage.getItem("twitch_token");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+    return this.http.get(url, { headers });
+  }
+
   getGlobalEmotes() {
     const url = `https://api.twitch.tv/helix/chat/emotes/global`;
     const token: any = localStorage.getItem("twitch_token");

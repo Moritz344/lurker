@@ -1,8 +1,8 @@
 import { Component,OnInit } from '@angular/core';
-import { SettingsService } from '../services/settings.service';
 import { TwitchChatService} from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-emoji',
@@ -22,12 +22,31 @@ export class EmojiComponent implements OnInit{
       hoverX: number = 0;
       hoverY: number = 0;
 
-			constructor(public chat: TwitchChatService) {}
+      channelEmotes: any;
+
+			constructor(public chat: TwitchChatService,
+                  public settings: SettingsService) {
+        this.initGlobalEmotesData();
+        this.initChannelEmotes();
+      }
     
-      ngOnInit() {
+      initChannelEmotes() {
+        const token: any = localStorage.getItem("twitch_token");
+        const id : any = localStorage.getItem("broadcaster_id");
+        this.chat.getChannelEmotes(id).subscribe((response:any) => {
+            this.channelEmotes = response.data;
+        });
+      }
+
+      initGlobalEmotesData() {
         this.chat.getGlobalEmotes().subscribe((response: any) => {
             this.globalEmotes = response.data;
         });
+
+      }
+
+
+      ngOnInit() {
       }
 
       onEmote(name: string) {
@@ -52,6 +71,7 @@ export class EmojiComponent implements OnInit{
           this.showEmojiDesc = true;
 
       }
+      
 
       OnMouseLeaveGlobal() {
         this.showEmojiDesc = false;

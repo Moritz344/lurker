@@ -85,9 +85,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		checkIfModerator() {}
 
-		onEmojiPicker() {
-        this.settings.openEmojiPicker();
-		}
+onEmojiPicker() {
+    this.settings.openEmojiPicker();
+}
 
    private handleStorageChange = (event: StorageEvent) => {
       this.userChatMessage += event.newValue || ''; 
@@ -126,6 +126,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.fetchStreamInfos(this.currentChannel);
   }
 
+  setCurrentChannel() {
+    const username: any = localStorage.getItem("username");
+    this.currentChannel = username;
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -133,8 +138,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     private chat: TwitchChatService,
     private dialog: MatDialog,
   ) {
+    this.setCurrentChannel();
     this.loadEmojisForChat();
     this.checkIfLoggedIn();
+    this.saveCurrentBroadCasterId();
   }
 
   scrollChatbox() {
@@ -172,10 +179,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.showVerticalMenuOptions = false;
   }
 
+  saveCurrentBroadCasterId() {
+    const token: any = localStorage.getItem("twitch_token");
+    this.settings.getBroadCasterId(token,this.currentChannel).subscribe(id => {
+      localStorage.setItem("broadcaster_id",id);
+    });
+  }
+
   onSwitchChannel(name: string) {
     this.fetchStreamInfos(name);
     this.messages.length = 0;
     this.currentChannel = name;
+    this.saveCurrentBroadCasterId();
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
   }
@@ -214,7 +229,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
 						this.streamerData = result.data[0];
-      console.log(channel, token, result);
+      //console.log(channel, token, result);
       if (result.data.length >= 1) {
         this.streamTitel = result.data[0]["title"];
       } else {
