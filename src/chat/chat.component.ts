@@ -8,6 +8,8 @@ import { ComponentFactoryResolver, Injector } from '@angular/core';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { TwitchChatService } from '../services/twitchChat.service';
 
+// TODO: show channel emotes
+
 @Component({
   selector: "app-chat",
   imports: [CommonModule,FormsModule,RouterModule,UserCardComponent],
@@ -17,6 +19,7 @@ import { TwitchChatService } from '../services/twitchChat.service';
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
   @Input() emojis: {name:string,url:string,url_2: string}[] = [];
+  @Input() emojisChannel: any;
 
 
 	title = "Lurker"
@@ -62,7 +65,10 @@ export class ChatComponent implements OnInit {
 							) {
 
   }
+
+
   ngOnInit() {
+
     this.checkMessage();
     const splitMessage = this.message.split(":");
     this.currentName = splitMessage[0];
@@ -83,14 +89,14 @@ export class ChatComponent implements OnInit {
       timestampFormat = "h:mm";
     }
 
-    let hours = "";
-    if (Number(new Date().getHours()) < 10) {
-      hours = new Date().getHours() + ":" + "0";
+    let minutes;
+    if (Number(new Date().getMinutes()) < 10) {
+      minutes = "0" + new Date().getMinutes() ;
     } else {
-      hours = new Date().getHours().toString() + ":";
+      minutes = new Date().getMinutes().toString();
     }
     if (timestampFormat !== "disabled") {
-      this.currentDate = hours + new Date().getMinutes();
+      this.currentDate =new Date().getHours() + ":" + minutes;
     }
 
     if (timestampFormat == "h:mm:ss") {
@@ -101,21 +107,35 @@ export class ChatComponent implements OnInit {
   }
 
 	onUserCard() {
-								this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
-																response.data[0]["last_message"] = this.currentMessage;
-																response.data[0]["current_date"] = this.currentDate;
-																response.data[0]["user_color"] = this.userColor;
-																localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
-																this.settings.openUserCard();
-								});
+		 this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
+		 	 response.data[0]["last_message"] = this.currentMessage;
+		 	 response.data[0]["current_date"] = this.currentDate;
+		 	 response.data[0]["user_color"] = this.userColor;
+		 	 localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
+		 	 this.settings.openUserCard();
+		 });
 
 
 	}
 
-  checkMessage() {
+
+  
+  initGlobalEmotes() {
     for (const emoji of this.emojis) {
       this.emojiSet.add(emoji.name);
     }   
+    for (const emoji of this.emojisChannel) {
+      this.emojiSet.add(emoji.name);
+    }   
+
+    for (let i=0;i<this.emojisChannel.length;i++) {
+      this.emojis.push({name: this.emojisChannel[i]["name"],url: this.emojisChannel[i]["images"]["url_1x"],url_2: this.emojisChannel[i]["images"]["url_2x"]})
+    }
+
+  }
+
+  checkMessage() {
+    this.initGlobalEmotes();
 
     let foundEmotesImages: {url: ''}[] = [];
 

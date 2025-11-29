@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	streamerData: any;
 
   globalEmojiNames: { name: string; url: string,url_2: string }[] = [];
+  channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
   channelNameHover: boolean = false;
@@ -93,12 +94,22 @@ onEmojiPicker() {
       this.userChatMessage += event.newValue || ''; 
   };
 
+  loadChannelEmojisForChat() {
+    const id: any = localStorage.getItem("broadcaster_id");
+    this.chat.getChannelEmotes(id).subscribe((response:any) => {
+      this.channelEmojis = response.data;
+      console.log(response);
+    });
+
+  }
+
   loadEmojisForChat() {
     this.chat.getGlobalEmotes().subscribe((response: any  ) => {
       for (let i=0;i<response.data.length;i++) {
         this.globalEmojiNames.push( {name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"],url_2: response.data[i]["images"]["url_2x"]});
       }
     });
+
   }
 
   ngOnInit() {
@@ -139,6 +150,7 @@ onEmojiPicker() {
     private dialog: MatDialog,
   ) {
     this.setCurrentChannel();
+    this.loadChannelEmojisForChat();
     this.loadEmojisForChat();
     this.checkIfLoggedIn();
     this.saveCurrentBroadCasterId();
@@ -183,6 +195,7 @@ onEmojiPicker() {
     const token: any = localStorage.getItem("twitch_token");
     this.settings.getBroadCasterId(token,this.currentChannel).subscribe(id => {
       localStorage.setItem("broadcaster_id",id);
+      this.loadChannelEmojisForChat();
     });
   }
 
@@ -193,6 +206,7 @@ onEmojiPicker() {
     this.saveCurrentBroadCasterId();
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
+
   }
 
   onClearChat() {
@@ -235,8 +249,6 @@ onEmojiPicker() {
       } else {
         this.streamTitel = "";
       }
-      console.log(this.streamTitel);
-      console.log(result);
     });
   }
 
@@ -400,7 +412,6 @@ onEmojiPicker() {
         this.settings.setAccessToken(this.accessToken);
         this.settings.getUserInfo().subscribe((data: any) => {
           this.settings.setUserName(data[0]["display_name"]);
-          console.log(data);
           this.setAccountData(
             data[0]["description"],
             data[0]["profile_image_url"],
@@ -410,7 +421,6 @@ onEmojiPicker() {
           this.settings
             .checkAccessTokenValidity(this.accessToken)
             .subscribe((result) => {
-              //console.log("token is valid?",result,this.accessToken);
               if (!result) {
                 alert("Your token is not valid. Try logging in again.");
                 this.logout();
