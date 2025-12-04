@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "pennti";
+  currentChannel: string = "BastiGHG";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
@@ -98,7 +98,6 @@ onEmojiPicker() {
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat.getChannelEmotes(id).subscribe((response:any) => {
       this.channelEmojis = response.data;
-      console.log(response);
     });
 
   }
@@ -139,6 +138,7 @@ onEmojiPicker() {
 
   setCurrentChannel() {
     const username: any = localStorage.getItem("username");
+    localStorage.setItem("channel",username);
     this.currentChannel = username;
   }
 
@@ -200,6 +200,7 @@ onEmojiPicker() {
   }
 
   onSwitchChannel(name: string) {
+    localStorage.setItem("channel",name);
     this.fetchStreamInfos(name);
     this.messages.length = 0;
     this.currentChannel = name;

@@ -56,6 +56,7 @@ export class ChatComponent implements OnInit {
   hoverEmojiGlobalY = 0;
   processedMessageEmoji: string[] = [];
   hoverEmoji: string = "";
+  userToListenTo: string = "";
 
   constructor(public settings: SettingsService,
 							public resolver: ComponentFactoryResolver,
@@ -68,6 +69,7 @@ export class ChatComponent implements OnInit {
 
 
   ngOnInit() {
+
 
     this.checkMessage();
     const splitMessage = this.message.split(":");
@@ -104,9 +106,14 @@ export class ChatComponent implements OnInit {
     } else if (timestampFormat == "h:mm") {
       this.currentDate += " ";
     }
+
+    let userToListenTo: any = localStorage.getItem("next-user-card");
+    const currentUserCardOpen = JSON.parse(userToListenTo);
   }
 
+
 	onUserCard() {
+     console.log(this.userToListenTo);
 		 this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
 		 	 response.data[0]["last_message"] = this.currentMessage;
 		 	 response.data[0]["current_date"] = this.currentDate;
