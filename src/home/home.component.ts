@@ -26,9 +26,8 @@ import { CommonModule } from '@angular/common';
 // TODO: emoji picker
 // TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
 // TODO: channel points
-// TODO: stream information
 // TODO: option to show streamers that user follows
-// TODO: user card
+// TODO: work on perfomance
 
 @Component({
   selector: "app-root",
@@ -64,6 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
 	streamerData: any;
+  streamThumbnail: string = "";
 
   globalEmojiNames: { name: string; url: string,url_2: string }[] = [];
   channelEmojis: any;
@@ -84,11 +84,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-		checkIfModerator() {}
 
-onEmojiPicker() {
-    this.settings.openEmojiPicker();
-}
+  onEmojiPicker() {
+      this.settings.openEmojiPicker();
+  }
+
 
    private handleStorageChange = (event: StorageEvent) => {
       this.userChatMessage += event.newValue || ''; 
@@ -115,7 +115,6 @@ onEmojiPicker() {
     const emoji: any = localStorage.getItem("emoji") || '';
     window.addEventListener('storage', this.handleStorageChange);
 
-    this.checkIfModerator();
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
 		this.username = user;
@@ -217,7 +216,7 @@ onEmojiPicker() {
   onChooseChannel() {
     this.dialog.open(DialogBoxComponent, {
       width: "400px",
-      height: "320px",
+      height: "220px",
       panelClass: "container",
 
       data: {
@@ -243,8 +242,9 @@ onEmojiPicker() {
   fetchStreamInfos(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
-						this.streamerData = result.data[0];
-      //console.log(channel, token, result);
+      this.streamerData = result.data[0];
+      this.streamThumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.replace(/\\s/g, '') + "-300x200.jpg";
+      console.log(this.streamThumbnail);
       if (result.data.length >= 1) {
         this.streamTitel = result.data[0]["title"];
       } else {

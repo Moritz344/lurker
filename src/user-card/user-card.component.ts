@@ -34,6 +34,10 @@ export class UserCardComponent implements OnInit,OnDestroy{
       const token: any = localStorage.getItem("twitch_token");
       const username: any = this.infos.display_name;
       let channel: any = localStorage.getItem("channel");
+      console.log(typeof channel);
+      if (!channel) {
+        channel = username;
+      }
         this.chat.connect(token, username, channel);
           let msgSubject = this.chat.messages$.subscribe((msg) => {
                   if (msg.split(":")[0] == username) {

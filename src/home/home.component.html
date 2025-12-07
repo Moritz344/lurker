@@ -1,13 +1,19 @@
 <div class="channel-name">
     <app-topbar></app-topbar>
     <span
+        class="name"
         (mouseenter)="onChannelNameHover()"
         (mouseleave)="onChannelNameLeave()"
         (click)="onChooseChannel()"
         >{{ currentChannel }}'s chat </span
     >
+    @if (streamerData) {
+      <div class="viewer-count">
+        <span title="people watching" >{{ streamerData.viewer_count }}</span>
+      </div>
+    }
 
-   <button *ngIf="username == currentChannel"class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
+   <button *ngIf="username == currentChannel" class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
 
     <div class="dropdown">
         <button class="vertical-menu" (click)="onVerticalMenu()">
@@ -20,7 +26,6 @@
 @if (showVerticalMenuOptions) {
     <div class="dropdown-content">
         <button (click)="onAnnouncement()">Make an Announcment</button>
-        <button (click)="onCreatePoll()">Create a Poll</button>
         <button (click)="onChooseChannel()">Switch Channel</button>
         <button (click)="onClearChat()">Clear Chat</button>
         <button (click)="onOpenStreamInBrowser()">
@@ -31,8 +36,9 @@
 
 @if (channelNameHover && streamTitel) {
     <div class="stream-info">
+        <img [src]="streamThumbnail" >
         <span>{{ streamTitel }}</span>
-    </div>
+   </div>
 }
 
 <br />

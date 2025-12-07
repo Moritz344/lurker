@@ -38,6 +38,7 @@ function createWindow() {
 
   });
 
+
   ipcMain.handle("open-settings", (event, data) => {
     openSettingsWindow = new BrowserWindow({
       width: 510,
