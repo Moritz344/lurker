@@ -17,7 +17,7 @@ export class SettingsService {
   lastMessageUser: string = "";
   lastMessageUserSubject = new BehaviorSubject<string>(this.lastMessageUser);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   setLoginStatus(isLogged: boolean) {
     this.loginStatus = isLogged;
@@ -67,10 +67,10 @@ export class SettingsService {
     return await (window as any).electronAPI.openUserCard();
   }
 
-		async openChatterList() {
+  async openChatterList() {
     return await (window as any).electronAPI.openChatterList();
 
-		}
+  }
 
   async openSettings() {
     return await (window as any).electronAPI.openSettings();
@@ -79,7 +79,7 @@ export class SettingsService {
   async closeWindow(window_name: string) {
     return await (window as any).electronAPI.closeWindow(window_name);
   }
-	
+
 
   getUserColor(token: string, user_id: string) {
     console.log(token, user_id);
@@ -133,8 +133,8 @@ export class SettingsService {
     );
   }
 
-		deleteChatMessage(broadcaster_id: string,moderator_id: string) {
-				const url = `https://api.twitch.tv/helix/moderation/chat?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`
+  deleteChatMessage(broadcaster_id: string, moderator_id: string) {
+    const url = `https://api.twitch.tv/helix/moderation/chat?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`
     const token: any = localStorage.getItem("twitch_token");
 
 
@@ -143,12 +143,12 @@ export class SettingsService {
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
     });
 
-				return this.http.delete(url, { headers });
+    return this.http.delete(url, { headers });
 
-		}
+  }
 
-		timeoutUser() {
-		}
+  timeoutUser() {
+  }
 
   checkIfUserIsModerator(channel: string) {
     let isUserMod: boolean = false;
@@ -215,17 +215,17 @@ export class SettingsService {
 
 
 
-	getUserCardInfo(name: string) {
-  const url = "https://api.twitch.tv/helix/users?login=" + name;
-	const token:any = localStorage.getItem("twitch_token");
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-    "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
-  });
-			return this.http.get(url, { headers });
-	}
+  getUserCardInfo(name: string) {
+    const url = "https://api.twitch.tv/helix/users?login=" + name;
+    const token: any = localStorage.getItem("twitch_token");
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+    return this.http.get(url, { headers });
+  }
 
-  
+
 
   getUserInfo(): Observable<string> {
     const url = "https://api.twitch.tv/helix/users";

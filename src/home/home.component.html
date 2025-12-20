@@ -25,7 +25,6 @@
 
 @if (showVerticalMenuOptions) {
     <div class="dropdown-content">
-        <button (click)="onAnnouncement()">Make an Announcment</button>
         <button (click)="onChooseChannel()">Switch Channel</button>
         <button (click)="onClearChat()">Clear Chat</button>
         <button (click)="onOpenStreamInBrowser()">
@@ -44,7 +43,7 @@
 <br />
 <div class="chat-container" (click)="onDisableVerticalMenu()" #chat>
     @for (msg of messages; track $index) {
-        <app-chat [emojis]="globalEmojiNames" [emojisChannel]="channelEmojis" [message]="msg"></app-chat>
+        <app-chat [emojis]="globalEmojiNames" [emojisChannel]="channelEmojis" [message]="msg" [color]="chatterInfo.color"></app-chat>
     }
 </div>
 

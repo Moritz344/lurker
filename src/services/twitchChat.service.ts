@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { Observable, Subject, of, throwError,BehaviorSubject } from "rxjs";
+import { Observable, Subject, of, throwError, BehaviorSubject } from "rxjs";
 import {
   HttpClient,
   HttpHeaders,
@@ -13,14 +13,17 @@ import { switchMap, map, catchError } from "rxjs/operators";
 export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
+  private badgeInfoSubject = new Subject<string>();
+  private chatColor = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   connect(token: string, username: string, channel: string) {
     this.disconnect();
 
     this.socket = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
+
 
     this.socket.addEventListener("open", () => {
       console.log("Twitch Chat verbunden");
@@ -31,6 +34,7 @@ export class TwitchChatService implements OnDestroy {
       this.socket!.send(`PASS oauth:${token}`);
       this.socket!.send(`NICK ${username}`);
       this.socket!.send(`JOIN #${channel}`);
+      this.socket!.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
     });
 
     this.socket.addEventListener("message", (event) => {
@@ -41,15 +45,27 @@ export class TwitchChatService implements OnDestroy {
       }
 
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
+      let badgeInfoString = raw.split(";")[0].split("@badge-info=")[1];
+      let chatColorString = raw.split(";")[3].split("color=")[1];
+
       if (match) {
         const [, user, message] = match;
         this.messageSubject.next(`${user}: ${message}`);
+        this.badgeInfoSubject.next(badgeInfoString);
+        this.chatColor.next(chatColorString);
       }
     });
 
     this.socket.addEventListener("close", () => {
       console.log("Twitch Chat getrennt");
     });
+  }
+
+  getChatterBadge() {
+    return this.badgeInfoSubject.asObservable();
+  }
+  getChatterColor() {
+    return this.chatColor.asObservable();
   }
 
   getUserFollows(
@@ -90,7 +106,7 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getChannelEmotes(broadcaster_id: string) {
-    console.log("channel emotes:",broadcaster_id);
+    console.log("channel emotes:", broadcaster_id);
     const url = `https://api.twitch.tv/helix/chat/emotes?broadcaster_id=${broadcaster_id}`;
     const token: any = localStorage.getItem("twitch_token");
 
@@ -101,6 +117,7 @@ export class TwitchChatService implements OnDestroy {
     });
     return this.http.get(url, { headers });
   }
+
 
   getGlobalEmotes() {
     const url = `https://api.twitch.tv/helix/chat/emotes/global`;
@@ -120,12 +137,12 @@ export class TwitchChatService implements OnDestroy {
 
 
   setEmoji(name: string) {
-    let emoji = localStorage.setItem("emoji",name);
+    let emoji = localStorage.setItem("emoji", name);
   }
 
 
 
-	getChatters(broadcaster_id:string,moderator_id: string) {
+  getChatters(broadcaster_id: string, moderator_id: string) {
     const url = `https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
     const token: any = localStorage.getItem("twitch_token");
 
@@ -137,7 +154,7 @@ export class TwitchChatService implements OnDestroy {
 
     return this.http.get(url, { headers });
 
-	}
+  }
 
 
   sendAnnouncement(

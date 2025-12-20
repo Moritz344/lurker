@@ -35,9 +35,10 @@ export class DialogBoxComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private settings: SettingsService,
     private chat: TwitchChatService,
-  ) {}
+  ) { }
 
   checkIfUserIsOwner(result: string) {
+    if (!result) { return; }
     const token: any = localStorage.getItem("twitch_token");
     const user_id: any = localStorage.getItem("user_id");
     this.settings.getBroadCasterId(token, result).subscribe((id) => {
@@ -167,7 +168,7 @@ export class DialogBoxComponent implements OnInit {
               "purple",
               token,
             )
-            .subscribe((result) => {});
+            .subscribe((result) => { });
         });
     } else {
       alert("Looks like you are not a moderator here");

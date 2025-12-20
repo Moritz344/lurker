@@ -28,6 +28,12 @@ import { CommonModule } from '@angular/common';
 // TODO: channel points
 // TODO: option to show streamers that user follows
 // TODO: work on perfomance
+// TODO: make user color not random everytime
+
+// TODO: GET BADGES AND SAVE THEM: /helix/chat/badges?broadcaster_id=DEINE_CHANNEL_ID
+// TODO: BADGE INFO IS FROM IRC
+
+
 
 @Component({
   selector: "app-root",
@@ -38,8 +44,8 @@ import { CommonModule } from '@angular/common';
     TopbarComponent,
     MatDialogModule,
     DialogBoxComponent,
-				CommonModule,
-				FormsModule
+    CommonModule,
+    FormsModule
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
@@ -62,10 +68,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private loginSub?: Subscription;
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
-	streamerData: any;
+  streamerData: any;
   streamThumbnail: string = "";
+  chatterInfo = { color: "", badges: "" };
 
-  globalEmojiNames: { name: string; url: string,url_2: string }[] = [];
+  globalEmojiNames: { name: string; url: string, url_2: string }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
   streamTitel: string = "";
@@ -86,26 +93,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   onEmojiPicker() {
-      this.settings.openEmojiPicker();
+    this.settings.openEmojiPicker();
   }
 
 
-   private handleStorageChange = (event: StorageEvent) => {
-      this.userChatMessage += event.newValue || ''; 
+  private handleStorageChange = (event: StorageEvent) => {
+    this.userChatMessage += event.newValue || '';
   };
 
   loadChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
-    this.chat.getChannelEmotes(id).subscribe((response:any) => {
+    this.chat.getChannelEmotes(id).subscribe((response: any) => {
       this.channelEmojis = response.data;
     });
 
   }
 
   loadEmojisForChat() {
-    this.chat.getGlobalEmotes().subscribe((response: any  ) => {
-      for (let i=0;i<response.data.length;i++) {
-        this.globalEmojiNames.push( {name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"],url_2: response.data[i]["images"]["url_2x"]});
+    this.chat.getGlobalEmotes().subscribe((response: any) => {
+      for (let i = 0; i < response.data.length; i++) {
+        this.globalEmojiNames.push({ name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"], url_2: response.data[i]["images"]["url_2x"] });
       }
     });
 
@@ -117,7 +124,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.applyUserSettings();
     const user: any = localStorage.getItem("username");
-		this.username = user;
+    this.username = user;
     this.loadChatMessages(this.currentChannel);
     this.settings.getUserId().subscribe((id) => {
       this.settings.setUserId(id);
@@ -137,7 +144,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setCurrentChannel() {
     const username: any = localStorage.getItem("username");
-    localStorage.setItem("channel",username);
+    localStorage.setItem("channel", username);
     this.currentChannel = username;
   }
 
@@ -166,9 +173,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 10);
   }
 
-		onChatterList() {
-										this.settings.openChatterList();
-		}
+  onChatterList() {
+    this.settings.openChatterList();
+  }
 
   onChannelNameHover() {
     this.channelNameHover = true;
@@ -192,14 +199,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   saveCurrentBroadCasterId() {
     const token: any = localStorage.getItem("twitch_token");
-    this.settings.getBroadCasterId(token,this.currentChannel).subscribe(id => {
-      localStorage.setItem("broadcaster_id",id);
+    this.settings.getBroadCasterId(token, this.currentChannel).subscribe(id => {
+      localStorage.setItem("broadcaster_id", id);
       this.loadChannelEmojisForChat();
     });
   }
 
   onSwitchChannel(name: string) {
-    localStorage.setItem("channel",name);
+    localStorage.setItem("channel", name);
     this.fetchStreamInfos(name);
     this.messages.length = 0;
     this.currentChannel = name;
@@ -239,7 +246,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
   fetchStreamInfos(channel: string) {
+    if (!channel) { return; }
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
       this.streamerData = result.data[0];
@@ -370,6 +379,14 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.sub = this.chat.messages$.subscribe((msg) =>
               this.messages.push(msg),
             );
+            this.chat.getChatterBadge().subscribe(badge => {
+              this.chatterInfo.badges = badge;
+            });
+
+            this.chat.getChatterColor().subscribe(color => {
+              this.chatterInfo.color = color;
+            });
+
           }
         }
       });

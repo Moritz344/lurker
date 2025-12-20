@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { SettingsService } from "../services/settings.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { RouterModule, } from '@angular/router';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ComponentFactoryResolver, Injector } from '@angular/core';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { TwitchChatService } from '../services/twitchChat.service';
@@ -12,17 +12,18 @@ import { TwitchChatService } from '../services/twitchChat.service';
 
 @Component({
   selector: "app-chat",
-  imports: [CommonModule,FormsModule,RouterModule,UserCardComponent],
+  imports: [CommonModule, FormsModule, RouterModule, UserCardComponent],
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.css",
 })
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
-  @Input() emojis: {name:string,url:string,url_2: string}[] = [];
+  @Input() color: string = "";
+  @Input() emojis: { name: string, url: string, url_2: string }[] = [];
   @Input() emojisChannel: any;
 
 
-	title = "Lurker"
+  title = "Lurker"
   currentDate: string = "";
   currentName: string = "";
   currentMessage: string = "";
@@ -59,11 +60,11 @@ export class ChatComponent implements OnInit {
   userToListenTo: string = "";
 
   constructor(public settings: SettingsService,
-							public resolver: ComponentFactoryResolver,
-							public chat: TwitchChatService,
-							public injector: Injector,
-							public router: Router,
-							) {
+    public resolver: ComponentFactoryResolver,
+    public chat: TwitchChatService,
+    public injector: Injector,
+    public router: Router,
+  ) {
 
   }
 
@@ -80,10 +81,7 @@ export class ChatComponent implements OnInit {
     if (state == "disabled") {
       this.userColor = "white";
     } else {
-      this.userColor =
-        this.userColorArray[
-          Math.floor(Math.random() * this.userColorArray.length)
-        ];
+      this.userColor = this.color;
     }
 
     let timestampFormat = this.settings.getUserTimestampFormat();
@@ -93,12 +91,12 @@ export class ChatComponent implements OnInit {
 
     let minutes;
     if (Number(new Date().getMinutes()) < 10) {
-      minutes = "0" + new Date().getMinutes() ;
+      minutes = "0" + new Date().getMinutes();
     } else {
       minutes = new Date().getMinutes().toString();
     }
     if (timestampFormat !== "disabled") {
-      this.currentDate =new Date().getHours() + ":" + minutes;
+      this.currentDate = new Date().getHours() + ":" + minutes;
     }
 
     if (timestampFormat == "h:mm:ss") {
@@ -112,31 +110,31 @@ export class ChatComponent implements OnInit {
   }
 
 
-	onUserCard() {
-     console.log(this.userToListenTo);
-		 this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
-		 	 response.data[0]["last_message"] = this.currentMessage;
-		 	 response.data[0]["current_date"] = this.currentDate;
-		 	 response.data[0]["user_color"] = this.userColor;
-		 	 localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
-		 	 this.settings.openUserCard();
-		 });
+  onUserCard() {
+    console.log(this.userToListenTo);
+    this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
+      response.data[0]["last_message"] = this.currentMessage;
+      response.data[0]["current_date"] = this.currentDate;
+      response.data[0]["user_color"] = this.userColor;
+      localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
+      this.settings.openUserCard();
+    });
 
 
-	}
+  }
 
 
-  
+
   initGlobalEmotes() {
     for (const emoji of this.emojis) {
       this.emojiSet.add(emoji.name);
-    }   
+    }
     for (const emoji of this.emojisChannel) {
       this.emojiSet.add(emoji.name);
-    }   
+    }
 
-    for (let i=0;i<this.emojisChannel.length;i++) {
-      this.emojis.push({name: this.emojisChannel[i]["name"],url: this.emojisChannel[i]["images"]["url_1x"],url_2: this.emojisChannel[i]["images"]["url_2x"]})
+    for (let i = 0; i < this.emojisChannel.length; i++) {
+      this.emojis.push({ name: this.emojisChannel[i]["name"], url: this.emojisChannel[i]["images"]["url_1x"], url_2: this.emojisChannel[i]["images"]["url_2x"] })
     }
 
   }
@@ -144,7 +142,7 @@ export class ChatComponent implements OnInit {
   checkMessage() {
     this.initGlobalEmotes();
 
-    let foundEmotesImages: {url: ''}[] = [];
+    let foundEmotesImages: { url: '' }[] = [];
 
     const messageParts = this.message.split(': ');
     const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
@@ -160,10 +158,10 @@ export class ChatComponent implements OnInit {
           return `<img src="${this.emojis[this.emojiIndex].url}">`;
         }
         return word;
-    });
+      });
 
       this.emoteMessage = this.processedMessageEmoji;
-      
+
     }
 
 
@@ -172,16 +170,16 @@ export class ChatComponent implements OnInit {
 
 
   OnMouseEnterGlobal(item: any) {
-      this.hoverEmoji = item;
-      this.showGlobalEmojiDesc = true;
+    this.hoverEmoji = item;
+    this.showGlobalEmojiDesc = true;
   }
 
   OnMouseLeaveGlobal() {
     this.showGlobalEmojiDesc = false;
   }
-  
+
   updateHoverPositionGlobal(event: MouseEvent) {
-    this.hoverEmojiGlobalX = event.pageX - 10 
+    this.hoverEmojiGlobalX = event.pageX - 10
     this.hoverEmojiGlobalY = event.pageY + 20
   }
 
