@@ -28,12 +28,11 @@ import { CommonModule } from '@angular/common';
 // TODO: channel points
 // TODO: option to show streamers that user follows
 // TODO: work on perfomance
-// TODO: make user color not random everytime
 
 // TODO: GET BADGES AND SAVE THEM: /helix/chat/badges?broadcaster_id=DEINE_CHANNEL_ID
 // TODO: BADGE INFO IS FROM IRC
 
-
+// TODO: mark streamer as favourite
 
 
 @Component({
@@ -70,15 +69,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
   streamerData: any;
-  streamThumbnail: string = "";
   chatterInfo = { color: "", badges: "" };
   isConnected: boolean = true;
 
+  streamInfoToShow: { title: string, thumbnail: string, game_name: string, viewer_count: string } = {
+    title: "",
+    thumbnail: "",
+    game_name: "",
+    viewer_count: ""
+  };
 
   globalEmojiNames: { name: string; url: string, url_2: string }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
-  streamTitel: string = "";
   channelNameHover: boolean = false;
 
   loginStatus: boolean = true;
@@ -255,13 +258,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!channel) { return; }
     const token: any = localStorage.getItem("twitch_token");
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
-      this.streamerData = result.data[0];
-      this.streamThumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.replace(/\\s/g, '') + "-300x200.jpg";
-      console.log(this.streamThumbnail);
-      if (result.data.length >= 1) {
-        this.streamTitel = result.data[0]["title"];
+      if (result.data.length > 0) {
+        this.streamerData = result.data[0];
+        this.streamInfoToShow = {
+          title: this.streamerData.title,
+          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.replace(/\\s/g, '') + "-300x200.jpg",
+          game_name: this.streamerData.game_name,
+          viewer_count: this.streamerData.viewer_count,
+        }
+        console.log(this.streamInfoToShow);
       } else {
-        this.streamTitel = "";
+        this.streamInfoToShow = {
+          title: this.currentChannel + " is offline :/",
+          game_name: "",
+          thumbnail: "",
+          viewer_count: "",
+        }
+
       }
     });
   }

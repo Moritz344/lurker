@@ -31,7 +31,6 @@ a {
     position: fixed;
     display: flex;
     flex-direction: column;
-		opacity: 0.9;
     justify-content: center;
     justify-items: center;
     align-items: center;

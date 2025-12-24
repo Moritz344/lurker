@@ -33,10 +33,11 @@
     </div>
 }
 
-@if (channelNameHover && streamTitel) {
+@if (channelNameHover ) {
     <div class="stream-info">
-        <img [src]="streamThumbnail" >
-        <span>{{ streamTitel }}</span>
+        <img *ngIf="streamInfoToShow" [src]="streamInfoToShow.thumbnail" >
+        <span>{{ streamInfoToShow.title }}</span>
+        <span *ngIf="streamInfoToShow.viewer_count">Viewer: {{ streamInfoToShow.viewer_count }}</span>
    </div>
 }
 
