@@ -70,8 +70,6 @@ export class ChatComponent implements OnInit {
 
 
   ngOnInit() {
-
-
     this.checkMessage();
     const splitMessage = this.message.split(":");
     this.currentName = splitMessage[0];

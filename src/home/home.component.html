@@ -7,11 +7,6 @@
         (click)="onChooseChannel()"
         >{{ currentChannel }}'s chat </span
     >
-    @if (streamerData) {
-      <div class="viewer-count">
-        <span title="people watching" >{{ streamerData.viewer_count }}</span>
-      </div>
-    }
 
    <button *ngIf="username == currentChannel" class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
 
@@ -26,10 +21,15 @@
 @if (showVerticalMenuOptions) {
     <div class="dropdown-content">
         <button (click)="onChooseChannel()">Switch Channel</button>
-        <button (click)="onClearChat()">Clear Chat</button>
         <button (click)="onOpenStreamInBrowser()">
             Open Stream In Browser
         </button>
+        <button (click)="onClearChat()">Clear Chat</button>
+        @if (isConnected) {
+          <button (click)="onDisconnect()">Disconnect</button>
+        }@else {
+          <button (click)="loadChatMessages(currentChannel)">Connect</button>
+          }
     </div>
 }
 
@@ -43,7 +43,7 @@
 <br />
 <div class="chat-container" (click)="onDisableVerticalMenu()" #chat>
     @for (msg of messages; track $index) {
-        <app-chat [emojis]="globalEmojiNames" [emojisChannel]="channelEmojis" [message]="msg" [color]="chatterInfo.color"></app-chat>
+          <app-chat [emojis]="globalEmojiNames" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color"></app-chat>
     }
 </div>
 

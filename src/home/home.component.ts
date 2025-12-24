@@ -35,6 +35,7 @@ import { CommonModule } from '@angular/common';
 
 
 
+
 @Component({
   selector: "app-root",
   standalone: true,
@@ -62,7 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollAuto: boolean = false;
   scrollInterval = 100;
   userScrolling: boolean = false;
-  currentChannel: string = "BastiGHG";
+  currentChannel: string = "";
   userChatMessage: string = "";
   placeholderString: string = "";
   private loginSub?: Subscription;
@@ -71,6 +72,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   streamerData: any;
   streamThumbnail: string = "";
   chatterInfo = { color: "", badges: "" };
+  isConnected: boolean = true;
+
 
   globalEmojiNames: { name: string; url: string, url_2: string }[] = [];
   channelEmojis: any;
@@ -177,6 +180,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.settings.openChatterList();
   }
 
+
   onChannelNameHover() {
     this.channelNameHover = true;
   }
@@ -274,6 +278,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
   onSendMessage(event: KeyboardEvent) {
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
@@ -282,6 +287,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const token: any = localStorage.getItem("twitch_token");
     this.accessToken = token;
+
 
     if (event.key === "Enter") {
       event.preventDefault();
@@ -301,7 +307,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap((userIdResult: any) => {
             const senderId = userIdResult;
-            console.log("got sender id");
+            //console.log("got sender id");
             return this.settings
               .getBroadCasterId(this.accessToken, this.currentChannel)
               .pipe(
@@ -361,7 +367,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.scrollAuto = true;
   }
 
+  onDisconnect() {
+    this.isConnected = false;
+    this.chat.disconnect();
+  }
+
   loadChatMessages(channel: string) {
+    this.isConnected = true;
     this.scrollToBottom();
     this.settings
       .getUserName()

@@ -45,10 +45,9 @@ export class TwitchChatService implements OnDestroy {
       }
 
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
-      let badgeInfoString = raw.split(";")[0].split("@badge-info=")[1];
-      let chatColorString = raw.split(";")[3].split("color=")[1];
-
       if (match) {
+        let badgeInfoString = raw.split(";")[0].split("@badge-info=")[1];
+        let chatColorString = raw.split(";")[3].split("color=")[1];
         const [, user, message] = match;
         this.messageSubject.next(`${user}: ${message}`);
         this.badgeInfoSubject.next(badgeInfoString);
