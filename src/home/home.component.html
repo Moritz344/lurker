@@ -44,7 +44,7 @@
 <br />
 <div class="chat-container" (click)="onDisableVerticalMenu()" #chat>
     @for (msg of messages; track $index) {
-          <app-chat [emojis]="globalEmojiNames" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color"></app-chat>
+          <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color"></app-chat>
     }
 </div>
 

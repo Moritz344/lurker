@@ -1,5 +1,11 @@
 <div class="container">
       <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
+      @if (currentBadges.images.length > 0) {
+        @for (img of currentBadges.images; track $index) {
+            <img [title]="img.title" [src]="img.img">
+        }
+
+      }
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
 		  <span style="color: white">
       @if (foundEmotes.length > 0) {

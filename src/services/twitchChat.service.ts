@@ -13,7 +13,7 @@ import { switchMap, map, catchError } from "rxjs/operators";
 export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
-  private badgeInfoSubject = new Subject<string>();
+  private badgeInfoSubject = new Subject<string[]>();
   private chatColor = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
 
@@ -46,11 +46,11 @@ export class TwitchChatService implements OnDestroy {
 
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
       if (match) {
-        let badgeInfoString = raw.split(";")[0].split("@badge-info=")[1];
+        let badgesArray = raw.split(";")[1].split("badges=")[1].split(",");
         let chatColorString = raw.split(";")[3].split("color=")[1];
         const [, user, message] = match;
         this.messageSubject.next(`${user}: ${message}`);
-        this.badgeInfoSubject.next(badgeInfoString);
+        this.badgeInfoSubject.next(badgesArray);
         this.chatColor.next(chatColorString);
       }
     });
@@ -65,6 +65,52 @@ export class TwitchChatService implements OnDestroy {
   }
   getChatterColor() {
     return this.chatColor.asObservable();
+  }
+
+  getImageFromBadgeName(badges: string[], badgeImages: any) {
+    let subscriber_id;
+    let subscriberBadgeImg;
+    let subscriberBadgeTitle;
+    let badgesFound: { img: string, title: string }[] = [{ img: "", title: "" }];
+
+
+
+    // get subscriber badge and filter id 
+    for (let i = 0; i < badges.length; i++) {
+      if (badges[i].includes("subscriber")) {
+        subscriber_id = badges[i].split("/")[1];
+      }
+    }
+
+
+    if (subscriber_id) {
+      // find sub badge with id
+      for (let i = 0; i < badgeImages.subscriber.length; i++) {
+        if (badgeImages.subscriber[i]["id"] === subscriber_id) {
+          subscriberBadgeImg = badgeImages.subscriber[i]["image_url_1x"];
+          subscriberBadgeTitle = badgeImages.subscriber[i]["title"];
+          badgesFound.push({ img: subscriberBadgeImg, title: subscriberBadgeTitle });
+          console.log(subscriberBadgeImg);
+        }
+      }
+
+    }
+    return badgesFound;
+
+  }
+
+  getGlobalBadges(broadcaster_id: string) {
+    const url = "https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + broadcaster_id;
+
+    const token: any = localStorage.getItem("twitch_token");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.get(url, { headers });
   }
 
   getUserFollows(

@@ -19,6 +19,7 @@ import { TwitchChatService } from '../services/twitchChat.service';
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
   @Input() color: string = "";
+  @Input() badges: any;
   @Input() emojis: { name: string, url: string, url_2: string }[] = [];
   @Input() emojisChannel: any;
 
@@ -27,29 +28,11 @@ export class ChatComponent implements OnInit {
   currentDate: string = "";
   currentName: string = "";
   currentMessage: string = "";
+  currentBadges: any;
   emojiSet: Set<string> = new Set();
   foundEmotes: any;
   emojiIndex: number = 0;
   emoteMessage: string[] = [];
-  userColorArray: string[] = [
-    "#FFA500", // Orange
-    "#FF4500", // Orangered
-    "#FF0000", // Red
-    "#FFFF00", // Yellow
-    "#00FF00", // Lime
-    "#0000FF", // Blue
-    "#8A2BE2", // BlueViolet
-    "#4B0082", // Indigo
-    "#FF69B4", // HotPink
-    "#D2691E", // Chocolate
-    "#FF8C00", // DarkOrange
-    "#ADFF2F", // GreenYellow
-    "#20B2AA", // LightSeaGreen
-    "#FFD700", // Gold
-    "#32CD32", // LimeGreen
-    "#7B68EE", // MediumSlateBlue
-    "#FF1493", // DeepPink
-  ];
   userColor: string = "white";
 
   showGlobalEmojiDesc: boolean = false;
@@ -68,12 +51,15 @@ export class ChatComponent implements OnInit {
 
   }
 
-
-  ngOnInit() {
+  init() {
     this.checkMessage();
     const splitMessage = this.message.split(":");
-    this.currentName = splitMessage[0];
+    this.currentName = " " + splitMessage[0];
     this.currentMessage = splitMessage[1];
+    this.currentBadges = {
+      images: this.badges.badgeImages,
+      title: this.badges.badges
+    };
 
     let state = this.settings.getUserColorStatus();
     if (state == "disabled") {
@@ -105,6 +91,11 @@ export class ChatComponent implements OnInit {
 
     let userToListenTo: any = localStorage.getItem("next-user-card");
     const currentUserCardOpen = JSON.parse(userToListenTo);
+
+  }
+
+  ngOnInit() {
+    this.init();
   }
 
 

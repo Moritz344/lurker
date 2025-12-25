@@ -69,8 +69,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
   streamerData: any;
-  chatterInfo = { color: "", badges: "" };
+  chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
   isConnected: boolean = true;
+
+  channelBadgeInfo: { bits: any, subscriber: any } = {
+    bits: "",
+    subscriber: ""
+  }
 
   streamInfoToShow: { title: string, thumbnail: string, game_name: string, viewer_count: string } = {
     title: "",
@@ -146,6 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       });
     this.fetchStreamInfos(this.currentChannel);
+    this.getBadgesForChannel();
   }
 
   setCurrentChannel() {
@@ -220,6 +226,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.saveCurrentBroadCasterId();
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
+    this.getBadgesForChannel();
 
   }
 
@@ -404,8 +411,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.sub = this.chat.messages$.subscribe((msg) =>
               this.messages.push(msg),
             );
-            this.chat.getChatterBadge().subscribe(badge => {
-              this.chatterInfo.badges = badge;
+            this.chat.getChatterBadge().subscribe(badges => {
+              this.chatterInfo.badges = badges;
+              this.getImageForBadge();
+              console.log(this.chatterInfo);
             });
 
             this.chat.getChatterColor().subscribe(color => {
@@ -415,6 +424,32 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  getImageForBadge() {
+    let a = this.chat.getImageFromBadgeName(this.chatterInfo.badges, this.channelBadgeInfo)
+    this.chatterInfo.badgeImages = a;
+
+
+  }
+
+  getBadgesForChannel() {
+    const token: any = localStorage.getItem("twitch_token");
+    const channel: any = localStorage.getItem("channel");
+    this.settings.getBroadCasterId(token, channel).subscribe(response => {
+      const broadcaster_id = response;
+      console.log(response);
+      this.chat.getGlobalBadges(broadcaster_id).subscribe((response: any) => {
+        if (response.data.length > 0) {
+          this.channelBadgeInfo = {
+            bits: response.data[0]["versions"],
+            subscriber: response.data[1]["versions"]
+          }
+          console.log(this.channelBadgeInfo);
+
+        }
+      });
+    });
   }
 
   checkIfLoggedIn() {
