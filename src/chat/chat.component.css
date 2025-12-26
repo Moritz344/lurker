@@ -1,26 +1,30 @@
 .container {
-				text-align: left;
-				white-space: wrap;
-				border-radius: 5px;
+	 text-align: left;
+	 white-space: wrap;
+	 border-radius: 5px;
 }
 
 span{
-								font-size: var(--message-size);
+	font-size: var(--message-size);
 }
 
 .container:hover{
-				background-color: var(--border-color);
+	background-color: var(--border-color);
 }
 
 
 ::-webkit-scrollbar{
-				display: none;
+	display: none;
+}
+
+.badges{
 }
 
 .name{
-		cursor: pointer;
+	 cursor: pointer;
+	 margin-left: 5px;
 }
-.emoji-desc{
+.hover{
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;

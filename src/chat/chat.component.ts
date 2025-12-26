@@ -42,6 +42,11 @@ export class ChatComponent implements OnInit {
   hoverEmoji: string = "";
   userToListenTo: string = "";
 
+  showBadge: boolean = false;
+  hoverBadgeX = 0;
+  hoverBadgeY = 0;
+  currentHoverBadge: { title: string, img: string } = { title: "", img: "" };
+
   constructor(public settings: SettingsService,
     public resolver: ComponentFactoryResolver,
     public chat: TwitchChatService,
@@ -54,7 +59,7 @@ export class ChatComponent implements OnInit {
   init() {
     this.checkMessage();
     const splitMessage = this.message.split(":");
-    this.currentName = " " + splitMessage[0];
+    this.currentName = splitMessage[0];
     this.currentMessage = splitMessage[1];
     this.currentBadges = {
       images: this.badges.badgeImages,
@@ -100,8 +105,7 @@ export class ChatComponent implements OnInit {
 
 
   onUserCard() {
-    console.log(this.userToListenTo);
-    this.settings.getUserCardInfo(this.currentName).subscribe((response: any) => {
+    this.settings.getUserCardInfo(this.currentName.trim()).subscribe((response: any) => {
       response.data[0]["last_message"] = this.currentMessage;
       response.data[0]["current_date"] = this.currentDate;
       response.data[0]["user_color"] = this.userColor;
@@ -110,6 +114,18 @@ export class ChatComponent implements OnInit {
     });
 
 
+  }
+
+  onBadgeHover(img: string, title: string) {
+    this.currentHoverBadge = {
+      img: img,
+      title: title
+    }
+    this.showBadge = true;
+  }
+
+  onBadgeLeave() {
+    this.showBadge = false;
   }
 
 
@@ -167,9 +183,13 @@ export class ChatComponent implements OnInit {
     this.showGlobalEmojiDesc = false;
   }
 
-  updateHoverPositionGlobal(event: MouseEvent) {
+  updateHoverPositionEmotes(event: MouseEvent) {
     this.hoverEmojiGlobalX = event.pageX - 10
     this.hoverEmojiGlobalY = event.pageY + 20
+  }
+  updateHoverPositionBadges(event: MouseEvent) {
+    this.hoverBadgeX = event.pageX - 10
+    this.hoverBadgeY = event.pageY + 20
   }
 
 

@@ -216,7 +216,7 @@ export class SettingsService {
 
 
   getUserCardInfo(name: string) {
-    const url = "https://api.twitch.tv/helix/users?login=" + name;
+    const url = `https://api.twitch.tv/helix/users?login=${name}`;
     const token: any = localStorage.getItem("twitch_token");
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,

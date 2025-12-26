@@ -68,39 +68,97 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getImageFromBadgeName(badges: string[], badgeImages: any) {
-    let subscriber_id;
+    let badgesFound: { img: string, title: string }[] = [{ img: "", title: "" }];
+    let subscriber_ids: string[] = [];
     let subscriberBadgeImg;
     let subscriberBadgeTitle;
-    let badgesFound: { img: string, title: string }[] = [{ img: "", title: "" }];
 
+    let bits_ids: string[] = [];
+    let bits_img;
+    let bits_title;
 
+    let global_types: string[] = [];
 
-    // get subscriber badge and filter id 
-    for (let i = 0; i < badges.length; i++) {
-      if (badges[i].includes("subscriber")) {
-        subscriber_id = badges[i].split("/")[1];
-      }
-    }
-
-
-    if (subscriber_id) {
-      // find sub badge with id
-      for (let i = 0; i < badgeImages.subscriber.length; i++) {
-        if (badgeImages.subscriber[i]["id"] === subscriber_id) {
-          subscriberBadgeImg = badgeImages.subscriber[i]["image_url_1x"];
-          subscriberBadgeTitle = badgeImages.subscriber[i]["title"];
-          badgesFound.push({ img: subscriberBadgeImg, title: subscriberBadgeTitle });
-          console.log(subscriberBadgeImg);
+    if (badges) {
+      for (let i = 0; i < badges.length; i++) {
+        if (badges[i].includes("subscriber")) {
+          // channel subscriber case
+          subscriber_ids.push(badges[i].split("/")[1]);
+        } else if (badges[i].includes("bits")) {
+          // channel bits case
+          bits_ids.push(badges[i].split("/")[1]);
+        } else {
+          // global case
+          global_types.push(badges[i].split("/")[0]);
         }
       }
 
     }
-    return badgesFound;
 
+    if (subscriber_ids.length > 0) {
+      for (let i = 0; i < badgeImages.subscriber.length; i++) {
+        for (let x = 0; x < subscriber_ids.length; x++) {
+          if (badgeImages.subscriber[i]["id"] === subscriber_ids[x]) {
+            subscriberBadgeImg = badgeImages.subscriber[i]["image_url_1x"];
+            subscriberBadgeTitle = badgeImages.subscriber[i]["title"];
+            badgesFound.push({ img: subscriberBadgeImg, title: subscriberBadgeTitle });
+          }
+
+        }
+      }
+
+    }
+    if (bits_ids.length > 0) {
+      for (let i = 0; i < badgeImages.bits.length; i++) {
+        for (let x = 0; x < bits_ids.length; x++) {
+          if (badgeImages.bits[i]["id"] === bits_ids[x]) {
+            bits_img = badgeImages.bits[i]["image_url_1x"];
+            bits_title = badgeImages.bits[i]["title"];
+            badgesFound.push({ img: bits_img, title: bits_title });
+          }
+        }
+      }
+    }
+
+    if (global_types.length > 0) {
+      for (let i = 0; i < badgeImages.global.length; i++) {
+        for (let x = 0; x < global_types.length; x++) {
+          if (badgeImages.global[i]["set_id"] == global_types[x]) {
+            console.log("found global entry:" + badgeImages.global[i]["set_id"]);
+            for (let x = 0; x < badgeImages.global[i]["versions"].length; x++) {
+              let img = badgeImages.global[i]["versions"][x]["image_url_1x"];
+              let title = badgeImages.global[i]["versions"][x]["title"];
+              badgesFound.push({ img: img, title: title });
+            }
+
+          }
+
+        }
+
+      }
+    }
+
+    console.log(badgesFound);
+
+    return badgesFound;
   }
 
-  getGlobalBadges(broadcaster_id: string) {
+  getChannelBadges(broadcaster_id: string) {
     const url = "https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + broadcaster_id;
+
+    const token: any = localStorage.getItem("twitch_token");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.get(url, { headers });
+  }
+
+  getGlobalChatBadges() {
+    const url = "https://api.twitch.tv/helix/chat/badges/global";
 
     const token: any = localStorage.getItem("twitch_token");
 

@@ -72,9 +72,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
   isConnected: boolean = true;
 
-  channelBadgeInfo: { bits: any, subscriber: any } = {
+  channelBadgeInfo: { bits: any, subscriber: any, global: any } = {
     bits: "",
-    subscriber: ""
+    subscriber: "",
+    global: ""
   }
 
   streamInfoToShow: { title: string, thumbnail: string, game_name: string, viewer_count: string } = {
@@ -152,6 +153,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
     this.fetchStreamInfos(this.currentChannel);
     this.getBadgesForChannel();
+    this.getGlobalBadges();
   }
 
   setCurrentChannel() {
@@ -413,8 +415,8 @@ export class HomeComponent implements OnInit, OnDestroy {
             );
             this.chat.getChatterBadge().subscribe(badges => {
               this.chatterInfo.badges = badges;
+              //console.log("chatter badges:" + badges);
               this.getImageForBadge();
-              console.log(this.chatterInfo);
             });
 
             this.chat.getChatterColor().subscribe(color => {
@@ -430,25 +432,47 @@ export class HomeComponent implements OnInit, OnDestroy {
     let a = this.chat.getImageFromBadgeName(this.chatterInfo.badges, this.channelBadgeInfo)
     this.chatterInfo.badgeImages = a;
 
+    //console.log("badge images found:");
+    //for (const img of a) {
+    //  console.log(img);
+    //}
+
 
   }
 
   getBadgesForChannel() {
     const token: any = localStorage.getItem("twitch_token");
     const channel: any = localStorage.getItem("channel");
+
+    let subscriberBadges: string[];
+    let bitsBadges: string[];
     this.settings.getBroadCasterId(token, channel).subscribe(response => {
       const broadcaster_id = response;
-      console.log(response);
-      this.chat.getGlobalBadges(broadcaster_id).subscribe((response: any) => {
+      this.chat.getChannelBadges(broadcaster_id).subscribe((response: any) => {
+        // check set_id and then set 
         if (response.data.length > 0) {
-          this.channelBadgeInfo = {
-            bits: response.data[0]["versions"],
-            subscriber: response.data[1]["versions"]
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i]["set_id"] == "subscriber") {
+              subscriberBadges = response.data[i]["versions"];
+            } else if (response.data[i]["set_id"] == "bits") {
+              bitsBadges = response.data[i]["versions"];
+            }
           }
-          console.log(this.channelBadgeInfo);
+          this.channelBadgeInfo = {
+            subscriber: subscriberBadges,
+            bits: bitsBadges,
+            global: ""
+          }
 
         }
       });
+    });
+  }
+
+  getGlobalBadges() {
+    this.chat.getGlobalChatBadges().subscribe((response: any) => {
+      this.channelBadgeInfo.global = response.data;
+      //console.log(response.data);
     });
   }
 
