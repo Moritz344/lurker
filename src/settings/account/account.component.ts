@@ -10,7 +10,6 @@ import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
   styleUrl: "./account.component.css",
 })
 export class AccountComponent implements OnInit {
-  // TODO: Show user desc,pfp,etc
   username: string = "";
   account_description: any;
   account_profile_picture: any;
@@ -21,7 +20,7 @@ export class AccountComponent implements OnInit {
     private settings: SettingsService,
     private chat: TwitchChatService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.settings.getUserName().subscribe((name) => {
@@ -33,6 +32,7 @@ export class AccountComponent implements OnInit {
     this.account_profile_picture = localStorage.getItem("profile_image_url");
     this.account_view_count = localStorage.getItem("view_count");
     this.account_created_at = localStorage.getItem("created_at");
+    this.account_created_at = new Date(this.account_created_at).toLocaleDateString();
   }
 
   onLogin() {

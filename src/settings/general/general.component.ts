@@ -17,8 +17,8 @@ export class GeneralComponent implements OnInit {
   currentTheme: string = "";
   currentFontSize: string = "";
   currentFont: string = "";
-	 currentTimeStampFormat: string = "";
-	 currentChatColorState: string = "";
+  currentTimeStampFormat: string = "";
+  currentChatColorState: string = "";
 
   saveSettings = [{}];
 
@@ -28,8 +28,8 @@ export class GeneralComponent implements OnInit {
         theme: this.currentTheme,
         font: this.currentFont,
         fontSize: this.currentFontSize,
-								timeStampFormat: this.currentTimeStampFormat,
-								chatColorState: this.currentChatColorState,
+        timeStampFormat: this.currentTimeStampFormat,
+        chatColorState: this.currentChatColorState,
       },
     ];
     localStorage.setItem("settings", JSON.stringify(this.saveSettings));
@@ -54,25 +54,28 @@ export class GeneralComponent implements OnInit {
   loadDefault() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
-				console.log(settingsJson);
+    console.log(settingsJson);
     if (settingsJson) {
       this.currentFont = settingsJson[0].font;
       this.currentFontSize = settingsJson[0].fontSize;
       this.currentTheme = settingsJson[0].theme;
       this.currentChatColorState = settingsJson[0].chatColorState;
-      this.currentTimeStampFormat= settingsJson[0].timeStampFormat;
-			this.updateSettings();
+      this.currentTimeStampFormat = settingsJson[0].timeStampFormat;
+      this.updateSettings();
     }
   }
 
   ngOnInit(): void {
     this.settings.getLoginStatus().subscribe((isLoggedIn) => {
-        this.loadDefault();
-        const settings: any = localStorage.getItem("settings");
-        this.saveSettings = settings;
-        this.applyUserSettings(this.saveSettings);
+      this.loadDefault();
+      const settings: any = localStorage.getItem("settings");
+      console.log(settings);
+      if (settings) {
+        this.saveSettings = JSON.parse(settings);
+        this.applyUserSettings(settings);
+      }
     });
   }
 
-  constructor(public settings: SettingsService) {}
+  constructor(public settings: SettingsService) { }
 }

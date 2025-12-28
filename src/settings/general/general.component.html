@@ -1,21 +1,12 @@
 <div class="container">
-    <h1>General</h1>
+    <h1 style="display:flex;justify-content: center">General</h1>
 
     <div class="interface">
-				<div class="inputs">
-								<input [(ngModel)]="currentFont" (change)="updateSettings()" />
-								<input [(ngModel)]="currentFontSize" (change)="updateSettings()" />
+			<div class="inputs">
 				</div>
-        <h1>Interface</h1>
-        Theme:
-
         <br />
         Font:
         <div class="dropdowns">
-            <select [(ngModel)]="currentTheme" (change)="updateSettings()">
-                <option value="" disable selected hidden>Standard</option>
-                <option value="standard">Standard</option>
-            </select>
             <select
                 style=""
                 [(ngModel)]="currentFont"
@@ -39,10 +30,10 @@
             </select>
         </div>
         <br />
-        UI Font Size:
     </div>
 
     <div class="chat">
+        <h1>Chat</h1>
 						<div class="chat-selects">
 								<select [(ngModel)]="currentTimeStampFormat" (change)="updateSettings()">
             		    <option value="" disable selected hidden>h:mm</option>
@@ -56,9 +47,5 @@
             		    <option value="disabled">disabled</option>
             		</select>
 						</div>
-        <h1>Chat</h1>
-        Timestamp format:
-        <br />
-        Chat colors:
     </div>
 </div>

@@ -18,56 +18,57 @@ body{
   z-index: 9999;
   background-color: var(--bg-color);
   border-radius: 0px !important;
-  height: 430px;
+  height: 100vh;
   overflow: hidden;
-
+  display: flex;
+  flex-direction: row;
 }
 
 .options{
-	display: grid;
-	grid-template-columns: repeat(1,1fr);
+	display: flex;
+	flex-direction: column;
 	gap: 10px;
-  width: 100px;
+  min-width: 100px;
 	margin-top: 10px;
+  flex: 1;
+}
+
+.content-container{
+	flex: 2;
+	background-color: var(--border-color);
+	overflow-y: auto;
 }
 button{
-    text-align: center;
-				justify-content: center;
-				background-color:var(--material-background);
+  text-align: center;
+	justify-content: center;
+	background-color:var(--material-background);
 }
 
 button:hover{
-								background-color: var(--material-primary);
+	background-color: var(--material-primary);
 }
 
 
 
-.content-container{
-				position: absolute;
-				top: 0px;
-				right: 0px;
-				width: 400px;
-				height: 500px;
-				background-color: var(--border-color);
-}
+
 
 
 .exit{
   position: absolute;
   right:10px;
   top: 5px;
-	 z-index: 1000;
+	z-index: 1000;
 }
 
 .exit button{
-								background: transparent;
+	background: transparent;
 }
 .exit button:hover{
-								background-color: var(--material-primary);
+	background-color: var(--material-primary);
 }
 
 .exit img{
-								margin-top: 5px;
+	margin-top: 5px;
 }
 
 

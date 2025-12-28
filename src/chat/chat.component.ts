@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SettingsService } from "../services/settings.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
@@ -22,6 +22,7 @@ export class ChatComponent implements OnInit {
   @Input() badges: any;
   @Input() emojis: { name: string, url: string, url_2: string }[] = [];
   @Input() emojisChannel: any;
+
 
 
   title = "Lurker"
@@ -119,17 +120,6 @@ export class ChatComponent implements OnInit {
 
   }
 
-  onBadgeHover(img: string, title: string) {
-    this.currentHoverBadge = {
-      img: img,
-      title: title
-    }
-    this.showBadge = true;
-  }
-
-  onBadgeLeave() {
-    this.showBadge = false;
-  }
 
 
 
@@ -193,14 +183,26 @@ export class ChatComponent implements OnInit {
   OnMouseLeaveGlobal() {
     this.showGlobalEmojiDesc = false;
   }
+  onBadgeHover(img: string, title: string) {
+
+    this.currentHoverBadge = {
+      img: img,
+      title: title
+    }
+    this.showBadge = true;
+  }
+
+  onBadgeLeave() {
+    this.showBadge = false;
+  }
 
   updateHoverPositionEmotes(event: MouseEvent) {
     this.hoverEmojiGlobalX = event.pageX - 50;
-    this.hoverEmojiGlobalY = event.pageY - 55;
+    this.hoverEmojiGlobalY = event.pageY - 45;
   }
   updateHoverPositionBadges(event: MouseEvent) {
     this.hoverBadgeX = event.pageX - 50;
-    this.hoverBadgeY = event.pageY - 55;
+    this.hoverBadgeY = event.pageY - 45;
   }
 
 

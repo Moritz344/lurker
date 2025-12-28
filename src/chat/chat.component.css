@@ -28,6 +28,10 @@ span{
   position: absolute;
   background-color: rgba(0, 0, 0, 1);
   padding: 5px;
+  min-width: 50px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .hover span{

@@ -1,73 +1,42 @@
 .container {
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 body{
-								overflow: hidden;
 }
 
-.interface h1 {
-    margin-bottom: 0px;
-}
-.inputs{
-  position: absolute;
-		display: grid;
-		grid-template-rows: repeat(1,1fr);
-  top: 50px;
-		gap: 10px;
-  right: -130px;
-  margin-left: 60px;
-  margin-top: 20px;
-		z-index: 1000;
+.interface, .chat {
+  margin-bottom: 30px;
 }
 
-.dropdowns {
-		display: grid;
-		grid-template-rows: repeat(1,1fr);
-		gap: 10px;
-  position: absolute;
-  top: 25px;
-  right: -250px;
-  margin-left: 60px;
+.interface h1, .chat h1 {
+    margin-bottom: 15px;
 }
 
-.chat-selects{
-		display: grid;
-		grid-template-rows: repeat(1,1fr);
-		gap: 10px;
-  position: absolute;
-  top: 20px;
-		left: 5px;
-  margin-left: 60px;
-  margin-top: 20px;
+.dropdowns, .chat-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 select {
-  width: 100px;
-  margin-left: 200px;
-  text-align: left;
-		height: 30px;
-}
-
-.interface {
-    position: absolute;
-    top: 50px;
-    left: 10px;
-}
-
-.chat {
-    position: absolute;
-    top: 200px;
-    left: 10px;
-}
-
-.chat h1 {
-    margin-bottom: 0px;
+  width: 100%;
+  max-width: 200px;
+  padding: 5px;
+  border: 1px solid white;
+  background-color: var(--material-background);
+  color: white;
+  height: 30px;
 }
 
 input {
-    border: 1px solid white;
-    width: 100px;
+  border: 1px solid white;
+  width: 100%;
+  max-width: 200px;
+  padding: 5px;
+  background-color: var(--material-background);
+  color: white;
 }

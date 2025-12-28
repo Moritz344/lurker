@@ -28,6 +28,8 @@ import { CommonModule } from '@angular/common';
 // TODO: mark streamer as favourite
 // TODO: channels you follow option => dont make seperate window
 
+// TODO: work on settings window
+
 
 @Component({
   selector: "app-root",
@@ -104,7 +106,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   private handleStorageChange = (event: StorageEvent) => {
-    this.userChatMessage += event.newValue || '';
+    if (event.key == "emoji") {
+      this.userChatMessage += event.newValue || '';
+    }
   };
 
   loadChannelEmojisForChat() {
@@ -128,6 +132,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.getGlobalBadges();
     await this.getBadgesForChannel();
   }
+
 
   ngOnInit() {
     this.initBadges();
@@ -318,11 +323,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   onSendMessage(event: KeyboardEvent) {
-    if (this.userChatMessage == "") {
-      event.preventDefault();
-      this.userChatMessage = "";
-      return;
-    }
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
       return;
@@ -332,7 +332,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.accessToken = token;
 
 
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && this.userChatMessage != "") {
       event.preventDefault();
       this.settings
         .checkAccessTokenValidity(this.accessToken)

@@ -1,5 +1,5 @@
 <div class="container">
-    <h1 class="account-header">Account</h1>
+    <h1 style="display:flex;justify-content: center">Account</h1>
 
     @if (username) {
         <div class="user-card">
@@ -16,8 +16,6 @@
                     </div>
                     <div class="extra-info">
                         <span>Created at: {{ account_created_at }}</span>
-                        <br />
-                        <span>View count: {{ account_view_count }}</span>
                     </div>
                 </div>
             </div>

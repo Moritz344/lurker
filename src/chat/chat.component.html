@@ -1,8 +1,13 @@
 <div class="container">
+      @if (showBadge) {
+        <div class="hover" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
+          <span>{{ currentHoverBadge.title }}</span>
+        </div>
+        }
       <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
       @if (currentBadges.images.length > 0) {
         @for (img of currentBadges.images; track $index) {
-            <img class="badge-img"
+            <img  class="badge-img"
             (mouseenter)="onBadgeHover(img.img,img.title)"
             (mousemove)="updateHoverPositionBadges($event)"
             (mouseleave)="onBadgeLeave()"
@@ -11,11 +16,16 @@
 
       }
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
+      @if (showGlobalEmojiDesc) {
+        <div class="hover"  [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
+            <span>{{ currentHoverEmoteName }}</span>
+        </div>
+        }
 		  <span style="color: white">
       @if (foundEmotes.length > 0) {
           @for (part of emoteMessage; track $index) {
             @if (part.includes('<img')) {
-              <span
+              <span 
               (mouseenter)="OnMouseEnterGlobal(part, $index)"
               (mousemove)="updateHoverPositionEmotes($event)"
               (mouseleave)="OnMouseLeaveGlobal()"
@@ -23,25 +33,12 @@
           } @else {
               <span>{{ part }} &#12;</span>
           }
-      }
-      }@else{
+       }
+       }@else{
       {{ currentMessage }}
       }
       </span><br>
 
-      @if (showGlobalEmojiDesc) {
-        <div class="hover" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
-            <span>{{ currentHoverEmoteName }}</span>
-        </div>
 
-
-        }
-      @if (showBadge) {
-        <div class="hover" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
-          <span>{{ currentHoverBadge.title }}</span>
-        </div>
-
-
-        }
 </div>
 
