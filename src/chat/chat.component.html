@@ -2,7 +2,7 @@
       <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
       @if (currentBadges.images.length > 0) {
         @for (img of currentBadges.images; track $index) {
-            <img
+            <img class="badge-img"
             (mouseenter)="onBadgeHover(img.img,img.title)"
             (mousemove)="updateHoverPositionBadges($event)"
             (mouseleave)="onBadgeLeave()"

@@ -130,7 +130,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
+  async initBadges() {
+    await this.getGlobalBadges();
+    await this.getBadgesForChannel();
+  }
+
   ngOnInit() {
+    this.initBadges();
     const emoji: any = localStorage.getItem("emoji") || '';
     window.addEventListener('storage', this.handleStorageChange);
 
@@ -152,8 +158,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       });
     this.fetchStreamInfos(this.currentChannel);
-    this.getBadgesForChannel();
-    this.getGlobalBadges();
   }
 
   setCurrentChannel() {
@@ -440,7 +444,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-  getBadgesForChannel() {
+  async getBadgesForChannel() {
     const token: any = localStorage.getItem("twitch_token");
     const channel: any = localStorage.getItem("channel");
 
@@ -458,21 +462,22 @@ export class HomeComponent implements OnInit, OnDestroy {
               bitsBadges = response.data[i]["versions"];
             }
           }
-          this.channelBadgeInfo = {
-            subscriber: subscriberBadges,
-            bits: bitsBadges,
-            global: ""
-          }
-
         }
+        const global_badges: any = localStorage.getItem("global_badges");
+        let global_badges_json = JSON.parse(global_badges);
+        this.channelBadgeInfo = {
+          subscriber: subscriberBadges,
+          bits: bitsBadges,
+          global: global_badges_json
+        }
+
       });
     });
   }
 
-  getGlobalBadges() {
+  async getGlobalBadges() {
     this.chat.getGlobalChatBadges().subscribe((response: any) => {
-      this.channelBadgeInfo.global = response.data;
-      //console.log(response.data);
+      localStorage.setItem("global_badges", JSON.stringify(response.data));
     });
   }
 

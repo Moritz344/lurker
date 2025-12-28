@@ -1,10 +1,9 @@
 <div class="container">
-			<input [(ngModel)]="searchValue" (change)="search()" placeholder="Search...">
-			<span style="color: grey">Searching: {{ searchValue }} </span>
-			@for (x of data; track $index) {
-					@if (x["user_name"].includes(searchValue) || searchValue == "") {
-					<span class="user">{{ x["user_name"]}}</span>
-
-					}
-			}
+	<input [(ngModel)]="searchValue" (change)="search()" placeholder="Search...">
+	<span style="color: grey">Searching: {{ searchValue }} </span>
+	@for (x of data; track $index) {
+		@if (x["user_name"].includes(searchValue) || searchValue == "") {
+		  <span class="user">{{ x["user_name"]}}</span>
+		}
+	}
 </div>

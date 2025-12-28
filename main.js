@@ -95,18 +95,18 @@ function createWindow() {
   ipcMain.handle("close-window", (event, window_name) => {
 
     if (window_name == "settings") {
-												if (openSettingsWindow) {
-												openSettingsWindow.close();
-												openSettingsWindow = null;
+      if (openSettingsWindow) {
+        openSettingsWindow.close();
+        openSettingsWindow = null;
 
-												}
-				}else{
-								if (openUserCardWindow) {
-								openUserCardWindow.close();
-								openUserCardWindow = null;
+      }
+    } else {
+      if (openUserCardWindow) {
+        openUserCardWindow.close();
+        openUserCardWindow = null;
 
-								}
-				}
+      }
+    }
 
   });
 

@@ -1,12 +1,12 @@
 .container{
-								display: grid;
-								grid-template-columns: repeat(1,1fr);
-								gap: 4px;
-								padding: 10px;
-								overflow: scroll;
-                overflow-x: hidden;
+	 display: grid;
+	 grid-template-columns: repeat(1,1fr);
+	 gap: 4px;
+	 padding: 10px;
+	 overflow: scroll;
+   overflow-x: hidden;
 }
 
 .user{
-								margin-top: 0px;
+	margin-top: 0px;
 }
