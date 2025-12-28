@@ -23,15 +23,10 @@ import { CommonModule } from '@angular/common';
 // TODO: better tv emotes
 // TODO: Tabsystem
 // TODO: emoji picker
-// TODO: Twitch emotes: https://dev.twitch.tv/docs/chat/send-receive-messages/
 // TODO: channel points
-// TODO: option to show streamers that user follows
 // TODO: work on perfomance
-
-// TODO: GET BADGES AND SAVE THEM: /helix/chat/badges?broadcaster_id=DEINE_CHANNEL_ID
-// TODO: BADGE INFO IS FROM IRC
-
 // TODO: mark streamer as favourite
+// TODO: channels you follow option => dont make seperate window
 
 
 @Component({
@@ -323,6 +318,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   onSendMessage(event: KeyboardEvent) {
+    if (this.userChatMessage == "") {
+      event.preventDefault();
+      this.userChatMessage = "";
+      return;
+    }
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
       return;
