@@ -34,6 +34,9 @@ export class ChatComponent implements OnInit {
   emojiIndex: number = 0;
   emoteMessage: string[] = [];
   userColor: string = "white";
+  emoteHTML: string[] = [];
+  currentEmoteHoverIndex: number = 0;
+  currentHoverEmoteName = "";
 
   showGlobalEmojiDesc: boolean = false;
   hoverEmojiGlobalX = 0;
@@ -159,13 +162,17 @@ export class ChatComponent implements OnInit {
       this.processedMessageEmoji = words.map(word => {
         this.emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
         if (this.emojiIndex !== -1) {
-          //foundEmotesImages.push(`<img src="${this.emojis[this.emojiIndex].url}">`)
           return `<img src="${this.emojis[this.emojiIndex].url}">`;
         }
         return word;
       });
 
       this.emoteMessage = this.processedMessageEmoji;
+      for (let i = 0; i < this.emoteMessage.length; i++) {
+        if (this.emoteMessage[i].includes("<img")) {
+          this.emoteHTML.push(this.emoteMessage[i]);
+        }
+      }
 
     }
 
@@ -174,9 +181,13 @@ export class ChatComponent implements OnInit {
   }
 
 
-  OnMouseEnterGlobal(item: any) {
+  OnMouseEnterGlobal(item: any, index: number) {
     this.hoverEmoji = item;
     this.showGlobalEmojiDesc = true;
+    this.currentHoverEmoteName = this.foundEmotes[index];
+    if (this.currentHoverEmoteName == undefined) {
+      this.currentHoverEmoteName = this.foundEmotes[this.foundEmotes.length - 1];
+    }
   }
 
   OnMouseLeaveGlobal() {
@@ -184,12 +195,12 @@ export class ChatComponent implements OnInit {
   }
 
   updateHoverPositionEmotes(event: MouseEvent) {
-    this.hoverEmojiGlobalX = event.pageX - 10
-    this.hoverEmojiGlobalY = event.pageY + 20
+    this.hoverEmojiGlobalX = event.pageX - 50;
+    this.hoverEmojiGlobalY = event.pageY - 55;
   }
   updateHoverPositionBadges(event: MouseEvent) {
-    this.hoverBadgeX = event.pageX - 10
-    this.hoverBadgeY = event.pageY + 20
+    this.hoverBadgeX = event.pageX - 50;
+    this.hoverBadgeY = event.pageY - 55;
   }
 
 

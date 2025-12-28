@@ -8,46 +8,12 @@
                 spellcheck="false"
                 [placeholder]="currentChannel"
             />
-        } @else if (data.function === "announcement") {
-            <input
-                [(ngModel)]="inputValueAnnouncement"
-                (keydown.code.enter)="onAnnouncementSave()"
-                spellcheck="false"
-            />
-        } @else if (data.function === "create_poll") {
-            <input
-                class="poll-title"
-                [(ngModel)]="inputValuePollTitle"
-                placeholder="Title"
-            />
-            <div class="poll">
-                <input
-                    [(ngModel)]="inputValueChoice_1"
-                    placeholder="Choice 1"
-                />
-                <input
-                    [(ngModel)]="inputValueChoice_2"
-                    placeholder="Choice 2"
-                />
-                <input
-                    [(ngModel)]="inputValueChoice_3"
-                    placeholder="Choice 3"
-                />
-                <input
-                    [(ngModel)]="inputValueChoice_4"
-                    placeholder="Choice 4"
-                />
-            </div>
-        }
+    }
     </div>
 
     <div class="button-layout">
         @if (data.function === "change_channel_name") {
             <button (click)="onChannelNameSave()" class="ok">Ok</button>
-        } @else if (data.function === "announcement") {
-            <button (click)="onAnnouncementSave()" class="ok">Ok</button>
-        } @else if (data.function === "create_poll") {
-            <button (click)="onCreatePoll()" class="ok">Ok</button>
         }
         <button (click)="onClose()" class="cancel">Cancel</button>
     </div>

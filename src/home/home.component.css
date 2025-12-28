@@ -62,20 +62,20 @@ a {
 
 
 .emoji{
-								position:absolute;
-								right: 0px;
-								bottom: 0px;
+	 position:absolute;
+	 right: 0px;
+	 bottom: 0px;
 }
 
 .dropdown-content button{
-				text-align: left;
-				padding: 10px;
+	text-align: left;
+	padding: 10px;
 }
 
 .chatter-list{
-								position: absolute;
-								top: 0px;
-								right: 45px;
+	position: absolute;
+	top: 0px;
+	right: 45px;
 
 }
 
@@ -99,34 +99,34 @@ a {
 }
 
 .chat-entry {
-    position: absolute;
-    overflow: hidden;
-				right: 0;
-				left: 0;
-				height: 50px;
-				bottom: 0px;
+   position: absolute;
+   overflow: hidden;
+	 right: 0;
+	 left: 0;
+	 height: 50px;
+	 bottom: 0px;
 
 }
 
 textarea{
-				overflow: hidden;
+	overflow: hidden;
 }
 
 .chat-entry textarea {
-    font-size: 20px;
-    color: white;
-    overflow: hidden;
-    color: white;
-    border: none;
-    outline: none;
-    resize: none;
-				height: 50px;
-    width: 100%;
+  font-size: 20px;
+  color: white;
+  overflow: hidden;
+  color: white;
+  border: none;
+  outline: none;
+  resize: none;
+	height: 50px;
+  width: 100%;
 
 }
 
 .chat-container::-webkit-scrollbar {
-    width: 12px;
+    width: 7px;
 }
 
 .chat-container::-webkit-scrollbar-track {
@@ -140,3 +140,5 @@ textarea{
 .chat-container::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+

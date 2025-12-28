@@ -13,12 +13,16 @@
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
 		  <span style="color: white">
       @if (foundEmotes.length > 0) {
-      @for (emoji of emoteMessage;track $index) {
-          <span
-          (mouseenter)="OnMouseEnterGlobal(emoji)"
-          (mousemove)="updateHoverPositionEmotes($event)"
-          (mouseleave)="OnMouseLeaveGlobal()"
-          [innerHTML]="emoji"></span>
+          @for (part of emoteMessage; track $index) {
+            @if (part.includes('<img')) {
+              <span
+              (mouseenter)="OnMouseEnterGlobal(part, $index)"
+              (mousemove)="updateHoverPositionEmotes($event)"
+              (mouseleave)="OnMouseLeaveGlobal()"
+              [innerHTML]="part"></span>
+          } @else {
+              <span>{{ part }} &#12;</span>
+          }
       }
       }@else{
       {{ currentMessage }}
@@ -27,8 +31,7 @@
 
       @if (showGlobalEmojiDesc) {
         <div class="hover" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
-            <span [innerHTML]="hoverEmoji"></span> <br>
-            <span>{{ foundEmotes }}</span>
+            <span>{{ currentHoverEmoteName }}</span>
         </div>
 
 

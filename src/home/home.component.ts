@@ -18,7 +18,6 @@ import { FormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
-import { SettingsComponent } from "../settings/settings.component";
 import { CommonModule } from '@angular/common';
 
 // TODO: better tv emotes
@@ -208,6 +207,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.settings.openExternalLink(url);
   }
 
+  onOpenModView() {
+    const url = "https://www.twitch.tv/moderator/" + this.currentChannel;
+    this.settings.openExternalLink(url);
+  }
+
   onVerticalMenu() {
     this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
   }
@@ -273,13 +277,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
       if (result.data.length > 0) {
         this.streamerData = result.data[0];
+
+        let viewers = this.streamerData.viewer_count;
+        let viewers_split = viewers.toString().split("");
+        let final_viewer_count_string = "";
+
+        if (viewers >= 1000 && viewers < 10000) {
+          final_viewer_count_string = viewers_split[0] + "." + viewers_split[1] + viewers_split[2] + viewers_split[3];
+        } else if (viewers >= 10000 && viewers < 100000) {
+          final_viewer_count_string = viewers_split[0] + viewers_split[1] + "." + viewers_split[2] + viewers_split[3] + viewers_split[4];
+        } else {
+          final_viewer_count_string = this.streamerData.viewer_count;
+        }
+
         this.streamInfoToShow = {
           title: this.streamerData.title,
           thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.replace(/\\s/g, '') + "-300x200.jpg",
           game_name: this.streamerData.game_name,
-          viewer_count: this.streamerData.viewer_count,
+          viewer_count: final_viewer_count_string,
         }
-        console.log(this.streamInfoToShow);
+
       } else {
         this.streamInfoToShow = {
           title: this.currentChannel + " is offline :/",

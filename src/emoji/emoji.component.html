@@ -37,12 +37,14 @@
               </button>
 
               }
-
           }
 
       <img [src]="channelEmotes.template">
     </div>
+    @if (channelEmotes.length == 0) {
+        <span style="display:flex;justify-content: center">This channel has no channel emotes!</span>
     }
+  }
 
   @if(showEmojiDesc) {
     <div class="emoji-desc" [ngStyle]="{ top: hoverY + 'px', left: hoverX + 'px' }">

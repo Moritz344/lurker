@@ -70,12 +70,8 @@ export class TwitchChatService implements OnDestroy {
   getImageFromBadgeName(badges: string[], badgeImages: any) {
     let badgesFound: { img: string, title: string }[] = [{ img: "", title: "" }];
     let subscriber_ids: string[] = [];
-    let subscriberBadgeImg;
-    let subscriberBadgeTitle;
 
     let bits_ids: string[] = [];
-    let bits_img;
-    let bits_title;
 
     let global_types: string[] = [];
     let global_ids: string[] = [];
@@ -97,7 +93,7 @@ export class TwitchChatService implements OnDestroy {
 
     }
 
-    if (subscriber_ids.length > 0) {
+    if (subscriber_ids.length > 0 && badgeImages.subscriber) {
       const subscriberSet = new Set(subscriber_ids);
       badgeImages.subscriber.forEach((badge: any) => {
         if (subscriberSet.has(badge.id)) {
@@ -107,7 +103,7 @@ export class TwitchChatService implements OnDestroy {
 
 
     }
-    if (bits_ids.length > 0) {
+    if (bits_ids.length > 0 && badgeImages.bits) {
       const bitsSet = new Set(bits_ids);
       badgeImages.bits.forEach((badge: any) => {
         if (bitsSet.has(badge.id)) {
@@ -116,7 +112,7 @@ export class TwitchChatService implements OnDestroy {
       });
     }
 
-    if (global_ids.length > 0) {
+    if (global_ids.length > 0 && badgeImages.global) {
       const typeSet = new Set(global_types);
       const idSet = new Set(global_ids);
       badgeImages.global.forEach((badge: any) => {

@@ -24,6 +24,9 @@
         <button (click)="onOpenStreamInBrowser()">
             Open Stream In Browser
         </button>
+        <button *ngIf="currentChannel === username" (click)="onOpenModView()">
+            Open Mod View 
+        </button>
         <button (click)="onClearChat()">Clear Chat</button>
         @if (isConnected) {
           <button (click)="onDisconnect()">Disconnect</button>
