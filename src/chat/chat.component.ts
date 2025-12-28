@@ -184,7 +184,6 @@ export class ChatComponent implements OnInit {
     this.showGlobalEmojiDesc = false;
   }
   onBadgeHover(img: string, title: string) {
-
     this.currentHoverBadge = {
       img: img,
       title: title
@@ -201,7 +200,7 @@ export class ChatComponent implements OnInit {
     this.hoverEmojiGlobalY = event.pageY - 45;
   }
   updateHoverPositionBadges(event: MouseEvent) {
-    this.hoverBadgeX = event.pageX - 50;
+    this.hoverBadgeX = event.pageX + 10;
     this.hoverBadgeY = event.pageY - 45;
   }
 

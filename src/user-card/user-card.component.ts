@@ -4,6 +4,8 @@ import { TwitchChatService } from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+// TODO: show multiple messages 
+
 @Component({
   selector: 'app-user-card',
   imports: [CommonModule, FormsModule],
@@ -15,7 +17,7 @@ export class UserCardComponent implements OnInit, OnDestroy {
   title = "";
   account_creation: string = "";
   infos: any;
-  last_message: string = "";
+  messages: [{ name: any, date: string, msg: any }] = [{ name: "", date: "", msg: "" }];
 
 
   constructor(public settings: SettingsService, public chat: TwitchChatService) {
@@ -35,7 +37,6 @@ export class UserCardComponent implements OnInit, OnDestroy {
     const token: any = localStorage.getItem("twitch_token");
     const username: any = this.infos.display_name;
     let channel: any = localStorage.getItem("channel");
-    console.log(typeof channel);
     if (!channel) {
       channel = username;
     }
@@ -43,6 +44,9 @@ export class UserCardComponent implements OnInit, OnDestroy {
     let msgSubject = this.chat.messages$.subscribe((msg) => {
       if (msg.split(":")[0] == username) {
         this.infos.last_message = msg.split(":")[1];
+        let today = new Date();
+        let dateString = today.getHours() + ":" + today.getMinutes();
+        this.messages.push({ name: this.infos.display_name, date: dateString, msg: this.infos.last_message });
       };
     });
 

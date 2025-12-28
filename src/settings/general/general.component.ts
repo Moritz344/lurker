@@ -69,7 +69,6 @@ export class GeneralComponent implements OnInit {
     this.settings.getLoginStatus().subscribe((isLoggedIn) => {
       this.loadDefault();
       const settings: any = localStorage.getItem("settings");
-      console.log(settings);
       if (settings) {
         this.saveSettings = JSON.parse(settings);
         this.applyUserSettings(settings);

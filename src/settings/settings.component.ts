@@ -25,7 +25,7 @@ export class SettingsComponent {
 
   constructor(
     private settings: SettingsService,
-  ) {}
+  ) { }
 
   onSwitch() {
     this.settings.setCurrentChannel(this.currentChannel);
@@ -36,6 +36,6 @@ export class SettingsComponent {
   }
 
   onClose() {
-										this.settings.closeWindow("settings");
+    this.settings.closeWindow("settings");
   }
 }
