@@ -185,6 +185,18 @@ export class SettingsService {
     return this.http.get(url, { headers });
   }
 
+  getChatSettings(broadcaster_id: string) {
+    const token: any = localStorage.getItem("twitch_token");
+    const url = "https://api.twitch.tv/helix/chat/settings?broadcaster_id=" + broadcaster_id;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+
+    return this.http.get(url, { headers });
+
+  }
+
   getBroadCasterId(token: string, channel: string) {
     const url = "https://api.twitch.tv/helix/users?login=" + channel || "";
     const headers = new HttpHeaders({

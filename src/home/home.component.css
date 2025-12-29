@@ -125,6 +125,16 @@ textarea{
 
 }
 
+.toast-container{
+  display: grid;
+  grid-template-columns: repeat(1,1fr);
+  gap: 10px;
+  position: absolute;
+  right: 20px;
+  top: 50px;
+  
+}
+
 .chat-container::-webkit-scrollbar {
     width: 7px;
 }

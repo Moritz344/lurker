@@ -19,6 +19,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import { CommonModule } from '@angular/common';
+import { ToastComponent } from '../toast/toast.component';
 
 // TODO: better tv emotes
 // TODO: Tabsystem
@@ -35,6 +36,7 @@ import { CommonModule } from '@angular/common';
   selector: "app-root",
   standalone: true,
   imports: [
+    ToastComponent,
     RouterOutlet,
     ChatComponent,
     TopbarComponent,
@@ -67,6 +69,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   streamerData: any;
   chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
   isConnected: boolean = true;
+
+  showToast: boolean = false;
+  currentToastData: { message: string, duration: string }[] = [{ message: "", duration: "" }];
+
+  chatSettings: any;
 
   channelBadgeInfo: { bits: any, subscriber: any, global: any } = {
     bits: "",
@@ -133,8 +140,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.getBadgesForChannel();
   }
 
+  initChatSettings() {
+    this.currentToastData.length = 0;
+    console.log(this.currentToastData);
+    const token: any = localStorage.getItem("twitch_token");
+    this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
+      this.settings.getChatSettings(id).subscribe((response: any) => {
+        this.chatSettings = response.data[0];
+        if (this.chatSettings.emote_mode) {
+          this.currentToastData.push({ message: "Emote only mode is on!", duration: "2700" });
+          this.showToast = true;
+        }
+        if (this.chatSettings.follower_mode) {
+          this.currentToastData.push({ message: "Follower mode is on! (" + Math.round(this.chatSettings.follower_mode_duration / 60) + "h)", duration: "2500" });
+          this.showToast = true;
+          console.log("follower mode is on");
+        }
+        if (this.chatSettings.slow_mode) {
+          this.currentToastData.push({ message: "Slow mode is on!", duration: "2400" });
+          this.showToast = true;
+        }
+        if (this.chatSettings.subscriber_mode) {
+          this.currentToastData.push({ message: "Subscriber mode is on!", duration: "2800" });
+          this.showToast = true;
+        }
+      });
+    });
+  }
+
+  onHideSingleToast(index: number) {
+    this.currentToastData.splice(index, 1);
+  }
+
+  onHideToast() {
+    this.currentToastData.length = 0;
+  }
 
   ngOnInit() {
+    this.initChatSettings();
     this.initBadges();
     const emoji: any = localStorage.getItem("emoji") || '';
     window.addEventListener('storage', this.handleStorageChange);
@@ -237,6 +280,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
     this.getBadgesForChannel();
+    this.initChatSettings();
 
   }
 
@@ -371,7 +415,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         .subscribe(
           (result: any) => {
             if (result.data[0].drop_reason) {
-              alert(result.data[0].drop_reason.message);
+              this.currentToastData.push({ message: result.data[0].drop_reason.message, duration: "5000" });
+              this.showToast = true;
               return;
             }
             this.userChatMessage = "";
