@@ -42,7 +42,7 @@ export class UserCardComponent implements OnInit, OnDestroy {
     }
     this.chat.connect(token, username, channel);
     let msgSubject = this.chat.messages$.subscribe((msg) => {
-      if (msg.split(":")[0] == username) {
+      if (msg.split(":")[0] == username.toLowerCase()) {
         this.infos.last_message = msg.split(":")[1];
         let today = new Date();
         let dateString = today.getHours() + ":" + today.getMinutes();

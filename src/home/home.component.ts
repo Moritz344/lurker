@@ -27,8 +27,8 @@ import { CommonModule } from '@angular/common';
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
 // TODO: channels you follow option => dont make seperate window
+// TODO: get chat settings => https://dev.twitch.tv/docs/api/reference#get-chat-settings
 
-// TODO: work on settings window
 
 
 @Component({
