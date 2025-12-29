@@ -63,8 +63,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentChannel: string = "";
   userChatMessage: string = "";
   placeholderString: string = "";
-  private loginSub?: Subscription;
-  private getLoginSub?: Subscription;
   private currChannelSub?: Subscription;
   streamerData: any;
   chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
@@ -142,7 +140,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   initChatSettings() {
     this.currentToastData.length = 0;
-    console.log(this.currentToastData);
     const token: any = localStorage.getItem("twitch_token");
     this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
       this.settings.getChatSettings(id).subscribe((response: any) => {
@@ -154,7 +151,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this.chatSettings.follower_mode) {
           this.currentToastData.push({ message: "Follower mode is on! (" + Math.round(this.chatSettings.follower_mode_duration / 60) + "h)", duration: "2500" });
           this.showToast = true;
-          console.log("follower mode is on");
         }
         if (this.chatSettings.slow_mode) {
           this.currentToastData.push({ message: "Slow mode is on!", duration: "2400" });
@@ -177,29 +173,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initChatSettings();
-    this.initBadges();
-    const emoji: any = localStorage.getItem("emoji") || '';
-    window.addEventListener('storage', this.handleStorageChange);
-
-    this.applyUserSettings();
-    const user: any = localStorage.getItem("username");
-    this.username = user;
-    this.loadChatMessages(this.currentChannel);
-    this.settings.getUserId().subscribe((id) => {
-      this.settings.setUserId(id);
-    });
-    this.scrollChatbox();
-
-    this.currChannelSub = this.settings
-      .getCurrentChannel()
-      .subscribe((result: any) => {
-        if (result) {
-          this.currentChannel = result;
-          this.onSwitchChannel(this.currentChannel);
-        }
-      });
-    this.fetchStreamInfos(this.currentChannel);
+    this.checkIfLoggedIn();
   }
 
   setCurrentChannel() {
@@ -215,11 +189,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private chat: TwitchChatService,
     private dialog: MatDialog,
   ) {
-    this.setCurrentChannel();
-    this.loadChannelEmojisForChat();
-    this.loadEmojisForChat();
-    this.checkIfLoggedIn();
-    this.saveCurrentBroadCasterId();
   }
 
   scrollChatbox() {
@@ -289,6 +258,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onChooseChannel() {
+    if (!this.loginStatus) { return; }
     this.dialog.open(DialogBoxComponent, {
       width: "400px",
       height: "220px",
@@ -544,15 +514,50 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   checkIfLoggedIn() {
-    const token: any = localStorage.getItem("twitch_token");
-    const username: any = localStorage.getItem("username");
-    if (!token) {
-      this.settings.setLoginStatus(false);
-      this.placeholderString = "Login to send a message";
-    } else {
-      this.settings.setLoginStatus(true);
-      this.placeholderString = "Send a message as " + username;
-    }
+    const username = localStorage.getItem("username");
+    this.settings.getLoginStatus().subscribe(response => {
+      this.loginStatus = response;
+      console.log("login: " + response);
+      if (!this.loginStatus) {
+        this.currentChannel = "Unknown";
+        this.placeholderString = "Login to send a message";
+        this.currentToastData.push({ message: "Please login!", duration: "5000" });
+        this.showToast = true;
+      } else {
+        this.placeholderString = "Send a message as " + username;
+        this.initializeLoggedInFeatures();
+      }
+    });
+  }
+
+  initializeLoggedInFeatures() {
+    this.setCurrentChannel();
+    this.loadChannelEmojisForChat();
+    this.loadEmojisForChat();
+    this.saveCurrentBroadCasterId();
+    this.initChatSettings();
+    this.initBadges();
+    const emoji: any = localStorage.getItem("emoji") || '';
+    window.addEventListener('storage', this.handleStorageChange);
+
+    this.applyUserSettings();
+    const user: any = localStorage.getItem("username");
+    this.username = user;
+    this.loadChatMessages(this.currentChannel);
+    this.settings.getUserId().subscribe((id) => {
+      this.settings.setUserId(id);
+    });
+    this.scrollChatbox();
+
+    this.currChannelSub = this.settings
+      .getCurrentChannel()
+      .subscribe((result: any) => {
+        if (result) {
+          this.currentChannel = result;
+          this.onSwitchChannel(this.currentChannel);
+        }
+      });
+    this.fetchStreamInfos(this.currentChannel);
   }
 
   logout() {
@@ -601,11 +606,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.loginSub) {
-      this.loginSub.unsubscribe();
-    } else if (this.getLoginSub) {
-      this.getLoginSub.unsubscribe();
-    } else if (this.currChannelSub) {
+    if (this.currChannelSub) {
       this.currChannelSub.unsubscribe();
     }
     window.removeEventListener('storage', this.handleStorageChange);

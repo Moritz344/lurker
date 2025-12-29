@@ -167,7 +167,6 @@ export class TwitchChatService implements OnDestroy {
     afterString: string,
     beforeString: string,
   ) {
-    console.log(beforeString);
     let url = `https://api.twitch.tv/helix/channels/followed?user_id=${user_id}&first=${first}`;
     if (afterString !== "") {
       url = `https://api.twitch.tv/helix/channels/followed?user_id=${user_id}&first=${first}&after=${afterString}`;

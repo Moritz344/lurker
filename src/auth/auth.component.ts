@@ -31,7 +31,7 @@ export class AuthComponent implements OnInit {
     public chat: TwitchChatService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Initialisiere den Auth-Prozess
@@ -39,7 +39,6 @@ export class AuthComponent implements OnInit {
       if (fragment) {
         const params = new URLSearchParams(fragment);
         this.accessToken = params.get("access_token");
-        this.settings.setAccessToken(this.accessToken);
         this.settings.setAccessToken(this.accessToken);
         this.settings.getUserInfo().subscribe((data: any) => {
           this.settings.setUserName(data[0]["display_name"]);
@@ -54,7 +53,9 @@ export class AuthComponent implements OnInit {
             .checkAccessTokenValidity(this.accessToken)
             .subscribe((result) => {
               console.log("token is valid?", result, this.accessToken);
-              if (!result) {
+              if (result) {
+                this.settings.setLoginStatus(true);
+              } else {
                 alert("Your token is not valid. Try logging in again.");
                 //this.logout();
               }
@@ -91,7 +92,7 @@ export class AuthComponent implements OnInit {
       "chat:edit",
       "moderator:manage:announcements",
       "moderation:read",
-						"moderator:read:chatters",
+      "moderator:read:chatters",
       "channel:manage:moderators",
       "channel:manage:polls",
       "user:write:chat",

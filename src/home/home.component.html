@@ -9,13 +9,12 @@
 }
 <div class="channel-name">
     <app-topbar></app-topbar>
-    <span
+    <span 
         class="name"
         (mouseenter)="onChannelNameHover()"
         (mouseleave)="onChannelNameLeave()"
-        (click)="onChooseChannel()"
-        >{{ currentChannel }}'s chat </span
-    >
+        (click)="onChooseChannel()" >{{ currentChannel }}'s chat
+    </span>
 
    <button *ngIf="username == currentChannel" class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
 

@@ -34,9 +34,7 @@ export class TopbarComponent {
     private router: Router,
   ) {
     this.settings.getLoginStatus().subscribe((result) => {
-      if (result) {
-        this.showLoginButton = false;
-      }
+      this.showLoginButton = !result;
     });
   }
 
@@ -51,7 +49,7 @@ export class TopbarComponent {
     //  width: "500px",
     //  panelClass: "container",
     //});
-				this.settings.openSettings();
+    this.settings.openSettings();
   }
 
   onSwitchChannel() {
@@ -59,6 +57,7 @@ export class TopbarComponent {
   }
 
   onLogin() {
+    this.settings.setLoginStatus(true);
     this.router.navigate(["auth"]);
   }
 }
