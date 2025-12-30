@@ -35,6 +35,9 @@
         <button *ngIf="currentChannel === username" (click)="onOpenModView()">
             Open Mod View 
         </button>
+        <button (click)="onOpenFollowerList()">
+            Open Channels
+        </button>
         <button (click)="onClearChat()">Clear Chat</button>
         @if (isConnected) {
           <button (click)="onDisconnect()">Disconnect</button>

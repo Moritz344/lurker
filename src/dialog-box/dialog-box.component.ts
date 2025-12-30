@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { AppComponent } from "../app/app.component";
 import { SettingsService } from "../services/settings.service";
@@ -14,21 +14,17 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
   templateUrl: "./dialog-box.component.html",
   styleUrl: "./dialog-box.component.css",
 })
-export class DialogBoxComponent implements OnInit {
+export class DialogBoxComponent implements OnInit, AfterViewInit {
+  @ViewChild("container") containerDiv!: ElementRef;
   inputValue: string = "";
   currentChannel: string = "";
-  inputValueAnnouncement: string = "";
-  isOwner = false;
-  followData: any;
-  followList: string[] = [];
-  nextPageCursor: string = "";
 
-  inputValuePollTitle: string = "";
-  inputValueChoice_1: string = "";
-  inputValueChoice_2: string = "";
-  inputValueChoice_3: string = "";
-  inputValueChoice_4: string = "";
-  inputValueChoices: string[] = [];
+  currentPageCursor: string = '';
+  previousPageCursor: string = '';
+  nextPageCursor: string = "";
+  followList: any;
+  searchValue: string = "";
+  searchResult: string[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<AppComponent>,
@@ -37,70 +33,71 @@ export class DialogBoxComponent implements OnInit {
     private chat: TwitchChatService,
   ) { }
 
-  checkIfUserIsOwner(result: string) {
-    if (!result) { return; }
-    const token: any = localStorage.getItem("twitch_token");
-    const user_id: any = localStorage.getItem("user_id");
-    this.settings.getBroadCasterId(token, result).subscribe((id) => {
-      if (user_id === id) {
-        this.isOwner = true;
-        return;
-      }
-    });
-  }
-
   insertStreamerName(channel: string) {
     this.inputValue = channel;
   }
 
-  loadDataForChooseChannelName(direction: string) {
-    this.followList.length = 0;
-    const userId: any = localStorage.getItem("user_id");
-    if (direction === "forwards" || direction === "") {
-      this.chat
-        .getUserFollows(userId, 6, this.nextPageCursor, "")
-        .subscribe((result: any) => {
-          this.followData = result;
-          this.setFollowerList();
-        });
-    } else if (direction === "backwards") {
-      this.chat
-        .getUserFollows(userId, 6, "", this.nextPageCursor)
-        .subscribe((result: any) => {
-          this.followData = result;
-          this.setFollowerList();
-        });
+  loadPage(cursor: string) {
+    const user_id: any = localStorage.getItem("user_id");
+
+    this.chat
+      .getUserFollows(user_id, 50, cursor, "")
+      .subscribe((response: any) => {
+        this.currentPageCursor = cursor;
+        this.nextPageCursor = response.pagination.cursor;
+        this.followList = response.data;
+        console.log(response);
+      });
+  }
+
+  onSearch() {
+    this.searchResult.length = 0;
+    console.log("search!", this.searchValue);
+    for (let i = 0; i < this.followList.length; i++) {
+      if (this.followList[i]["broadcaster_name"].includes(this.searchValue)) {
+        this.searchResult.push(this.followList[i]["broadcaster_name"]);
+      }
     }
   }
 
-  setFollowerList() {
-    if (this.followData && this.followData.data) {
-      for (let follow of this.followData.data) {
-        this.followList.push(follow.broadcaster_name);
-      }
+  onNextPage() {
+    this.searchResult.length = 0;
+    this.previousPageCursor = this.currentPageCursor;
+    this.loadPage(this.nextPageCursor);
+  }
+  onPreviousPage() {
+    this.searchResult.length = 0;
+    if (this.previousPageCursor) {
+      this.loadPage(this.previousPageCursor);
+      this.previousPageCursor = '';
     }
-    this.nextPageCursor = this.followData.pagination.cursor;
+  }
+
+
+  ngAfterViewInit() {
+    this.containerDiv.nativeElement.style.height = this.data.height;
+    console.log(this.data.height);
   }
 
   ngOnInit() {
-    const user: any = localStorage.getItem("username");
-    this.currentChannel = user;
-    this.settings.getCurrentChannel().subscribe((result) => {
-      this.currentChannel = result;
-      this.inputValue = result;
-      this.checkIfUserIsOwner(this.currentChannel);
-    });
+    const channel: any = localStorage.getItem("channel");
+    this.currentChannel = channel;
 
-    this.loadDataForChooseChannelName("");
+    this.loadPage("");
+
+
   }
 
+  onSwitchChannel(value: string) {
+    this.data.function = "change_channel_name";
+    this.inputValue = value;
+    this.data.message = "Type in a channel name";
+    this.dialogRef.updateSize("400px", "200px");
+  }
 
   onChannelNameSave() {
     if (!this.inputValue) {
-      alert("please name a channel name");
-      return;
-    } else if (this.inputValue.length > 25 || this.inputValue.length < 4) {
-      alert("please enter a valid channel name");
+      alert("Please enter a valid channel name");
       return;
     }
     this.chat.disconnect();

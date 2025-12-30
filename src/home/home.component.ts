@@ -6,6 +6,7 @@ import {
   HostListener,
   OnChanges,
   OnDestroy,
+  ChangeDetectorRef
 } from "@angular/core";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../services/settings.service";
@@ -28,7 +29,6 @@ import { ToastComponent } from '../toast/toast.component';
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
 // TODO: channels you follow option => dont make seperate window
-// TODO: get chat settings => https://dev.twitch.tv/docs/api/reference#get-chat-settings
 
 
 
@@ -43,7 +43,7 @@ import { ToastComponent } from '../toast/toast.component';
     MatDialogModule,
     DialogBoxComponent,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   scrollInterval = 100;
   userScrolling: boolean = false;
   currentChannel: string = "";
-  userChatMessage: string = "";
+  userChatMessage = "";
   placeholderString: string = "";
   private currChannelSub?: Subscription;
   streamerData: any;
@@ -104,6 +104,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onOpenFollowerList() {
+    this.dialog.open(DialogBoxComponent, {
+      width: "400px",
+      height: "500px",
+      panelClass: "container",
+
+      data: {
+        height: "500px",
+        width: "400px",
+        function: "open_follower_list",
+      },
+    });
+  }
 
   onEmojiPicker() {
     this.settings.openEmojiPicker();
@@ -188,6 +201,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private settings: SettingsService,
     private chat: TwitchChatService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -340,11 +354,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
       return;
+    } else if (event.key !== "Enter") {
+      return;
     }
 
     const token: any = localStorage.getItem("twitch_token");
     this.accessToken = token;
-
 
     if (event.key === "Enter" && this.userChatMessage != "") {
       event.preventDefault();
@@ -446,12 +461,16 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (token && username) {
           this.chat.connect(token, username, channel);
           if (!this.sub || this.sub.closed) {
-            this.sub = this.chat.messages$.subscribe((msg) =>
-              this.messages.push(msg),
-            );
+            this.sub = this.chat.messages$.subscribe((msg) => {
+              this.messages.push(msg)
+              if (this.messages.length >= 1000) {
+                this.messages.splice(0, 1000);
+              }
+            });
+
+
             this.chat.getChatterBadge().subscribe(badges => {
               this.chatterInfo.badges = badges;
-              //console.log("chatter badges:" + badges);
               this.getImageForBadge();
             });
 
@@ -516,7 +535,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   checkIfLoggedIn() {
     const username = localStorage.getItem("username");
     this.settings.getLoginStatus().subscribe(response => {
-      this.loginStatus = response;
+      const token: any = localStorage.getItem("twitch_token");
       console.log("login: " + response);
       if (!this.loginStatus) {
         this.currentChannel = "Unknown";

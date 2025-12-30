@@ -7,7 +7,7 @@ import { switchMap, map, catchError } from "rxjs/operators";
   providedIn: "root",
 })
 export class SettingsService {
-  loginStatus: boolean = false;
+  loginStatus: boolean = localStorage.getItem('twitch_token') ? true : false;
   loginStatusSubject = new BehaviorSubject<boolean>(this.loginStatus);
 
   currentChannel: string = "";

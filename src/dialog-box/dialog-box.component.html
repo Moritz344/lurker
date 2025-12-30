@@ -1,20 +1,36 @@
-<div class="container">
+<div class="container" #container>
     <div class="items">
-        <span>{{ data.message }}</span>
         @if (data.function === "change_channel_name") {
+            <span>{{ data.message }}</span>
             <input
                 [(ngModel)]="inputValue"
                 (keydown.code.enter)="onChannelNameSave()"
                 spellcheck="false"
                 [placeholder]="currentChannel"
             />
+    }@else if (data.function === "open_follower_list") {
+      <div class="channel-container">
+      <div class="top-items">
+        <span>Channels You Follow: </span>
+        <input placeholder="Search..." [(ngModel)]="searchValue" (keydown.code.enter)="onSearch()" >
+      </div>
+        @if (searchResult.length == 0) {
+            @for (channel of followList; track $index) {
+                <button class="broadcaster" (click)="onSwitchChannel(channel.broadcaster_name)">{{ channel.broadcaster_name }}</button>
+            }
+        }@else {
+          @for (channel of searchResult; track $index) {
+              <button>{{ channel }}</button>
+          }
+        }
+        <button (click)="onNextPage()">Next Page</button>
+        <button (click)="onPreviousPage()">Previous Page</button>
+      </div>
     }
     </div>
 
     <div class="button-layout">
-        @if (data.function === "change_channel_name") {
-            <button (click)="onChannelNameSave()" class="ok">Ok</button>
-        }
+        <button (click)="onChannelNameSave()" class="ok">Ok</button>
         <button (click)="onClose()" class="cancel">Cancel</button>
     </div>
 
