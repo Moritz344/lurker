@@ -20,7 +20,7 @@
             }
         }@else {
           @for (channel of searchResult; track $index) {
-              <button>{{ channel }}</button>
+              <button class="broadcaster" (click)="onSwitchChannel(channel)">{{ channel }}</button>
           }
         }
         <button (click)="onNextPage()">Next Page</button>
