@@ -29,6 +29,7 @@ import { ToastComponent } from '../toast/toast.component';
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
 // TODO: channels you follow option => dont make seperate window
+// TODO: show for how long the stream is going for if possible
 
 
 
