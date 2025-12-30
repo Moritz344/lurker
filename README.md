@@ -2,7 +2,9 @@
 
 an opensource app for listening and writing twitch chat messages.
 
-<img width="1092" height="795" alt="lurker" src="https://github.com/user-attachments/assets/3a0113c0-30b8-4e2a-8704-f4a1fc7194cc" />
+
+<img width="882" height="707" alt="screenshot-2025-12-27_19-10-50" src="https://github.com/user-attachments/assets/91142e3b-54a0-42bd-a761-6434de2ed7e1" />
+
 
 
 > [!WARNING]
