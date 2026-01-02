@@ -28,8 +28,8 @@ import { ToastComponent } from '../toast/toast.component';
 // TODO: channel points
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
-// TODO: channels you follow option => dont make seperate window
 // TODO: show for how long the stream is going for if possible
+// TODO: show replys
 
 
 
@@ -87,10 +87,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     viewer_count: ""
   };
 
+
   globalEmojiNames: { name: string; url: string, url_2: string }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
   channelNameHover: boolean = false;
+  zoomLevel: number = 1;
 
   loginStatus: boolean = true;
 
@@ -159,21 +161,32 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.settings.getChatSettings(id).subscribe((response: any) => {
         this.chatSettings = response.data[0];
         if (this.chatSettings.emote_mode) {
-          this.currentToastData.push({ message: "Emote only mode is on!", duration: "2700" });
+          this.currentToastData.push({ message: "Emote only mode is on!", duration: "5000" });
           this.showToast = true;
         }
         if (this.chatSettings.follower_mode) {
-          this.currentToastData.push({ message: "Follower mode is on! (" + Math.round(this.chatSettings.follower_mode_duration / 60) + "h)", duration: "2500" });
+          let follower_mode_duration: string = Math.round(this.chatSettings.follower_mode_duration / 60).toString() + "h";
+          if (follower_mode_duration == "0h") {
+            follower_mode_duration = this.chatSettings.follower_mode_duration.toString() + "m";
+          }
+          this.currentToastData.push({ message: "Follower mode is on! " + follower_mode_duration, duration: "5000" });
           this.showToast = true;
         }
         if (this.chatSettings.slow_mode) {
-          this.currentToastData.push({ message: "Slow mode is on!", duration: "2400" });
+          let slow_mode_duration = Math.round(this.chatSettings.slow_mode_wait_time / 60);
+          let finalString = slow_mode_duration.toString() + "m";
+          if (slow_mode_duration < 1) {
+            slow_mode_duration = this.chatSettings.slow_mode_wait_time.toString();
+            finalString = slow_mode_duration.toString() + "s";
+          }
+          this.currentToastData.push({ message: "Slow mode is on! " + finalString, duration: "5000" });
           this.showToast = true;
         }
         if (this.chatSettings.subscriber_mode) {
-          this.currentToastData.push({ message: "Subscriber mode is on!", duration: "2800" });
+          this.currentToastData.push({ message: "Subscriber mode is on! ", duration: "2800" });
           this.showToast = true;
         }
+        console.log(this.chatSettings);
       });
     });
   }
@@ -223,6 +236,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   onChannelNameHover() {
+    if (!this.loginStatus) { return; }
     this.channelNameHover = true;
   }
   onChannelNameLeave() {
@@ -246,6 +260,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   onDisableVerticalMenu() {
     this.showVerticalMenuOptions = false;
   }
+
+
 
   saveCurrentBroadCasterId() {
     const token: any = localStorage.getItem("twitch_token");
@@ -479,6 +495,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.chatterInfo.color = color;
             });
 
+
           }
         }
       });
@@ -535,17 +552,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   checkIfLoggedIn() {
     const username = localStorage.getItem("username");
+    const token: any = localStorage.getItem("twitch_token");
     this.settings.getLoginStatus().subscribe(response => {
-      const token: any = localStorage.getItem("twitch_token");
-      console.log("login: " + response);
-      if (!this.loginStatus) {
-        this.currentChannel = "Unknown";
+      if (!response) {
+        this.currentChannel = "";
         this.placeholderString = "Login to send a message";
         this.currentToastData.push({ message: "Please login!", duration: "5000" });
         this.showToast = true;
+        this.loginStatus = false;
       } else {
         this.placeholderString = "Send a message as " + username;
         this.initializeLoggedInFeatures();
+        this.loginStatus = true;
       }
     });
   }

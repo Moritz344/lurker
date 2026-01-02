@@ -14,6 +14,7 @@ export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
   private badgeInfoSubject = new Subject<string[]>();
+  private replyMessageBody = new Subject<{ to: string, msg: string }>();
   private chatColor = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
 
@@ -44,11 +45,13 @@ export class TwitchChatService implements OnDestroy {
         return;
       }
 
+
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
       if (match) {
         let badgesArray = raw.split(";")[1].split("badges=")[1].split(",");
         let chatColorString = raw.split(";")[3].split("color=")[1];
         const [, user, message] = match;
+
         this.messageSubject.next(`${user}: ${message}`);
         this.badgeInfoSubject.next(badgesArray);
         this.chatColor.next(chatColorString);
@@ -60,6 +63,7 @@ export class TwitchChatService implements OnDestroy {
     });
   }
 
+
   getChatterBadge() {
     return this.badgeInfoSubject.asObservable();
   }
@@ -68,7 +72,7 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getImageFromBadgeName(badges: string[], badgeImages: any) {
-    let badgesFound: { img: string, title: string }[] = [{ img: "", title: "" }];
+    let badgesFound: { img: string, img_2x: string, title: string }[] = [{ img: "", img_2x: "", title: "" }];
     let subscriber_ids: string[] = [];
 
     let bits_ids: string[] = [];
@@ -97,7 +101,7 @@ export class TwitchChatService implements OnDestroy {
       const subscriberSet = new Set(subscriber_ids);
       badgeImages.subscriber.forEach((badge: any) => {
         if (subscriberSet.has(badge.id)) {
-          badgesFound.push({ img: badge.image_url_1x, title: badge.title });
+          badgesFound.push({ img: badge.image_url_1x, img_2x: badge.image_url_2x, title: badge.title });
         }
       });
 
@@ -107,7 +111,7 @@ export class TwitchChatService implements OnDestroy {
       const bitsSet = new Set(bits_ids);
       badgeImages.bits.forEach((badge: any) => {
         if (bitsSet.has(badge.id)) {
-          badgesFound.push({ img: badge.image_url_1x, title: badge.title });
+          badgesFound.push({ img: badge.image_url_1x, img_2x: badge.image_url_2x, title: badge.title });
         }
       });
     }
@@ -119,7 +123,7 @@ export class TwitchChatService implements OnDestroy {
         if (typeSet.has(badge.set_id)) {
           badge.versions.forEach((version: any) => {
             if (idSet.has(version.id)) {
-              badgesFound.push({ img: version.image_url_1x, title: version.title });
+              badgesFound.push({ img: version.image_url_1x, img_2x: version.image_url_2x, title: version.title });
             }
           });
         }

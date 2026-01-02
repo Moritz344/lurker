@@ -38,7 +38,6 @@ function createWindow() {
 
   });
 
-
   ipcMain.handle("open-settings", (event, data) => {
     openSettingsWindow = new BrowserWindow({
       width: 510,
@@ -108,6 +107,36 @@ function createWindow() {
       }
     }
 
+  });
+
+  // Custom zoom keybindings
+  win.webContents.on('before-input-event', (event, input) => {
+    // Zoom in: Ctrl/Cmd + +
+    if ((input.control || input.meta) && input.key === '+' || 
+        (input.control || input.meta) && input.key === '=') {
+      event.preventDefault();
+      win.webContents.setZoomLevel(win.webContents.getZoomLevel() + 1);
+    }
+    // Zoom out: Ctrl/Cmd + -
+    if ((input.control || input.meta) && input.key === '-') {
+      event.preventDefault();
+      win.webContents.setZoomLevel(win.webContents.getZoomLevel() - 1);
+    }
+    // Reset zoom: Ctrl/Cmd + 0
+    if ((input.control || input.meta) && input.key === '0') {
+      event.preventDefault();
+      win.webContents.setZoomLevel(0);
+    }
+    // Custom keybinding: Ctrl/Cmd + Shift + Z for zoom in
+    if ((input.control || input.meta) && input.shift && input.key === 'Z') {
+      event.preventDefault();
+      win.webContents.setZoomLevel(win.webContents.getZoomLevel() + 1);
+    }
+    // Custom keybinding: Ctrl/Cmd + Shift + X for zoom out
+    if ((input.control || input.meta) && input.shift && input.key === 'X') {
+      event.preventDefault();
+      win.webContents.setZoomLevel(win.webContents.getZoomLevel() - 1);
+    }
   });
 
   if (process.env.ELECTRON_DEV) {

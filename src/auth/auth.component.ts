@@ -26,10 +26,12 @@ export class AuthComponent implements OnInit {
   placeholderString: string = "";
   accessToken: any;
 
+  loginDataToCopy: string = "";
+
   constructor(
     public settings: SettingsService,
     public chat: TwitchChatService,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private router: Router,
   ) { }
 
@@ -73,6 +75,7 @@ export class AuthComponent implements OnInit {
     const scopes = this.getScopes();
     const url = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200/auth&scope=${scopes}`;
     window.location.href = url;
+    //this.settings.openExternalLink(url);
   }
 
   setAccountData(

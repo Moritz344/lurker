@@ -13,8 +13,9 @@
         class="name"
         (mouseenter)="onChannelNameHover()"
         (mouseleave)="onChannelNameLeave()"
-        (click)="onChooseChannel()" >{{ currentChannel }}'s chat
+        (click)="onChooseChannel()" >{{ currentChannel ? currentChannel + "'s chat": "Not logged in" }}
     </span>
+    
 
    <button *ngIf="username == currentChannel" class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>
 
@@ -23,6 +24,7 @@
             <img src="vertical.svg" />
         </button>
     </div>
+
 
 </div>
 
@@ -34,9 +36,6 @@
         </button>
         <button *ngIf="currentChannel === username" (click)="onOpenModView()">
             Open Mod View 
-        </button>
-        <button (click)="onOpenFollowerList()">
-            Open Channels
         </button>
         <button (click)="onClearChat()">Clear Chat</button>
         @if (isConnected) {
@@ -56,11 +55,12 @@
 }
 
 <br />
-<div class="chat-container" (click)="onDisableVerticalMenu()" #chat>
+<div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
     @for (msg of messages; track $index) {
-          <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color"></app-chat>
+          <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color" ></app-chat>
     }
 </div>
+
 
 <div class="chat-entry">
     <textarea

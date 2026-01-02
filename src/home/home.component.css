@@ -98,6 +98,42 @@ a {
     color: var(--primary-hover);
 }
 
+.zoom-controls {
+    position: absolute;
+    top: 0px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--input-color);
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 10;
+}
+
+.zoom-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 3px;
+    min-width: 30px;
+}
+
+.zoom-controls button:hover {
+    background-color: var(--primary-hover);
+}
+
+.zoom-level {
+    color: white;
+    font-size: 12px;
+    min-width: 40px;
+    text-align: center;
+}
+
 .chat-entry {
    position: absolute;
    overflow: hidden;
@@ -133,6 +169,10 @@ textarea{
   right: 20px;
   top: 50px;
   
+}
+
+.user-scroll{
+  position: absolute;
 }
 
 .chat-container::-webkit-scrollbar {

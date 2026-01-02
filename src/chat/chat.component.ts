@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ComponentFactoryResolver, Injector } from '@angular/core';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { TwitchChatService } from '../services/twitchChat.service';
+import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 
 // TODO: show channel emotes
 
@@ -22,7 +23,7 @@ export class ChatComponent implements OnInit {
   @Input() badges: any;
   @Input() emojis: { name: string, url: string, url_2: string }[] = [];
   @Input() emojisChannel: any;
-
+  @ViewChild('container') containerDiv!: ElementRef;
 
 
   title = "Lurker"
@@ -49,26 +50,40 @@ export class ChatComponent implements OnInit {
   showBadge: boolean = false;
   hoverBadgeX = 0;
   hoverBadgeY = 0;
-  currentHoverBadge: { title: string, img: string } = { title: "", img: "" };
+  currentHoverBadge: { title: string, img: SafeUrl } = { title: "", img: "" };
+  currentHoverEmote: { title: string, img: SafeUrl } = { title: "", img: "" };
+
+  isReply: boolean = false;
+  isMention: boolean = false;
 
   constructor(public settings: SettingsService,
     public resolver: ComponentFactoryResolver,
     public chat: TwitchChatService,
     public injector: Injector,
     public router: Router,
+    private sanitizer: DomSanitizer,
   ) {
 
+  }
+
+  checkIfMentions(msg: string) {
+    const username: any = localStorage.getItem("username");
+    if (msg.includes("@" + username)) {
+      this.isMention = true;
+    }
   }
 
   init() {
     this.checkMessage();
     const splitMessage = this.message.split(":");
+    this.checkIfMentions(splitMessage[1]);
     this.currentName = splitMessage[0];
     this.currentMessage = splitMessage[1];
     this.currentBadges = {
       images: this.badges.badgeImages,
       title: this.badges.badges
     };
+
 
     let state = this.settings.getUserColorStatus();
     if (state == "disabled") {
@@ -166,29 +181,41 @@ export class ChatComponent implements OnInit {
 
     }
 
+  }
 
-
+  sanitizeHtml(html: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
 
   OnMouseEnterGlobal(item: any, index: number) {
-    this.hoverEmoji = item;
     this.showGlobalEmojiDesc = true;
+    this.hoverEmoji = item;
     this.currentHoverEmoteName = this.foundEmotes[index];
     if (this.currentHoverEmoteName == undefined) {
       this.currentHoverEmoteName = this.foundEmotes[this.foundEmotes.length - 1];
+    }
+
+    const urlMatch = item.match(/src="([^"]+)"/);
+    const imageUrl = urlMatch ? urlMatch[1] : '';
+
+    this.currentHoverEmote = {
+      title: this.currentHoverEmoteName,
+      img: this.sanitizer.bypassSecurityTrustUrl(imageUrl)
     }
   }
 
   OnMouseLeaveGlobal() {
     this.showGlobalEmojiDesc = false;
   }
+
   onBadgeHover(img: string, title: string) {
     this.currentHoverBadge = {
-      img: img,
+      img: this.sanitizer.bypassSecurityTrustUrl(img),
       title: title
     }
     this.showBadge = true;
+
   }
 
   onBadgeLeave() {
@@ -196,13 +223,14 @@ export class ChatComponent implements OnInit {
   }
 
   updateHoverPositionEmotes(event: MouseEvent) {
-    this.hoverEmojiGlobalX = event.pageX - 50;
-    this.hoverEmojiGlobalY = event.pageY - 45;
+    this.hoverEmojiGlobalX = event.pageX + 60;
+    this.hoverEmojiGlobalY = event.pageY + 45;
   }
   updateHoverPositionBadges(event: MouseEvent) {
-    this.hoverBadgeX = event.pageX + 10;
-    this.hoverBadgeY = event.pageY - 45;
+    this.hoverBadgeX = event.clientX + 60;
+    this.hoverBadgeY = event.clientY + 45;
   }
+
 
 
 

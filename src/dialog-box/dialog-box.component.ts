@@ -37,41 +37,6 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
     this.inputValue = channel;
   }
 
-  loadPage(cursor: string) {
-    const user_id: any = localStorage.getItem("user_id");
-
-    this.chat
-      .getUserFollows(user_id, 50, cursor, "")
-      .subscribe((response: any) => {
-        this.currentPageCursor = cursor;
-        this.nextPageCursor = response.pagination.cursor;
-        this.followList = response.data;
-        console.log(response);
-      });
-  }
-
-  onSearch() {
-    this.searchResult.length = 0;
-    console.log("search!", this.searchValue);
-    for (let i = 0; i < this.followList.length; i++) {
-      if (this.followList[i]["broadcaster_name"].includes(this.searchValue)) {
-        this.searchResult.push(this.followList[i]["broadcaster_name"]);
-      }
-    }
-  }
-
-  onNextPage() {
-    this.searchResult.length = 0;
-    this.previousPageCursor = this.currentPageCursor;
-    this.loadPage(this.nextPageCursor);
-  }
-  onPreviousPage() {
-    this.searchResult.length = 0;
-    if (this.previousPageCursor) {
-      this.loadPage(this.previousPageCursor);
-      this.previousPageCursor = '';
-    }
-  }
 
 
   ngAfterViewInit() {
@@ -82,8 +47,6 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const channel: any = localStorage.getItem("channel");
     this.currentChannel = channel;
-
-    this.loadPage("");
 
 
   }
