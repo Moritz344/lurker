@@ -1,4 +1,6 @@
 <div class="container">
+    
+
     <button (click)="onSettings()" title="Settings">
         <img src="settings.svg" />
     </button>
@@ -16,4 +18,10 @@
             <a></a>
         </button>
     }
+    <div class="tab-container">
+      @for (tab of currentTabs; track $index) {
+          <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
+        }
+        <button (click)="onAddButton()">+</button>
+    </div>
 </div>

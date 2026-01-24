@@ -29,7 +29,7 @@ select {
   border: 1px solid white;
   background-color: var(--material-background);
   color: white;
-  height: 30px;
+  height: 40px;
 }
 
 input {

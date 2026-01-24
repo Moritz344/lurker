@@ -197,7 +197,10 @@ export class ChatComponent implements OnInit {
     }
 
     const urlMatch = item.match(/src="([^"]+)"/);
-    const imageUrl = urlMatch ? urlMatch[1] : '';
+    let imageUrl = urlMatch ? urlMatch[1] : '';
+    let a = imageUrl.split("/");
+    a[a.length - 1] = "2.0";
+    imageUrl = a.join("/");
 
     this.currentHoverEmote = {
       title: this.currentHoverEmoteName,

@@ -20,6 +20,8 @@ export class GeneralComponent implements OnInit {
   currentTimeStampFormat: string = "";
   currentChatColorState: string = "";
 
+  customChatColor: boolean = false;
+
   saveSettings = [{}];
 
   updateSettings() {

@@ -5,6 +5,7 @@ import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
+import { TabService } from "../services/tab.service";
 import { switchMap, map } from "rxjs/operators";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
@@ -18,6 +19,7 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   @ViewChild("container") containerDiv!: ElementRef;
   inputValue: string = "";
   currentChannel: string = "";
+  tabName: string = "";
 
   currentPageCursor: string = '';
   previousPageCursor: string = '';
@@ -31,6 +33,7 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private settings: SettingsService,
     private chat: TwitchChatService,
+    private tab: TabService,
   ) { }
 
   insertStreamerName(channel: string) {
@@ -42,6 +45,11 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.containerDiv.nativeElement.style.height = this.data.height;
     console.log(this.data.height);
+  }
+
+  onTabChange() {
+    this.tab.addTab({ name: this.tabName });
+    this.onClose();
   }
 
   ngOnInit() {

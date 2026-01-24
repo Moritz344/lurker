@@ -112,8 +112,8 @@ function createWindow() {
   // Custom zoom keybindings
   win.webContents.on('before-input-event', (event, input) => {
     // Zoom in: Ctrl/Cmd + +
-    if ((input.control || input.meta) && input.key === '+' || 
-        (input.control || input.meta) && input.key === '=') {
+    if ((input.control || input.meta) && input.key === '+' ||
+      (input.control || input.meta) && input.key === '=') {
       event.preventDefault();
       win.webContents.setZoomLevel(win.webContents.getZoomLevel() + 1);
     }

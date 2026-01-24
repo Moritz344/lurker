@@ -21,6 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import { CommonModule } from '@angular/common';
 import { ToastComponent } from '../toast/toast.component';
+import { TabService } from '../services/tab.service';
 
 // TODO: better tv emotes
 // TODO: Tabsystem
@@ -65,6 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   userChatMessage = "";
   placeholderString: string = "";
   private currChannelSub?: Subscription;
+  private currentTabSub?: Subscription;
   streamerData: any;
   chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
   isConnected: boolean = true;
@@ -186,7 +188,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.currentToastData.push({ message: "Subscriber mode is on! ", duration: "2800" });
           this.showToast = true;
         }
-        console.log(this.chatSettings);
       });
     });
   }
@@ -207,12 +208,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     const username: any = localStorage.getItem("username");
     localStorage.setItem("channel", username);
     this.currentChannel = username;
+    this.tab.addTab({ name: username });
   }
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
+    private tab: TabService,
     private chat: TwitchChatService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef
@@ -274,13 +277,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   onSwitchChannel(name: string) {
     localStorage.setItem("channel", name);
     this.fetchStreamInfos(name);
-    this.messages.length = 0;
     this.currentChannel = name;
     this.saveCurrentBroadCasterId();
     this.chat.disconnect();
     this.loadChatMessages(this.currentChannel);
     this.getBadgesForChannel();
     this.initChatSettings();
+    this.onClearChat();
 
   }
 
@@ -595,6 +598,18 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.onSwitchChannel(this.currentChannel);
         }
       });
+
+    this.currentTabSub = this.tab.currentTab$.subscribe((tab) => {
+      if (tab.name) {
+        this.currentChannel = tab.name;
+        this.initChatSettings();
+        this.fetchStreamInfos(tab.name);
+        this.saveCurrentBroadCasterId();
+        this.getBadgesForChannel();
+        this.initChatSettings();
+        this.onClearChat();
+      }
+    });
     this.fetchStreamInfos(this.currentChannel);
   }
 
@@ -646,6 +661,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.currChannelSub) {
       this.currChannelSub.unsubscribe();
+    }
+    if (this.currentTabSub) {
+      this.currentTabSub.unsubscribe();
     }
     window.removeEventListener('storage', this.handleStorageChange);
   }

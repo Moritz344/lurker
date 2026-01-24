@@ -7,14 +7,14 @@
       }
     </div>
 }
+<app-topbar></app-topbar>
 <div class="channel-name">
-    <app-topbar></app-topbar>
-    <span 
-        class="name"
-        (mouseenter)="onChannelNameHover()"
-        (mouseleave)="onChannelNameLeave()"
-        (click)="onChooseChannel()" >{{ currentChannel ? currentChannel + "'s chat": "Not logged in" }}
-    </span>
+      <span 
+          class="name"
+          (mouseenter)="onChannelNameHover()"
+          (mouseleave)="onChannelNameLeave()"
+          (click)="onChooseChannel()" >{{ currentChannel ? currentChannel + "'s chat": "Not logged in" }}
+      </span>
     
 
    <button *ngIf="username == currentChannel" class="chatter-list" (click)="onChatterList()"> <img src="persons.svg"></button>

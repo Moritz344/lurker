@@ -3,14 +3,8 @@ import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { Subscription } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
-import { ChatComponent } from "../chat/chat.component";
-import { TopbarComponent } from "../topbar/topbar.component";
-import { FormsModule } from "@angular/forms";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
-import { SettingsComponent } from "../settings/settings.component";
+
+// TODO: auth => lurker homepage => auth => user copys user data => paste into settings and save them
 
 @Component({
   selector: "app-auth",

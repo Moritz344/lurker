@@ -34,7 +34,7 @@ a {
     justify-content: center;
     justify-items: center;
     align-items: center;
-    top: -30px;
+    top: 0px;
     left: 0;
     right: 0;
     z-index: 1000;
@@ -82,8 +82,9 @@ a {
 
 .channel-name {
     position: absolute;
-    top: 5px;
+    top: 36px;
     right: 0px;
+    background-color: var(--gray9);
     width: 100%;
     text-align: center;
     overflow: hidden;
@@ -91,6 +92,7 @@ a {
 }
 
 .name {
+  
     color: var(--material-primary);
 }
 
@@ -165,6 +167,7 @@ textarea{
   display: grid;
   grid-template-columns: repeat(1,1fr);
   gap: 10px;
+  z-index: 9999;
   position: absolute;
   right: 20px;
   top: 50px;
