@@ -226,12 +226,12 @@ export class ChatComponent implements OnInit {
   }
 
   updateHoverPositionEmotes(event: MouseEvent) {
-    this.hoverEmojiGlobalX = event.pageX + 60;
-    this.hoverEmojiGlobalY = event.pageY + 45;
+    this.hoverEmojiGlobalX = event.pageX + 40;
+    this.hoverEmojiGlobalY = event.pageY + 0;
   }
   updateHoverPositionBadges(event: MouseEvent) {
-    this.hoverBadgeX = event.clientX + 60;
-    this.hoverBadgeY = event.clientY + 45;
+    this.hoverBadgeX = event.clientX + 40;
+    this.hoverBadgeY = event.clientY + 0;
   }
 
 

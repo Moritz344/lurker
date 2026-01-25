@@ -7,6 +7,7 @@
     --text-color: #ebdbb2;
     --text-muted: #928374;
     --border-color: #504945;
+    --border-color-rgb: 80, 73, 75;
     --error-color: #cc241d;
     --radius: 10px;
     --transition: 0.25s ease;
@@ -63,6 +64,27 @@
     --material-primary: #d79921;
 
     --message-size: 17px;
+}
+
+.hover-container{
+  position: absolute;
+  border: 1px solid white;
+  background-color: var(--gruvbox-dark0);
+  border-radius: 5px;
+  padding: 10px;
+}
+.hover-items img{
+  margin: auto;
+}
+
+.hover-items{
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 100px;
+  width: auto;
+  text-align: center;
+
 }
 
 .mat-mdc-dialog-container {

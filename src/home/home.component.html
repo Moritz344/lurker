@@ -50,15 +50,15 @@
     <div class="stream-info">
         <img *ngIf="streamInfoToShow" [src]="streamInfoToShow.thumbnail" >
         <span>{{ streamInfoToShow.title }}</span>
-        <span *ngIf="streamInfoToShow.viewer_count">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+        <span style="margin-top: 5px" *ngIf="streamInfoToShow.viewer_count">Viewer: {{ streamInfoToShow.viewer_count }}</span>
    </div>
 }
 
 <br />
-<div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
-    @for (msg of messages; track $index) {
-          <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color" ></app-chat>
-    }
+  <div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
+      @for (msg of messages; track $index) {
+            <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color" ></app-chat>
+      }
 </div>
 
 

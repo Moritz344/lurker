@@ -16,7 +16,7 @@
                 (mouseleave)="OnMouseLeaveGlobal()"
                 (click)="onEmote(x['name'])"
                 >
-                <img [src]="x['images']['url_1x']">
+                <img [src]="x['images']['url_1x']"> 
             </button>
 
           }
@@ -47,9 +47,11 @@
   }
 
   @if(showEmojiDesc) {
-    <div class="emoji-desc" [ngStyle]="{ top: hoverY + 'px', left: hoverX + 'px' }">
-      <img [src]="hoverEmojiUrl">
-      <span>{{ hoverEmojiName }}</span>
+    <div class="hover-container" [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
+      <div class="hover-items">
+        <img width="40" height="30" [src]="hoverEmojiUrl"> 
+        <span>{{ hoverEmojiName }}</span> 
+      </div>
     </div>
     }
 

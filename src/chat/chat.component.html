@@ -1,6 +1,6 @@
 <div class="container" #container [class.mention]="isMention">
       @if (showBadge) {
-        <div class="hover" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
+        <div class="hover-container" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
           <div class="hover-items">
             <img  width="50" height="50" [src]="currentHoverBadge.img"> 
             <span>{{ currentHoverBadge.title }}</span>
@@ -10,7 +10,7 @@
       <span style="color: grey;margin-right: 5px" >{{ currentDate }}</span> 
       @if (currentBadges.images.length > 0) {
         @for (img of currentBadges.images; track $index) {
-            <img  class="badge-img"
+            <img class="badge-img"
             (mouseenter)="onBadgeHover(img.img_2x,img.title)"
             (mousemove)="updateHoverPositionBadges($event)"
             (mouseleave)="onBadgeLeave()"
@@ -20,9 +20,11 @@
       }
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
       @if (showGlobalEmojiDesc) {
-        <div class="hover" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
-            <img [src]="currentHoverEmote.img">
-            <span>{{ currentHoverEmote.title }}</span>
+        <div class="hover-container" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
+            <div class="hover-items">
+              <img [src]="currentHoverEmote.img">
+              <span>{{ currentHoverEmote.title }}</span>
+            </div>
         </div>
         }
 		  <span style="color: white">

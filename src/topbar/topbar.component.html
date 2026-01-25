@@ -1,6 +1,4 @@
 <div class="container">
-    
-
     <button (click)="onSettings()" title="Settings">
         <img src="settings.svg" />
     </button>
@@ -22,6 +20,6 @@
       @for (tab of currentTabs; track $index) {
           <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
         }
-        <button (click)="onAddButton()">+</button>
+        <button (click)="onAddButton()" title="Add a streamer to the quick menu"><img src="add.svg"></button>
     </div>
 </div>

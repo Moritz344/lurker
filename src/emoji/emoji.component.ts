@@ -78,8 +78,8 @@ export class EmojiComponent implements OnInit {
   }
 
   updateHoverPositionGlobal(event: MouseEvent) {
-    this.hoverX = event.pageX - 100
-    this.hoverY = event.pageY - 70
+    this.hoverX = event.pageX - 50
+    this.hoverY = event.pageY - 100
   }
 
 
