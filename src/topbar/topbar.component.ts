@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
 import { TabService } from "../services/tab.service";
+import { ToastComponent } from "../toast/toast.component";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -25,6 +26,7 @@ import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
     MatButtonModule,
     SettingsComponent,
     CommonModule,
+    ToastComponent,
     TabComponent,
     FormsModule,
   ],
@@ -35,6 +37,9 @@ export class TopbarComponent implements OnInit, OnChanges {
   currentChannel: string = "";
   showLoginButton: boolean = true;
   currentTabs: any;
+
+  showToast: boolean = false;
+  currentToastData: { message: string, duration: string }[] = [{ message: "", duration: "" }];
 
   constructor(
     private dialog: MatDialog,
@@ -54,8 +59,21 @@ export class TopbarComponent implements OnInit, OnChanges {
     console.log(this.tab.getTabs());
   }
 
+  onHideSingleToast(index: number) {
+    this.currentToastData.splice(index, 1);
+  }
+
+  onHideToast() {
+    this.currentToastData.length = 0;
+  }
+
   onAddButton() {
-    //this.tab.addTab({ name: "deme" });
+    console.log(this.currentToastData);
+    if (this.currentTabs.length >= 5) {
+      this.showToast = true;
+      this.currentToastData.push({ message: "You can open a maximum of 5 Tabs", duration: "5000" });
+      return;
+    }
     this.dialog.open(DialogBoxComponent, {
       width: "400px",
       height: "220px",
@@ -91,10 +109,6 @@ export class TopbarComponent implements OnInit, OnChanges {
   }
 
   onSettings() {
-    //this.dialog.open(SettingsComponent, {
-    //  width: "500px",
-    //  panelClass: "container",
-    //});
     this.settings.openSettings();
   }
 

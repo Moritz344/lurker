@@ -1,3 +1,12 @@
+@if (showToast) {
+    <div class="toast-container">
+      @for (data of currentToastData; track $index) {
+        <div (click)="onHideSingleToast($index)" class="toast">
+          <app-toast [message]=data.message [time]=data.duration  (destroy)="onHideToast()"></app-toast>
+        </div>
+      }
+    </div>
+}
 <div class="container">
     <button (click)="onSettings()" title="Settings">
         <img src="settings.svg" />
