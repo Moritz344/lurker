@@ -11,10 +11,13 @@ an opensource app for listening and writing twitch chat messages.
 
 
 # TODOS
-- [x] Tabsystem (kinad)
+- [x] Tabsystem (kinda)
 - [ ] Support 7tv emotes
 - [x] View user info
 - [x] Settings menu (kinda)
+- [x] Show channel emotes and global emotes
+- [x] show badges
+- [x] show stream info: Stream thumbnail,title and viewer
 - [x] View and send chat messages
 - [x] Switch between streamer
 - [x] User chat color
