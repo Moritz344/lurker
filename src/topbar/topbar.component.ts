@@ -56,7 +56,6 @@ export class TopbarComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.currentTabs = this.tab.getTabs();
     this.tab.removeTab(0);
-    console.log(this.tab.getTabs());
   }
 
   onHideSingleToast(index: number) {
@@ -68,7 +67,6 @@ export class TopbarComponent implements OnInit, OnChanges {
   }
 
   onAddButton() {
-    console.log(this.currentToastData);
     if (this.currentTabs.length >= 5) {
       this.showToast = true;
       this.currentToastData.push({ message: "You can open a maximum of 5 Tabs", duration: "5000" });

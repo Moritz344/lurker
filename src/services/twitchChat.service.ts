@@ -27,10 +27,10 @@ export class TwitchChatService implements OnDestroy {
 
 
     this.socket.addEventListener("open", () => {
-      console.log("Twitch Chat verbunden");
-      console.log("oauth:", token);
-      console.log("user:", username);
-      console.log("channel:", channel);
+      //console.log("Twitch Chat verbunden");
+      //console.log("oauth:", token);
+      //console.log("user:", username);
+      //console.log("channel:", channel);
 
       this.socket!.send(`PASS oauth:${token}`);
       this.socket!.send(`NICK ${username}`);
@@ -202,7 +202,6 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getChannelEmotes(broadcaster_id: string) {
-    console.log("channel emotes:", broadcaster_id);
     const url = `https://api.twitch.tv/helix/chat/emotes?broadcaster_id=${broadcaster_id}`;
     const token: any = localStorage.getItem("twitch_token");
 
@@ -291,8 +290,6 @@ export class TwitchChatService implements OnDestroy {
 
     const choiceObject = choices.map((choice) => ({ title: choice }));
 
-    console.log("Broadcaster", broadcaster_id);
-    console.log("Choices", choiceObject);
 
     const body = {
       duration: duration,

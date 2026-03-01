@@ -4,6 +4,19 @@ const path = require("path");
 let openUserCardWindow;
 let openSettingsWindow;
 
+function loadAngularRoute(window, route = "") {
+  if (process.env.ELECTRON_DEV) {
+    window.loadURL(`http://localhost:4200/${route}`);
+  } else {
+    //console.log("DIRNAME:", __dirname);
+    //console.log("INDEX PATH:", path.join(__dirname, "dist/launcher/browser/index.html"));
+    window.loadFile(
+      path.join(__dirname, "dist/launcher/browser/index.html"),
+      { hash: route }
+    );
+  }
+}
+
 // 613 646
 function createWindow() {
   const win = new BrowserWindow({
@@ -30,12 +43,38 @@ function createWindow() {
       },
     });
 
-    openUserCardWindow.loadURL("http://localhost:4200/user");
+    loadAngularRoute(openUserCardWindow, "user");
 
     openUserCardWindow.webContents.on("did-finish-load", () => {
       openUserCardWindow.webContents.send("data", data);
     });
 
+  });
+
+  ipcMain.handle("start-auth", async () => {
+    const authWindow = new BrowserWindow({
+      width: 600,
+      height: 800,
+      webPreferences: { nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, "preload.js") }
+    });
+
+    const scopes = "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows";
+    const authUrl = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost&scope=${scopes}`;
+
+    authWindow.loadURL(authUrl);
+
+    authWindow.webContents.on("will-navigate", (event, url) => {
+      if (url.startsWith("http://localhost")) {
+        event.preventDefault();
+        const hash = new URL(url).hash;
+
+        const params = new URLSearchParams(hash.substring(1));
+
+        const token = params.get("access_token");
+        win.webContents.send("twitch-token", token);
+        authWindow.close();
+      }
+    });
   });
 
   ipcMain.handle("open-settings", (event, data) => {
@@ -51,7 +90,7 @@ function createWindow() {
       },
     });
 
-    openSettingsWindow.loadURL("http://localhost:4200/settings");
+    loadAngularRoute(openSettingsWindow, "settings");
 
     openSettingsWindow.webContents.on("did-finish-load", () => {
       openSettingsWindow.webContents.send("data", data);
@@ -70,7 +109,7 @@ function createWindow() {
       },
     });
 
-    openEmojiPicker.loadURL("http://localhost:4200/emoji");
+    loadAngularRoute(openEmojiPicker, "emoji");
 
   });
 
@@ -87,7 +126,7 @@ function createWindow() {
       },
     });
 
-    openChatterList.loadURL("http://localhost:4200/chatter");
+    loadAngularRoute(openChatterList, "chatter");
 
   });
 
@@ -109,30 +148,24 @@ function createWindow() {
 
   });
 
-  // Custom zoom keybindings
   win.webContents.on('before-input-event', (event, input) => {
-    // Zoom in: Ctrl/Cmd + +
     if ((input.control || input.meta) && input.key === '+' ||
       (input.control || input.meta) && input.key === '=') {
       event.preventDefault();
       win.webContents.setZoomLevel(win.webContents.getZoomLevel() + 1);
     }
-    // Zoom out: Ctrl/Cmd + -
     if ((input.control || input.meta) && input.key === '-') {
       event.preventDefault();
       win.webContents.setZoomLevel(win.webContents.getZoomLevel() - 1);
     }
-    // Reset zoom: Ctrl/Cmd + 0
     if ((input.control || input.meta) && input.key === '0') {
       event.preventDefault();
       win.webContents.setZoomLevel(0);
     }
-    // Custom keybinding: Ctrl/Cmd + Shift + Z for zoom in
     if ((input.control || input.meta) && input.shift && input.key === 'Z') {
       event.preventDefault();
       win.webContents.setZoomLevel(win.webContents.getZoomLevel() + 1);
     }
-    // Custom keybinding: Ctrl/Cmd + Shift + X for zoom out
     if ((input.control || input.meta) && input.shift && input.key === 'X') {
       event.preventDefault();
       win.webContents.setZoomLevel(win.webContents.getZoomLevel() - 1);

@@ -76,8 +76,16 @@ export class SettingsService {
     return await (window as any).electronAPI.openSettings();
   }
 
+  async startAuth() {
+    return await (window as any).electronAPI.startAuth();
+  }
+
   async closeWindow(window_name: string) {
     return await (window as any).electronAPI.closeWindow(window_name);
+  }
+
+  async onTwitchToken(callback: (token: string) => void) {
+    return (window as any).electronAPI.onTwitchToken(callback);
   }
 
 

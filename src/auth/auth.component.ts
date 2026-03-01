@@ -30,46 +30,47 @@ export class AuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Initialisiere den Auth-Prozess
+    this.settings.onTwitchToken((token: string) => {
+      this.accessToken = token;
+      this.afterLogin(token);
+    });
+
     this.route.fragment.subscribe((fragment) => {
       if (fragment) {
         const params = new URLSearchParams(fragment);
         this.accessToken = params.get("access_token");
-        this.settings.setAccessToken(this.accessToken);
-        this.settings.getUserInfo().subscribe((data: any) => {
-          this.settings.setUserName(data[0]["display_name"]);
-          console.log(data);
-          this.setAccountData(
-            data[0]["description"],
-            data[0]["profile_image_url"],
-            data[0]["created_at"],
-            data[0]["view_count"],
-          );
-          this.settings
-            .checkAccessTokenValidity(this.accessToken)
-            .subscribe((result) => {
-              console.log("token is valid?", result, this.accessToken);
-              if (result) {
-                this.settings.setLoginStatus(true);
-              } else {
-                alert("Your token is not valid. Try logging in again.");
-                //this.logout();
-              }
-            });
-          this.router.navigate([""]);
-        });
+        this.afterLogin(this.accessToken);
       } else {
         this.startAuthProcess();
       }
     });
   }
-  //http://localhost:4200/?error=redirect_mismatch&error_description=Parameter%20redirect_uri%20does%20not%20match%20registered%20URI
 
   startAuthProcess() {
-    const scopes = this.getScopes();
-    const url = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost:4200/auth&scope=${scopes}`;
-    window.location.href = url;
-    //this.settings.openExternalLink(url);
+    this.settings.startAuth();
+  }
+
+  private afterLogin(token: string) {
+    this.settings.setAccessToken(token);
+    this.settings.getUserInfo().subscribe((data: any) => {
+      this.settings.setUserName(data[0]["display_name"]);
+      this.setAccountData(
+        data[0]["description"],
+        data[0]["profile_image_url"],
+        data[0]["created_at"],
+        data[0]["view_count"],
+      );
+      this.settings
+        .checkAccessTokenValidity(token)
+        .subscribe((result) => {
+          if (result) {
+            this.settings.setLoginStatus(true);
+          } else {
+            alert("Your token is not valid. Try logging in again.");
+          }
+        });
+      this.router.navigate([""]);
+    });
   }
 
   setAccountData(

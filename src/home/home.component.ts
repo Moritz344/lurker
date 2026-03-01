@@ -208,7 +208,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     const username: any = localStorage.getItem("username");
     localStorage.setItem("channel", username);
     this.currentChannel = username;
-    this.tab.addTab({ name: username });
   }
 
   constructor(
@@ -340,7 +339,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.streamInfoToShow = {
           title: this.streamerData.title,
-          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.replace(/\\s/g, '') + "-300x200.jpg",
+          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.toLowerCase().replace(/\\s/g, '') + "-300x200.jpg",
           game_name: this.streamerData.game_name,
           viewer_count: final_viewer_count_string,
         }
@@ -386,7 +385,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.settings
         .checkAccessTokenValidity(this.accessToken)
         .subscribe((result) => {
-          console.log("token is valid?", result, this.accessToken);
           if (!result) {
             alert("Your token is not valid. Please login again.");
             this.logout();
@@ -399,13 +397,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap((userIdResult: any) => {
             const senderId = userIdResult;
-            //console.log("got sender id");
             return this.settings
               .getBroadCasterId(this.accessToken, this.currentChannel)
               .pipe(
                 switchMap((broadcasterIdResult: any) => {
                   const broadcasterId = broadcasterIdResult;
-                  console.log("got broadcaster id");
                   return this.chat.sendMessage(
                     this.currentChannel,
                     senderId,
