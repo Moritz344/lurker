@@ -2,8 +2,7 @@
 
 an opensource app for listening and writing twitch chat messages.
 
-<img width="946" height="770" alt="screenshot-2025-12-30_18-53-05" src="https://github.com/user-attachments/assets/329740a9-9881-4b82-97e8-bcd308b47dc4" />
-
+<img width="1925" height="1080" alt="screenshot-2026-03-01_09-21-54" src="https://github.com/user-attachments/assets/b03d43a9-3bac-4fc4-8085-9e3cfb069c27" />
 
 
 > [!WARNING]
