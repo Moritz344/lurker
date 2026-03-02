@@ -25,12 +25,15 @@ import { TabService } from '../services/tab.service';
 
 // TODO: better tv emotes
 // TODO: Tabsystem
-// TODO: emoji picker
 // TODO: channel points
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
 // TODO: show for how long the stream is going for if possible
 // TODO: show replys
+// TODO: update viewer count 
+// TODO: fix hover positions
+// TODO: fix first message not hoverable
+// TODO: tabs in localstorage speichern?
 
 
 

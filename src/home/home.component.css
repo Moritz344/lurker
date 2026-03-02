@@ -2,7 +2,6 @@
 .chat-container {
    height: 85%;
    overflow-x: hidden;
-   margin-top: 200px;
    margin: 10px;
 }
 
@@ -54,7 +53,7 @@ a {
 
 .dropdown-content {
     display: grid;
-				background-color: var(--input-color);
+    background-color: var(--input-color);
     position: absolute;
     top: 30px;
     right: 45px;
