@@ -13,6 +13,9 @@ export class SettingsService {
   currentChannel: string = "";
   currentChannelSubject = new BehaviorSubject<string>(this.currentChannel);
 
+  currentTheme: string = "";
+  currentThemeSubject = new BehaviorSubject<string>(this.currentTheme);
+
 
   lastMessageUser: string = "";
   lastMessageUserSubject = new BehaviorSubject<string>(this.lastMessageUser);
@@ -51,9 +54,28 @@ export class SettingsService {
     return this.currentChannelSubject.asObservable();
   }
 
-  applyUserSettings(settings: any) {
-    console.log(settings);
+  setTheme(theme: string) {
+    this.currentTheme = theme;
+    this.currentThemeSubject.next(this.currentTheme);
+    if (theme === 'gnome-dark') {
+      document.documentElement.setAttribute('data-theme', 'gnome-dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
   }
+
+  getTheme() {
+    return this.currentThemeSubject.asObservable();
+  }
+
+  applyThemeFromStorage() {
+    const settings: any = localStorage.getItem("settings");
+    if (settings) {
+      const settingsJson = JSON.parse(settings);
+      this.setTheme(settingsJson[0]?.theme || '');
+    }
+  }
+
 
   async openExternalLink(url: string) {
     return await (window as any).electronAPI.openExternalLink(url);

@@ -66,6 +66,69 @@
     --message-size: 17px;
 }
 
+[data-theme="gnome-dark"] {
+    --bg-color: #1e1e1e;
+    --surface-color: #2d2d2d;
+    --accent-color: #3584e4;
+    --accent-hover: #62a0ea;
+    --text-color: #ffffff;
+    --text-muted: #9a9996;
+    --border-color: #404040;
+    --border-color-rgb: 64, 64, 64;
+    --error-color: #e01b24;
+    --radius: 8px;
+    --transition: 0.2s ease;
+    --input-color: #303030;
+    --primary: #3584e4;
+    --primary-hover: #62a0ea;
+    --secondary: #2d2d2d;
+    --secondary-hover: #404040;
+    --success: #33d17a;
+    --success-hover: #57e389;
+    --danger: #e01b24;
+    --danger-hover: #ff7b63;
+    --ghost: rgba(255, 255, 255, 0.1);
+    --ghost-hover: rgba(255, 255, 255, 0.15);
+
+    --gruvbox-dark0: #1e1e1e;
+    --gruvbox-dark1: #2d2d2d;
+    --gruvbox-dark2: #404040;
+    --gruvbox-dark3: #5e5e5e;
+    --gruvbox-dark4: #777777;
+    --gruvbox-light0: #ffffff;
+    --gruvbox-light1: #f6f5f4;
+    --gruvbox-light2: #deddda;
+    --gruvbox-light3: #c0bfbc;
+    --gruvbox-light4: #9a9996;
+    --gruvbox-bright-red: #ff7800;
+    --gruvbox-bright-green: #33d17a;
+    --gruvbox-bright-yellow: #f9f06b;
+    --gruvbox-bright-blue: #3584e4;
+    --gruvbox-bright-purple: #c061cb;
+    --gruvbox-bright-aqua: #8ff0a4;
+    --gruvbox-bright-orange: #ff7800;
+    --gruvbox-neutral-red: #e01b24;
+    --gruvbox-neutral-green: #26a269;
+    --gruvbox-neutral-yellow: #e5a50a;
+    --gruvbox-neutral-blue: #3584e4;
+    --gruvbox-neutral-purple: #9141ac;
+    --gruvbox-neutral-aqua: #2ec27e;
+    --gruvbox-neutral-orange: #e66100;
+    --gruvbox-faded-red: #c01c28;
+    --gruvbox-faded-green: #26a269;
+    --gruvbox-faded-yellow: #a2734c;
+    --gruvbox-faded-blue: #1c71d8;
+    --gruvbox-faded-purple: #813d9c;
+    --gruvbox-faded-aqua: #1a5f4a;
+    --gruvbox-faded-orange: #b06027;
+
+    --material-background: #303030;
+    --material-background_2: #404040;
+    --material-error: #e01b24;
+    --material-secondary: #3584e4;
+    --material-primary: #3584e4;
+}
+
 .hover-container{
   position: absolute;
   border: 1px solid white;

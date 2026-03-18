@@ -35,6 +35,7 @@ export class GeneralComponent implements OnInit {
       },
     ];
     localStorage.setItem("settings", JSON.stringify(this.saveSettings));
+    this.settings.setTheme(this.currentTheme);
     const settings = localStorage.getItem("settings");
     this.applyUserSettings(settings);
   }
@@ -56,11 +57,9 @@ export class GeneralComponent implements OnInit {
   loadDefault() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
-    console.log(settingsJson);
     if (settingsJson) {
       this.currentFont = settingsJson[0].font;
       this.currentFontSize = settingsJson[0].fontSize;
-      this.currentTheme = settingsJson[0].theme;
       this.currentChatColorState = settingsJson[0].chatColorState;
       this.currentTimeStampFormat = settingsJson[0].timeStampFormat;
       this.updateSettings();

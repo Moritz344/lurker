@@ -5,6 +5,18 @@
 			<div class="inputs">
 				</div>
         <br />
+        Theme:
+        <div class="dropdowns">
+            <select
+                [(ngModel)]="currentTheme"
+                (change)="updateSettings()"
+            >
+                <option value="" disabled selected hidden>gruvbox</option>
+                <option value="gruvbox">Gruvbox </option>
+                <option value="gnome-dark">Dark Blue</option>
+            </select>
+        </div>
+        <br />
         Font:
         <div class="dropdowns">
             <select

@@ -4,7 +4,7 @@ import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { Subscription } from "rxjs";
 
-// TODO: auth => lurker homepage => auth => user copys user data => paste into settings and save them
+// TODO: dont store in localStorage use electron-store
 
 @Component({
   selector: "app-auth",

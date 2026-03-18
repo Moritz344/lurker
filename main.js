@@ -6,10 +6,8 @@ let openSettingsWindow;
 
 function loadAngularRoute(window, route = "") {
   if (process.env.ELECTRON_DEV) {
-    window.loadURL(`http://localhost:4200/${route}`);
+    window.loadURL(`http://localhost:4200/#/${route}`);
   } else {
-    //console.log("DIRNAME:", __dirname);
-    //console.log("INDEX PATH:", path.join(__dirname, "dist/launcher/browser/index.html"));
     window.loadFile(
       path.join(__dirname, "dist/launcher/browser/index.html"),
       { hash: route }
@@ -173,7 +171,7 @@ function createWindow() {
   });
 
   if (process.env.ELECTRON_DEV) {
-    win.loadURL("http://localhost:4200");
+    win.loadURL("http://localhost:4200/");
     win.webContents.openDevTools();
   } else {
     win.loadFile(path.join(__dirname, "dist/launcher/browser/index.html"));
