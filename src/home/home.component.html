@@ -42,7 +42,8 @@
           <button (click)="onDisconnect()">Disconnect</button>
         }@else {
           <button (click)="loadChatMessages(currentChannel)">Connect</button>
-          }
+        }
+        <button (click)="onExit()" class="exit-button">Exit</button>
     </div>
 }
 

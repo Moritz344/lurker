@@ -49,6 +49,11 @@ function createWindow() {
 
   });
 
+
+  ipcMain.handle("exit", () => {
+    app.exit();
+  });
+
   ipcMain.handle("start-auth", async () => {
     const authWindow = new BrowserWindow({
       width: 600,

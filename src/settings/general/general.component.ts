@@ -62,6 +62,7 @@ export class GeneralComponent implements OnInit {
       this.currentFontSize = settingsJson[0].fontSize;
       this.currentChatColorState = settingsJson[0].chatColorState;
       this.currentTimeStampFormat = settingsJson[0].timeStampFormat;
+      this.currentTheme = settingsJson[0].theme;
       this.updateSettings();
     }
   }

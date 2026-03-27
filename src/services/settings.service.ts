@@ -89,6 +89,10 @@ export class SettingsService {
     return await (window as any).electronAPI.openUserCard();
   }
 
+  async exit() {
+    return await (window as any).electronAPI.exit();
+  }
+
   async openChatterList() {
     return await (window as any).electronAPI.openChatterList();
 

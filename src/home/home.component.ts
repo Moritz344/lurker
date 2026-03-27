@@ -195,6 +195,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onExit() {
+    this.settings.exit();
+  }
+
   onHideSingleToast(index: number) {
     this.currentToastData.splice(index, 1);
   }

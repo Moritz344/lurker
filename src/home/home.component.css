@@ -11,6 +11,11 @@
   right: 50px;
 }
 
+.exit-button:hover{
+  background: red;
+
+}
+
 .viewer-count span{
   color: white;
 }
