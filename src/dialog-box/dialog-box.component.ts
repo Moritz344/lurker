@@ -71,6 +71,12 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
       alert("Please enter a valid channel name");
       return;
     }
+
+    if (this.currentChannel == this.inputValue) {
+      alert("You are already connected with " + this.inputValue + "'s chat!");
+      return;
+    }
+
     this.chat.disconnect();
     this.settings.setCurrentChannel(this.inputValue);
     this.dialogRef.close();

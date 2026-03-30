@@ -15,8 +15,6 @@ export class TabService {
   private tabs: Tab[] = [{ name: "" }];
   private currentTabSubject = new BehaviorSubject<Tab>({ name: "" });
   currentTab$ = this.currentTabSubject.asObservable();
-  private isConnectedSubject = new BehaviorSubject<boolean>(true);
-  isConnected$ = this.isConnectedSubject.asObservable();
   private clearChatSubject = new Subject<void>();
   clearChat$ = this.clearChatSubject.asObservable();
 
@@ -35,21 +33,7 @@ export class TabService {
     this.currentTabSubject.next(tab);
   }
 
-  setConnected(connected: boolean) {
-    this.isConnectedSubject.next(connected);
-  }
 
-  disconnect() {
-    this.chat.disconnect();
-    this.isConnectedSubject.next(false);
-  }
-
-  connect(channel: string) {
-    const token: any = localStorage.getItem("twitch_token");
-    const username: any = localStorage.getItem("username");
-    this.chat.connect(token, username, channel);
-    this.isConnectedSubject.next(true);
-  }
 
   addTab(tab: Tab) {
     this.tabs.push(tab);
@@ -59,9 +43,6 @@ export class TabService {
     this.tabs.splice(index, 1);
   }
 
-  clearChat() {
-    this.clearChatSubject.next();
-  }
 
 
 }

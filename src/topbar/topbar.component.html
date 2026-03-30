@@ -18,6 +18,15 @@
           (mouseleave)="onChannelNameLeave()">
       {{ currentChannel ? currentChannel + "'s chat" : "Not logged in" }}
     </span>
+    @if (channelNameHover && streamInfoToShow) {
+      <div class="stream-info">
+        <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
+        <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
+        @if (streamInfoToShow.viewer_count) {
+          <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+        }
+      </div>
+    }
   </div>
 
   <div class="header-right">
@@ -63,15 +72,7 @@
   </div>
 </div>
 
-@if (channelNameHover && streamInfoToShow) {
-  <div class="stream-info">
-    <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
-    <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
-    @if (streamInfoToShow.viewer_count) {
-      <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
-    }
-  </div>
-}
+
 
 @if (showToast) {
   <div class="toast-container">

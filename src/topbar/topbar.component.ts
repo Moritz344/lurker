@@ -83,9 +83,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
           this.onSwitchChannel(tab.name);
         }
       }),
-      this.tab.isConnected$.subscribe((connected) => {
-        this.isConnected = connected;
-      }),
       this.settings.getLoginStatus().subscribe((result) => {
         this.loginStatus = result;
         if (result) {
@@ -116,11 +113,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onDisconnect() {
-    this.tab.disconnect();
+    this.isConnected = false;
+    this.chat.disconnect();
   }
 
   onConnect() {
-    this.tab.connect(this.currentChannel);
+    this.isConnected = true;
+    this.connectChat(this.currentChannel);
   }
 
   onExit() {
@@ -151,18 +150,19 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
 
   onSwitchChannel(name: string) {
-    console.log("switching channel to:", name);
     localStorage.setItem("channel", name);
+    //if (this.currentChannel == name) {
+    //  alert("You are already connect with" + name + "'s chat");
+    //  return;
+    //}
     this.currentChannel = name;
     this.chat.fetchStreamerInfo(name).subscribe((info) => {
       this.streamInfoToShow = info;
       console.log("info:", info);
     });
     this.saveCurrentBroadcasterId();
-    this.tab.disconnect();
     this.connectChat(name);
-    this.getBadgesForChannel();
-    this.tab.clearChat();
+    this.clearChat.emit();
     this.showVerticalMenuOptions = false;
   }
 
@@ -173,43 +173,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  private connectChat(channel: string) {
+  connectChat(channel: string) {
     const token: any = localStorage.getItem("twitch_token");
     const username: any = localStorage.getItem("username");
+    console.log(token, username, channel);
     this.chat.connect(token, username, channel);
-    this.tab.setConnected(true);
-  }
-
-  private initChatSettings() {
-    this.currentToastData = [];
-    const token: any = localStorage.getItem("twitch_token");
-    this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
-      this.settings.getChatSettings(id).subscribe((response: any) => {
-        this.chatSettings = response.data[0];
-        if (this.chatSettings?.emote_mode) {
-          this.currentToastData.push({ message: "Emote only mode is on!", duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings?.follower_mode) {
-          const duration = this.chatSettings.follower_mode_duration;
-          let durationStr = Math.round(duration / 60) + "h";
-          if (durationStr === "0h") durationStr = duration + "m";
-          this.currentToastData.push({ message: "Follower mode is on! " + durationStr, duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings?.slow_mode) {
-          const waitTime = this.chatSettings.slow_mode_wait_time;
-          let waitStr = Math.round(waitTime / 60) + "m";
-          if (waitTime < 60) waitStr = waitTime + "s";
-          this.currentToastData.push({ message: "Slow mode is on! " + waitStr, duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings?.subscriber_mode) {
-          this.currentToastData.push({ message: "Subscriber mode is on!", duration: "2800" });
-          this.showToast = true;
-        }
-      });
-    });
   }
 
   private getBadgesForChannel() {

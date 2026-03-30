@@ -22,6 +22,7 @@ export class TwitchChatService implements OnDestroy {
 
   connect(token: string, username: string, channel: string) {
     this.disconnect();
+    console.log("Twitch Chat verbunden");
 
     this.socket = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
 
