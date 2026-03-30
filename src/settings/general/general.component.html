@@ -6,11 +6,10 @@
 				</div>
         <br />
         Theme:
-        <div class="dropdowns">
+        <div class="theme">
             <select
                 [(ngModel)]="currentTheme"
-                (change)="updateSettings()"
-            >
+                (change)="updateSettings()">
                 <option value="" disabled selected hidden>gruvbox</option>
                 <option value="gruvbox">Gruvbox </option>
                 <option value="gnome-dark">Dark Blue</option>
@@ -18,7 +17,7 @@
         </div>
         <br />
         Font:
-        <div class="dropdowns">
+        <div class="font">
             <select
                 style=""
                 [(ngModel)]="currentFont"
@@ -41,23 +40,22 @@
                 <option value="30px">30px</option>
             </select>
         </div>
-        <br />
     </div>
 
     <div class="chat">
         <h1>Chat</h1>
-						<div class="chat-selects">
+						<div class="chat-time-format">
 								<select [(ngModel)]="currentTimeStampFormat" (change)="updateSettings()">
             		    <option value="" disable selected hidden>h:mm</option>
             		    <option value="disabled">disabled</option>
             		    <option value="h:mm">h:mm</option>
             		    <option value="h:mm:ss">h:mm:ss</option>
             		</select>
-            		<select [(ngModel)]="currentChatColorState" (change)="updateSettings()">
-            		    <option value="" disable selected hidden>enabled</option>
-            		    <option value="enabled">Chat Color</option>
-            		    <option value="disabled">No Chat Color</option>
-            		</select>
+                
 						</div>
+            <div class="chat-color">
+              Chat Color
+              <input [(ngModel)]="currentChatColorState" (change)="updateSettings()" type="checkbox">
+            </div>
     </div>
 </div>

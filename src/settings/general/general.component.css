@@ -4,8 +4,25 @@
   box-sizing: border-box;
 }
 
+.theme{
+  display: flex;
+  flex-direction: column;
+}
+
+
 body{
 }
+
+.font{
+  display: flex;
+  justify-content: row;
+}
+
+.font select{
+  width: 100%;
+}
+
+.chat{}
 
 .interface, .chat {
   margin-bottom: 30px;
@@ -15,28 +32,28 @@ body{
     margin-bottom: 15px;
 }
 
-.dropdowns, .chat-selects {
+.chat-color{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  gap: 290px;
   margin-top: 10px;
 }
 
-select {
-  width: 100%;
-  max-width: 200px;
-  padding: 5px;
-  border: 1px solid white;
-  background-color: var(--material-background);
-  color: white;
-  height: 40px;
+.chat-color input{
+  width: 15px;
 }
 
-input {
-  border: 1px solid white;
-  width: 100%;
-  max-width: 200px;
-  padding: 5px;
-  background-color: var(--material-background);
-  color: white;
+.chat-time-format {
+  display: flex;
+  flex-direction: column;
 }
+
+.chat-time-format select{
+  margin-top: -16px;
+}
+
+select{
+  padding: 4px;
+}
+
+

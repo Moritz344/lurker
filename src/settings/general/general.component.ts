@@ -18,7 +18,7 @@ export class GeneralComponent implements OnInit {
   currentFontSize: string = "";
   currentFont: string = "";
   currentTimeStampFormat: string = "";
-  currentChatColorState: string = "";
+  currentChatColorState: boolean = true;
 
   customChatColor: boolean = false;
 
@@ -31,7 +31,7 @@ export class GeneralComponent implements OnInit {
         font: this.currentFont,
         fontSize: this.currentFontSize,
         timeStampFormat: this.currentTimeStampFormat,
-        chatColorState: this.currentChatColorState,
+        chatColorState: (this.currentChatColorState == true) ? "enabled" : "disabled",
       },
     ];
     localStorage.setItem("settings", JSON.stringify(this.saveSettings));
