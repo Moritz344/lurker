@@ -35,12 +35,15 @@ body{
 .chat-color{
   display: flex;
   flex-direction: row;
-  gap: 290px;
   margin-top: 10px;
 }
 
 .chat-color input{
-  width: 15px;
+  width: 20px;
+}
+
+.chat-color span{
+  width: 100%;
 }
 
 .chat-time-format {
