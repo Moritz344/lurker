@@ -1,34 +1,140 @@
-.container{
-	position:absolute;
-  top: 10px;
-	left:0;
+.header {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 10px;
 }
 
-.tab-container{
-  display: grid;
-  grid-template-columns: repeat(6,1fr);
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
   gap: 10px;
-  position: absolute;
-  top: 0px;
-  left: 100px;
-  flex-direction: row;
-  z-index: 0;
+  -webkit-app-region: no-drag;
 }
 
-.toast-container{
-  display: grid;
-  grid-template-columns: repeat(1,1fr);
-  gap: 10px;
-  z-index: 9999;
+.header-left { flex: 1; }
+.header-center { 
+  flex: 2; 
+  justify-content: center;
+}
+.header-right { 
+  flex: 1; 
+  justify-content: flex-end; 
+  position: relative;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.exit-btn:hover {
+  background: red;
+}
+
+.connect-btn:hover {
+  background: green;
+}
+
+.channel-name {
+  cursor: pointer;
+  color: var(--material-primary);
+}
+
+.channel-name:hover {
+  color: var(--primary-hover);
+}
+
+.dropdown-menu {
   position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--input-color);
+  z-index: 1000;
+}
+
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 17px;
+}
+
+
+.dropdown-menu button img {
+  width: 18px;
+  height: 18px;
+}
+
+.dropdown-container{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+}
+
+.stream-info {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+  z-index: 1000;
+  padding: 10px;
+}
+
+.stream-info img {
+  width: 300px;
+  border-radius: 5px;
+}
+
+.stream-info span {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--input-color);
+}
+
+.toast-container {
+  position: fixed;
   right: 20px;
-  top: 50px;
-  
+  top: 60px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 
+.toast {
+  cursor: pointer;
+}
 
 ::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
-
-

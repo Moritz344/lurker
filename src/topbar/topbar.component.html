@@ -1,34 +1,84 @@
-@if (showToast) {
-    <div class="toast-container">
-      @for (data of currentToastData; track $index) {
-        <div (click)="onHideSingleToast($index)" class="toast">
-          <app-toast [message]=data.message [time]=data.duration  (destroy)="onHideToast()"></app-toast>
-        </div>
-      }
-    </div>
-}
-<div class="container">
+<div class="header">
+  <div class="header-left">
     <button (click)="onSettings()" title="Settings">
-        <img src="settings.svg" />
+      <img src="settings.svg" />
     </button>
-
-    @if (showLoginButton) {
-        <button title="Login" (click)="onLogin()">
-            <img src="profile.svg" />
-
-            <a></a>
-        </button>
-    } @else {
-        <button title="Logout" (click)="onLogout()">
-            <img src="profile.svg" />
-
-            <a></a>
-        </button>
-    }
-    <div class="tab-container">
+    <div class="tabs">
       @for (tab of currentTabs; track $index) {
-          <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
-        }
-        <button (click)="onAddButton()" title="Add a streamer to the quick menu"><img src="add.svg"></button>
+        <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
+      }
+      <button (click)="onAddButton()" title="Add streamer"><img src="add.svg"></button>
     </div>
+  </div>
+
+  <div class="header-center">
+    <span class="channel-name" 
+          (click)="onChooseChannel()"
+          (mouseenter)="onChannelNameHover()"
+          (mouseleave)="onChannelNameLeave()">
+      {{ currentChannel ? currentChannel + "'s chat" : "Not logged in" }}
+    </span>
+  </div>
+
+  <div class="header-right">
+    <button (click)="showLoginButton ? onLogin() : onLogout()" [title]="showLoginButton ? 'Login' : 'Logout'">
+      <img src="profile.svg" />
+    </button>
+    @if (username == currentChannel) {
+      <button title="Chatter List" (click)="onChatterList()"><img src="persons.svg"></button>
+    }
+    <button (click)="onVerticalMenu()"><img src="vertical.svg"></button>
+
+    @if (showVerticalMenuOptions) {
+      <div (click)="onVerticalMenu()" class="dropdown-container"></div>
+      <div class="dropdown-menu">
+        <button (click)="onChooseChannel()">
+          <img src="switch_account.svg">Switch Channel
+        </button>
+        <button (click)="onOpenStreamInBrowser()">
+          <img src="open_in_browser.svg">Open In Browser
+        </button>
+        @if (currentChannel === username) {
+          <button (click)="onOpenModView()">
+            <img src="mod_view.svg">Open Mod View
+          </button>
+        }
+        <button (click)="onClearChat()">
+          <img src="clear.svg">Clear Chat
+        </button>
+        @if (isConnected) {
+          <button class="exit-btn" (click)="onDisconnect()">
+            <img src="cancel.svg">Disconnect
+          </button>
+        } @else {
+          <button class="connect-btn" (click)="onConnect()">
+            <img src="connect.png">Connect
+          </button>
+        }
+        <button class="exit-btn" (click)="onExit()">
+          <img src="logout.svg">Exit
+        </button>
+      </div>
+    }
+  </div>
 </div>
+
+@if (channelNameHover && streamInfoToShow) {
+  <div class="stream-info">
+    <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
+    <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
+    @if (streamInfoToShow.viewer_count) {
+      <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+    }
+  </div>
+}
+
+@if (showToast) {
+  <div class="toast-container">
+    @for (data of currentToastData; track $index) {
+      <div (click)="onHideSingleToast($index)" class="toast">
+        <app-toast [message]="data.message" [time]="data.duration" (destroy)="onHideToast()"></app-toast>
+      </div>
+    }
+  </div>
+}

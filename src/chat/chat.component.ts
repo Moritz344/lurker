@@ -225,14 +225,27 @@ export class ChatComponent implements OnInit {
     this.showBadge = false;
   }
 
-  updateHoverPositionEmotes(event: MouseEvent) {
-    this.hoverEmojiGlobalX = event.pageX + 40;
-    this.hoverEmojiGlobalY = event.pageY + 0;
+  updateHoverPosition(event: MouseEvent, type: 'badge' | 'emoji', posX: number, posY: number) {
+    const offsetY = 0;
+    const offsetX = 20;
+
+    posX = event.clientX + offsetX;
+    posY = event.clientY + offsetY;
+
+    if (posY >= 600) {
+      posY -= 100;
+    }
+
+    if (type == 'badge') {
+      this.hoverBadgeX = posX;
+      this.hoverBadgeY = posY;
+    } else {
+      this.hoverEmojiGlobalX = posX;
+      this.hoverEmojiGlobalY = posY;
+    }
+
   }
-  updateHoverPositionBadges(event: MouseEvent) {
-    this.hoverBadgeX = event.clientX + 40;
-    this.hoverBadgeY = event.clientY + 0;
-  }
+
 
 
 

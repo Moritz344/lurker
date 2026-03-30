@@ -2,6 +2,11 @@
 	text-align: left;
 	white-space: wrap;
 	border-radius: 5px;
+  width: 97vw;
+}
+
+.hover-container{
+  position: fixed;
 }
 
 span{
@@ -36,8 +41,10 @@ span{
 
 .badge-img{
   margin-right: 0.25em;
+  z-index: 1000;
 }
 
 .badge-img:last-child{
   margin-right: 0;
+  z-index: 1000;
 }

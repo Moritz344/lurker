@@ -20,7 +20,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    frame: true,
+    frame: false,
+    titleBarStyle: "hidden",
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -62,22 +63,39 @@ function createWindow() {
     });
 
     const scopes = "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows";
-    const authUrl = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=http://localhost&scope=${scopes}`;
+    const authUrl = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=https://localhost&scope=${scopes}`;
 
     authWindow.loadURL(authUrl);
 
-    authWindow.webContents.on("will-navigate", (event, url) => {
-      if (url.startsWith("http://localhost")) {
+    const extractToken = (url) => {
+      try {
+        const urlObj = new URL(url);
+        const hash = urlObj.hash;
+        if (hash) {
+          const params = new URLSearchParams(hash.substring(1));
+          return params.get("access_token");
+        }
+      } catch (e) {
+        console.error("Error parsing URL:", e);
+      }
+      return null;
+    };
+
+    const handleAuth = (event, url) => {
+      console.log("Auth URL intercepted:", url);
+      if (url.includes("access_token=")) {
         event.preventDefault();
-        const hash = new URL(url).hash;
-
-        const params = new URLSearchParams(hash.substring(1));
-
-        const token = params.get("access_token");
-        win.webContents.send("twitch-token", token);
+        const token = extractToken(url);
+        if (token) {
+          console.log("Token received:", token.substring(0, 10) + "...");
+          win.webContents.send("twitch-token", token);
+        }
         authWindow.close();
       }
-    });
+    };
+
+    authWindow.webContents.on("will-navigate", handleAuth);
+    authWindow.webContents.on("will-redirect", handleAuth);
   });
 
   ipcMain.handle("open-settings", (event, data) => {

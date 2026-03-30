@@ -11,9 +11,7 @@ export class ToastComponent implements OnInit {
   @Input() time: string = "";
   @Output() destroy = new EventEmitter<void>();
 
-  constructor() {
-
-  }
+  constructor() { }
 
   ngOnInit() {
     setTimeout(() => {

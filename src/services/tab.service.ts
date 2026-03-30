@@ -15,6 +15,10 @@ export class TabService {
   private tabs: Tab[] = [{ name: "" }];
   private currentTabSubject = new BehaviorSubject<Tab>({ name: "" });
   currentTab$ = this.currentTabSubject.asObservable();
+  private isConnectedSubject = new BehaviorSubject<boolean>(true);
+  isConnected$ = this.isConnectedSubject.asObservable();
+  private clearChatSubject = new Subject<void>();
+  clearChat$ = this.clearChatSubject.asObservable();
 
   constructor(private chat: TwitchChatService) { }
 
@@ -24,10 +28,27 @@ export class TabService {
 
   changeTab(tab: Tab) {
     this.chat.disconnect();
+    this.clearChatSubject.next();
     const token: any = localStorage.getItem("twitch_token");
     const username: any = localStorage.getItem("username");
     this.chat.connect(token, username, tab.name);
     this.currentTabSubject.next(tab);
+  }
+
+  setConnected(connected: boolean) {
+    this.isConnectedSubject.next(connected);
+  }
+
+  disconnect() {
+    this.chat.disconnect();
+    this.isConnectedSubject.next(false);
+  }
+
+  connect(channel: string) {
+    const token: any = localStorage.getItem("twitch_token");
+    const username: any = localStorage.getItem("username");
+    this.chat.connect(token, username, channel);
+    this.isConnectedSubject.next(true);
   }
 
   addTab(tab: Tab) {
@@ -36,6 +57,10 @@ export class TabService {
 
   removeTab(index: number) {
     this.tabs.splice(index, 1);
+  }
+
+  clearChat() {
+    this.clearChatSubject.next();
   }
 
 

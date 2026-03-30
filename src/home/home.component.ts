@@ -24,16 +24,12 @@ import { ToastComponent } from '../toast/toast.component';
 import { TabService } from '../services/tab.service';
 
 // TODO: better tv emotes
-// TODO: Tabsystem
 // TODO: channel points
 // TODO: work on perfomance
 // TODO: mark streamer as favourite
 // TODO: show for how long the stream is going for if possible
 // TODO: show replys
 // TODO: update viewer count 
-// TODO: fix hover positions
-// TODO: fix first message not hoverable
-// TODO: tabs in localstorage speichern?
 
 
 
@@ -280,103 +276,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSwitchChannel(name: string) {
-    localStorage.setItem("channel", name);
-    this.fetchStreamInfos(name);
-    this.currentChannel = name;
-    this.saveCurrentBroadCasterId();
-    this.chat.disconnect();
-    this.loadChatMessages(this.currentChannel);
-    this.getBadgesForChannel();
-    this.initChatSettings();
-    this.onClearChat();
-
-  }
-
   onClearChat() {
     this.messages.length = 0;
   }
 
-  onChooseChannel() {
-    if (!this.loginStatus) { return; }
-    this.dialog.open(DialogBoxComponent, {
-      width: "400px",
-      height: "220px",
-      panelClass: "container",
-
-      data: {
-        message: "Type in a channel name",
-        function: "change_channel_name",
-      },
-    });
-  }
-
-  onCreatePoll() {
-    this.dialog.open(DialogBoxComponent, {
-      width: "400px",
-      height: "300px",
-      panelClass: "container",
-
-      data: {
-        message: "Create a Poll",
-        function: "create_poll",
-      },
-    });
-  }
-
-
-  fetchStreamInfos(channel: string) {
-    if (!channel) { return; }
-    const token: any = localStorage.getItem("twitch_token");
-    this.chat.getStreamInfo(channel, token).subscribe((result: any) => {
-      if (result.data.length > 0) {
-        this.streamerData = result.data[0];
-
-        let viewers = this.streamerData.viewer_count;
-        let viewers_split = viewers.toString().split("");
-        let final_viewer_count_string = "";
-
-        if (viewers >= 1000 && viewers < 10000) {
-          final_viewer_count_string = viewers_split[0] + "." + viewers_split[1] + viewers_split[2] + viewers_split[3];
-        } else if (viewers >= 10000 && viewers < 100000) {
-          final_viewer_count_string = viewers_split[0] + viewers_split[1] + "." + viewers_split[2] + viewers_split[3] + viewers_split[4];
-        } else {
-          final_viewer_count_string = this.streamerData.viewer_count;
-        }
-
-        this.streamInfoToShow = {
-          title: this.streamerData.title,
-          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + this.currentChannel.toLowerCase().replace(/\\s/g, '') + "-300x200.jpg",
-          game_name: this.streamerData.game_name,
-          viewer_count: final_viewer_count_string,
-        }
-
-      } else {
-        this.streamInfoToShow = {
-          title: this.currentChannel + " is offline :/",
-          game_name: "",
-          thumbnail: "",
-          viewer_count: "",
-        }
-
-      }
-    });
-  }
-
-  onAnnouncement() {
-    this.dialog.open(DialogBoxComponent, {
-      width: "400px",
-      height: "200px",
-      panelClass: "container",
-      data: {
-        message: "What should be the announcement?",
-        function: "announcement",
-      },
-    });
-  }
 
 
   onSendMessage(event: KeyboardEvent) {
+    if (event.key == "Enter" && !this.isConnected) {
+      if (this.currentToastData.length < 1) {
+        this.currentToastData.push({ message: "Not connected to chat", duration: "5000" });
+        this.showToast = true;
+      }
+      return;
+    }
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
       return;
@@ -486,9 +399,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (!this.sub || this.sub.closed) {
             this.sub = this.chat.messages$.subscribe((msg) => {
               this.messages.push(msg)
-              if (this.messages.length >= 1000) {
-                this.messages.splice(0, 1000);
-              }
             });
 
 
@@ -598,22 +508,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe((result: any) => {
         if (result) {
           this.currentChannel = result;
-          this.onSwitchChannel(this.currentChannel);
         }
       });
 
-    this.currentTabSub = this.tab.currentTab$.subscribe((tab) => {
-      if (tab.name) {
-        this.currentChannel = tab.name;
-        this.initChatSettings();
-        this.fetchStreamInfos(tab.name);
-        this.saveCurrentBroadCasterId();
-        this.getBadgesForChannel();
-        this.initChatSettings();
-        this.onClearChat();
-      }
-    });
-    this.fetchStreamInfos(this.currentChannel);
   }
 
   logout() {

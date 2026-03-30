@@ -151,6 +151,40 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
+  fetchStreamerInfo(channel: string): Observable<any> {
+    if (!channel) return of(null);
+    const token: any = localStorage.getItem("twitch_token");
+    return this.getStreamInfo(channel, token).pipe(
+      map((result: any) => {
+        if (result.data.length === 0) {
+          return {
+            title: channel + " is offline",
+            game_name: "",
+            thumbnail: "",
+            viewer_count: "",
+          };
+        }
+        const streamerData = result.data[0];
+        const viewers = streamerData.viewer_count;
+        const viewers_split = viewers.toString().split("");
+        let viewerString = viewers.toString();
+
+        if (viewers >= 1000 && viewers < 10000) {
+          viewerString = viewers_split[0] + "." + viewers_split[1] + viewers_split[2] + viewers_split[3];
+        } else if (viewers >= 10000 && viewers < 100000) {
+          viewerString = viewers_split[0] + viewers_split[1] + "." + viewers_split[2] + viewers_split[3] + viewers_split[4];
+        }
+
+        return {
+          title: streamerData.title,
+          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + channel.toLowerCase().replace(/\s/g, '') + "-300x200.jpg",
+          game_name: streamerData.game_name,
+          viewer_count: viewerString,
+        };
+      })
+    );
+  }
+
   getGlobalChatBadges() {
     const url = "https://api.twitch.tv/helix/chat/badges/global";
 
@@ -344,6 +378,7 @@ export class TwitchChatService implements OnDestroy {
     this.disconnect();
     localStorage.clear();
   }
+
 
   UserRelog() {
     this.Userlogout();

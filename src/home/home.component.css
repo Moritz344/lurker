@@ -1,81 +1,27 @@
 
 .chat-container {
-   height: 85%;
-   overflow-x: hidden;
-   margin: 10px;
-}
-
-.viewer-count{
+  height: 85%;
   position: absolute;
-  top: -3px;
-  right: 50px;
+  overflow-x: hidden;
+  margin: 10px;
 }
 
-.exit-button:hover{
-  background: red;
-
+.container {
 }
 
-.viewer-count span{
-  color: white;
-}
 
 a {
     text-decoration: none;
     color: white;
 }
 
-.vertical-menu {
-    position: absolute;
-    top: 0px;
-    right: 10px;
-}
 
-.stream-info {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
-    top: 0;
-    left: 100px;
-    right: 100px;
-    z-index: 1000;
-    margin-top: 60px;
-}
-
-
-
-.stream-info span {
-    border: 1px solid white;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: var(--input-color);
-}
-
-
-
-.dropdown-content {
-    display: grid;
-    background-color: var(--input-color);
-    position: absolute;
-    top: 30px;
-    right: 45px;
-    z-index: 1000;
-    width: 200px;
-}
 
 
 .emoji{
 	 position:absolute;
 	 right: 0px;
 	 bottom: 0px;
-}
-
-.dropdown-content button{
-	text-align: left;
-	padding: 10px;
 }
 
 .chatter-list{
@@ -87,13 +33,14 @@ a {
 
 
 .channel-name {
-    position: absolute;
-    top: 36px;
-    right: 0px;
-    width: 100%;
-    text-align: center;
-    overflow: hidden;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  width: 100%;
+  user-select: none;
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .name {
@@ -143,6 +90,7 @@ a {
 .chat-entry {
    position: absolute;
    overflow: hidden;
+   overflow-x: hidden;
 	 right: 0;
 	 left: 0;
 	 height: 50px;
