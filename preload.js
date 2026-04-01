@@ -9,5 +9,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openChatterList: () => ipcRenderer.invoke("open-chatter-list"),
   openEmojiPicker: () => ipcRenderer.invoke("open-emoji-picker"),
   closeWindow: (window_name) => ipcRenderer.invoke("close-window", window_name),
+  saveUserData: (data) => ipcRenderer.invoke("save-user-data", data),
+  getToken: () => ipcRenderer.invoke("get-token"),
+  getUsername: () => ipcRenderer.invoke("get-username"),
+  getCreatedAt: () => ipcRenderer.invoke("get-created-at"),
+  getUserId: () => ipcRenderer.invoke("get-user-id"),
+  getDesc: () => ipcRenderer.invoke("get-desc"),
+  getProfileImageUrl: () => ipcRenderer.invoke("get-profile-image-url"),
   onTwitchToken: (callback) => ipcRenderer.on("twitch-token", (event, token) => callback(token)),
 });

@@ -4,6 +4,14 @@ const path = require("path");
 let openUserCardWindow;
 let openSettingsWindow;
 
+let store;
+
+async function initStore() {
+  const StoreModule = await import('electron-store');
+  store = new StoreModule.default();
+}
+
+
 function loadAngularRoute(window, route = "") {
   if (process.env.ELECTRON_DEV) {
     window.loadURL(`http://localhost:4200/#/${route}`);
@@ -15,8 +23,7 @@ function loadAngularRoute(window, route = "") {
   }
 }
 
-// 613 646
-function createWindow() {
+async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -50,6 +57,39 @@ function createWindow() {
 
   });
 
+  ipcMain.handle("save-user-data", (_, data) => {
+    store.set("userData", data);
+  });
+
+  ipcMain.handle("get-token", () => {
+    let userData = store.get("userData");
+    return userData.token;
+  });
+
+  ipcMain.handle("get-username", () => {
+    let userData = store.get("userData");
+    return userData.username;
+  });
+
+  ipcMain.handle("get-created-at", () => {
+    let userData = store.get("userData");
+    return userData.created_at;
+  });
+
+  ipcMain.handle("get-user-id", () => {
+    let userData = store.get("userData");
+    return userData.id;
+  });
+
+  ipcMain.handle("get-desc", () => {
+    let userData = store.get("userData");
+    return userData.desc;
+  });
+
+  ipcMain.handle("get-profile-image-url", () => {
+    let userData = store.get("userData");
+    return userData.profile_image_url;
+  });
 
   ipcMain.handle("exit", () => {
     app.exit();
@@ -201,7 +241,10 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  await initStore();
+  await createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
