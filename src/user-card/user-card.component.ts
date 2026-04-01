@@ -33,8 +33,8 @@ export class UserCardComponent implements OnInit, OnDestroy {
     this.settings.openExternalLink("https://twitch.tv/popout/norman/viewercard/" + this.infos.display_name);
   }
 
-  startChat() {
-    const token: any = localStorage.getItem("twitch_token");
+  async startChat() {
+    const token = await this.settings.getToken();
     const username: any = this.infos.display_name;
     let channel: any = localStorage.getItem("channel");
     if (!channel) {

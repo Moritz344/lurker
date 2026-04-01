@@ -51,15 +51,16 @@ export class AuthComponent implements OnInit {
   }
 
   private afterLogin(token: string) {
-    this.settings.setAccessToken(token);
     this.settings.getUserInfo().subscribe((data: any) => {
-      this.settings.setUserName(data[0]["display_name"]);
-      this.setAccountData(
-        data[0]["description"],
-        data[0]["profile_image_url"],
-        data[0]["created_at"],
-        data[0]["view_count"],
-      );
+      let userData = {
+        token: token,
+        username: data[0]["display_name"],
+        id: data[0]["id"],
+        desc: data[0]["description"],
+        created_at: data[0]["created_at"],
+        profile_image_url: data[0]["profile_image_url"],
+      }
+      this.settings.saveUserData(userData);
       this.settings
         .checkAccessTokenValidity(token)
         .subscribe((result) => {
@@ -71,18 +72,6 @@ export class AuthComponent implements OnInit {
         });
       this.router.navigate([""]);
     });
-  }
-
-  setAccountData(
-    desc: string,
-    image_url: string,
-    created_at: string,
-    view_count: number,
-  ): void {
-    localStorage.setItem("description", desc);
-    localStorage.setItem("profile_image_url", image_url);
-    localStorage.setItem("created_at", created_at);
-    localStorage.setItem("view_count", view_count.toString());
   }
 
   getScopes(): string {

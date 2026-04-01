@@ -44,7 +44,6 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.containerDiv.nativeElement.style.height = this.data.height;
-    console.log(this.data.height);
   }
 
   onTabChange() {
@@ -55,8 +54,6 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const channel: any = localStorage.getItem("channel");
     this.currentChannel = channel;
-
-
   }
 
   onSwitchChannel(value: string) {

@@ -113,9 +113,6 @@ export class ChatComponent implements OnInit {
       this.currentDate += " ";
     }
 
-    let userToListenTo: any = localStorage.getItem("next-user-card");
-    const currentUserCardOpen = JSON.parse(userToListenTo);
-
   }
 
   ngOnInit() {
@@ -123,11 +120,13 @@ export class ChatComponent implements OnInit {
   }
 
 
-  onUserCard() {
-    this.settings.getUserCardInfo(this.currentName.trim()).subscribe((response: any) => {
+  async onUserCard() {
+    const token = await this.settings.getToken();
+    this.settings.getUserCardInfo(this.currentName.trim(), token).subscribe((response: any) => {
       response.data[0]["last_message"] = this.currentMessage;
       response.data[0]["current_date"] = this.currentDate;
       response.data[0]["user_color"] = this.userColor;
+      console.log(response.data[0]);
       localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
       this.settings.openUserCard();
     });

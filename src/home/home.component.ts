@@ -31,8 +31,6 @@ import { TabService } from '../services/tab.service';
 // TODO: show replys
 // TODO: update viewer count 
 
-
-
 @Component({
   selector: "app-root",
   standalone: true,
@@ -133,16 +131,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   };
 
-  loadChannelEmojisForChat() {
+  async loadChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
-    this.chat.getChannelEmotes(id).subscribe((response: any) => {
+    const token = await this.settings.getToken();
+    this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
       this.channelEmojis = response.data;
     });
 
   }
 
-  loadEmojisForChat() {
-    this.chat.getGlobalEmotes().subscribe((response: any) => {
+  async loadEmojisForChat() {
+    const token = await this.settings.getToken();
+    this.chat.getGlobalEmotes(token).subscribe((response: any) => {
       for (let i = 0; i < response.data.length; i++) {
         this.globalEmojiNames.push({ name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"], url_2: response.data[i]["images"]["url_2x"] });
       }
@@ -155,11 +155,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.getBadgesForChannel();
   }
 
-  initChatSettings() {
+  async initChatSettings() {
     this.currentToastData.length = 0;
-    const token: any = localStorage.getItem("twitch_token");
+    const token = await this.settings.getToken();
     this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
-      this.settings.getChatSettings(id).subscribe((response: any) => {
+      this.settings.getChatSettings(id, token).subscribe((response: any) => {
         this.chatSettings = response.data[0];
         if (this.chatSettings.emote_mode) {
           this.currentToastData.push({ message: "Emote only mode is on!", duration: "5000" });
@@ -207,8 +207,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.checkIfLoggedIn();
   }
 
-  setCurrentChannel() {
-    const username: any = localStorage.getItem("username");
+  async setCurrentChannel() {
+    const username = await this.settings.getStoredUsername();
     localStorage.setItem("channel", username);
     this.currentChannel = username;
   }
@@ -268,8 +268,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 
-  saveCurrentBroadCasterId() {
-    const token: any = localStorage.getItem("twitch_token");
+  async saveCurrentBroadCasterId() {
+    const token = await this.settings.getToken();
     this.settings.getBroadCasterId(token, this.currentChannel).subscribe(id => {
       localStorage.setItem("broadcaster_id", id);
       this.loadChannelEmojisForChat();
@@ -282,28 +282,33 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 
-  onSendMessage(event: KeyboardEvent) {
+  async onSendMessage(event: KeyboardEvent) {
     if (event.key == "Enter" && !this.isConnected) {
       if (this.currentToastData.length < 1) {
         this.currentToastData.push({ message: "Not connected to chat", duration: "5000" });
         this.showToast = true;
       }
+      event.preventDefault();
       return;
     }
+
     if (event.key === "Enter" && event.shiftKey) {
       this.userChatMessage += "\n";
+      event.preventDefault();
       return;
     } else if (event.key !== "Enter") {
       return;
     }
 
-    const token: any = localStorage.getItem("twitch_token");
+    event.preventDefault();
+
+    const token = await this.settings.getToken();
     this.accessToken = token;
 
     if (event.key === "Enter" && this.userChatMessage != "") {
       event.preventDefault();
       this.settings
-        .checkAccessTokenValidity(this.accessToken)
+        .checkAccessTokenValidity(token)
         .subscribe((result) => {
           if (!result) {
             alert("Your token is not valid. Please login again.");
@@ -311,9 +316,8 @@ export class HomeComponent implements OnInit, OnDestroy {
             return;
           }
         });
-      // TODO: handle drop reasons: like followers only mode
       this.settings
-        .getUserId()
+        .getUserId(token)
         .pipe(
           switchMap((userIdResult: any) => {
             const senderId = userIdResult;
@@ -327,7 +331,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                     senderId,
                     broadcasterId,
                     this.userChatMessage,
-                    this.accessToken,
+                    token,
                   );
                 }),
               );
@@ -378,44 +382,34 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onDisconnect() {
     this.isConnected = false;
-    this.chat.disconnect();
+  }
+  onConnect() {
+    this.isConnected = true;
   }
 
-  loadChatMessages(channel: string) {
+  async loadChatMessages(channel: string) {
     this.isConnected = true;
     this.scrollToBottom();
-    this.settings
-      .getUserName()
-      .pipe(
-        switchMap((username) =>
-          this.settings
-            .getAccessToken()
-            .pipe(map((token) => ({ token, username }))),
-        ),
-      )
-      .subscribe(({ token, username }) => {
-        if (token && username) {
-          this.chat.connect(token, username, channel);
-          if (!this.sub || this.sub.closed) {
-            this.sub = this.chat.messages$.subscribe((msg) => {
-              this.messages.push(msg)
-            });
 
-
-            this.chat.getChatterBadge().subscribe(badges => {
-              this.chatterInfo.badges = badges;
-              this.getImageForBadge();
-            });
-
-            this.chat.getChatterColor().subscribe(color => {
-              this.chatterInfo.color = color;
-            });
-
-
-          }
-        }
-      });
+    const username = await this.settings.getStoredUsername();
+    const token = await this.settings.getToken();
+    if (token && username) {
+      this.chat.connect(token, username, channel);
+      if (!this.sub || this.sub.closed) {
+        this.sub = this.chat.messages$.subscribe((msg) => {
+          this.messages.push(msg)
+        });
+        this.chat.getChatterBadge().subscribe(badges => {
+          this.chatterInfo.badges = badges;
+          this.getImageForBadge();
+        });
+        this.chat.getChatterColor().subscribe(color => {
+          this.chatterInfo.color = color;
+        });
+      }
+    }
   }
+
 
   getImageForBadge() {
     let a = this.chat.getImageFromBadgeName(this.chatterInfo.badges, this.channelBadgeInfo)
@@ -430,14 +424,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async getBadgesForChannel() {
-    const token: any = localStorage.getItem("twitch_token");
+    const token = await this.settings.getToken();
     const channel: any = localStorage.getItem("channel");
 
     let subscriberBadges: string[];
     let bitsBadges: string[];
     this.settings.getBroadCasterId(token, channel).subscribe(response => {
       const broadcaster_id = response;
-      this.chat.getChannelBadges(broadcaster_id).subscribe((response: any) => {
+      this.chat.getChannelBadges(broadcaster_id, token).subscribe((response: any) => {
         // check set_id and then set 
         if (response.data.length > 0) {
           for (let i = 0; i < response.data.length; i++) {
@@ -461,14 +455,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async getGlobalBadges() {
-    this.chat.getGlobalChatBadges().subscribe((response: any) => {
+    const token = await this.settings.getToken();
+    this.chat.getGlobalChatBadges(token).subscribe((response: any) => {
       localStorage.setItem("global_badges", JSON.stringify(response.data));
     });
   }
 
-  checkIfLoggedIn() {
-    const username = localStorage.getItem("username");
-    const token: any = localStorage.getItem("twitch_token");
+  async checkIfLoggedIn() {
+    const username = await this.settings.getStoredUsername();
     this.settings.getLoginStatus().subscribe(response => {
       if (!response) {
         this.currentChannel = "";
@@ -484,21 +478,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  initializeLoggedInFeatures() {
+  async initializeLoggedInFeatures() {
     this.setCurrentChannel();
     this.loadChannelEmojisForChat();
     this.loadEmojisForChat();
     this.saveCurrentBroadCasterId();
     this.initChatSettings();
     this.initBadges();
-    const emoji: any = localStorage.getItem("emoji") || '';
+    const emoji: any = localStorage.getItem("emoji");
     window.addEventListener('storage', this.handleStorageChange);
 
     this.applyUserSettings();
-    const user: any = localStorage.getItem("username");
+    const user = await this.settings.getStoredUsername();
     this.username = user;
     this.loadChatMessages(this.currentChannel);
-    this.settings.getUserId().subscribe((id) => {
+    const token = await this.settings.getToken();
+    this.settings.getUserId(token).subscribe((id) => {
       this.settings.setUserId(id);
     });
     this.scrollChatbox();
@@ -519,32 +514,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.settings.setLoginStatus(false);
   }
 
-  setAccountData(
-    desc: string,
-    image_url: string,
-    created_at: string,
-    view_count: number,
-  ): void {
-    localStorage.setItem("description", desc);
-    localStorage.setItem("profile_image_url", image_url);
-    localStorage.setItem("created_at", created_at);
-    localStorage.setItem("view_count", view_count.toString());
-  }
 
   loadUserToken() {
     this.route.fragment.subscribe((fragment) => {
       if (fragment) {
         const params = new URLSearchParams(fragment);
         this.accessToken = params.get("access_token");
-        this.settings.setAccessToken(this.accessToken);
         this.settings.getUserInfo().subscribe((data: any) => {
-          this.settings.setUserName(data[0]["display_name"]);
-          this.setAccountData(
-            data[0]["description"],
-            data[0]["profile_image_url"],
-            data[0]["created_at"],
-            data[0]["view_count"],
-          );
+          let userData = {
+            token: this.accessToken,
+            username: data[0]["display_name"],
+            id: data[0]["id"],
+            desc: data[0]["description"],
+            created_at: data[0]["created_at"],
+            profile_image_url: data[0]["profile_image_url"],
+          }
+          this.settings.saveUserData(userData);
           this.settings
             .checkAccessTokenValidity(this.accessToken)
             .subscribe((result) => {

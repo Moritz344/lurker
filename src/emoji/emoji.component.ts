@@ -30,16 +30,17 @@ export class EmojiComponent implements OnInit {
     this.initChannelEmotes();
   }
 
-  initChannelEmotes() {
-    const token: any = localStorage.getItem("twitch_token");
+  async initChannelEmotes() {
+    const token = await this.settings.getToken();
     const id: any = localStorage.getItem("broadcaster_id");
-    this.chat.getChannelEmotes(id).subscribe((response: any) => {
+    this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
       this.channelEmotes = response.data;
     });
   }
 
-  initGlobalEmotesData() {
-    this.chat.getGlobalEmotes().subscribe((response: any) => {
+  async initGlobalEmotesData() {
+    const token = await this.settings.getToken();
+    this.chat.getGlobalEmotes(token).subscribe((response: any) => {
       this.globalEmotes = response.data;
     });
 

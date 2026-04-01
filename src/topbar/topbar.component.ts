@@ -31,6 +31,9 @@ import { Subscription } from "rxjs";
 })
 export class TopbarComponent implements OnInit, OnDestroy {
   @Output() clearChat = new EventEmitter<void>();
+  @Output() disconnect = new EventEmitter<void>();
+  @Output() connect = new EventEmitter<void>();
+
   public currentChannel: string = "";
   public showLoginButton: boolean = true;
   public currentTabs: any;
@@ -71,10 +74,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.currentTabs = this.tab.getTabs();
     this.tab.removeTab(0);
-    this.username = localStorage.getItem("username") || "";
+    this.username = await this.settings.getStoredUsername();
+
 
     this.subscriptions.push(
       this.tab.currentTab$.subscribe((tab) => {
@@ -86,7 +90,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.settings.getLoginStatus().subscribe((result) => {
         this.loginStatus = result;
         if (result) {
-          this.username = localStorage.getItem("username") || "";
           const channel = localStorage.getItem("channel");
           if (channel && channel !== this.currentChannel) {
             this.currentChannel = channel;
@@ -114,11 +117,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   onDisconnect() {
     this.isConnected = false;
+    this.disconnect.emit();
     this.chat.disconnect();
   }
 
   onConnect() {
     this.isConnected = true;
+    this.connect.emit();
     this.connectChat(this.currentChannel);
   }
 
@@ -149,16 +154,12 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
 
-  onSwitchChannel(name: string) {
+  async onSwitchChannel(name: string) {
     localStorage.setItem("channel", name);
-    //if (this.currentChannel == name) {
-    //  alert("You are already connect with" + name + "'s chat");
-    //  return;
-    //}
     this.currentChannel = name;
-    this.chat.fetchStreamerInfo(name).subscribe((info) => {
+    const token = await this.settings.getToken();
+    this.chat.fetchStreamerInfo(name, token).subscribe((info) => {
       this.streamInfoToShow = info;
-      console.log("info:", info);
     });
     this.saveCurrentBroadcasterId();
     this.connectChat(name);
@@ -166,27 +167,26 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.showVerticalMenuOptions = false;
   }
 
-  private saveCurrentBroadcasterId() {
-    const token: any = localStorage.getItem("twitch_token");
+  async saveCurrentBroadcasterId() {
+    const token = await this.settings.getToken();
     this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
       localStorage.setItem("broadcaster_id", id);
     });
   }
 
-  connectChat(channel: string) {
-    const token: any = localStorage.getItem("twitch_token");
-    const username: any = localStorage.getItem("username");
-    console.log(token, username, channel);
+  async connectChat(channel: string) {
+    const username = await this.settings.getStoredUsername();
+    const token = await this.settings.getToken();
     this.chat.connect(token, username, channel);
   }
 
-  private getBadgesForChannel() {
-    const token: any = localStorage.getItem("twitch_token");
+  async getBadgesForChannel() {
+    const token = await this.settings.getToken();
     let subscriberBadges: string[];
     let bitsBadges: string[];
 
     this.settings.getBroadCasterId(token, this.currentChannel).subscribe((broadcaster_id: string) => {
-      this.chat.getChannelBadges(broadcaster_id).subscribe((response: any) => {
+      this.chat.getChannelBadges(broadcaster_id, token).subscribe((response: any) => {
         if (response.data.length > 0) {
           for (const badge of response.data) {
             if (badge.set_id === "subscriber") subscriberBadges = badge.versions;

@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, of, BehaviorSubject } from "rxjs";
+import { Observable, of, from, BehaviorSubject } from "rxjs";
 import { switchMap, map, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
 })
 export class SettingsService {
-  loginStatus: boolean = localStorage.getItem('twitch_token') ? true : false;
+  loginStatus: boolean = false;
   loginStatusSubject = new BehaviorSubject<boolean>(this.loginStatus);
+
 
   currentChannel: string = "";
   currentChannelSubject = new BehaviorSubject<string>(this.currentChannel);
@@ -20,7 +21,18 @@ export class SettingsService {
   lastMessageUser: string = "";
   lastMessageUserSubject = new BehaviorSubject<string>(this.lastMessageUser);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.initLoginStatus();
+  }
+
+  async initLoginStatus() {
+    let token = await this.getToken();
+    if (token) {
+      this.setLoginStatus(true);
+    } else {
+      this.setLoginStatus(false);
+    }
+  }
 
   setLoginStatus(isLogged: boolean) {
     this.loginStatus = isLogged;
@@ -28,21 +40,6 @@ export class SettingsService {
   }
   getLoginStatus() {
     return this.loginStatusSubject.asObservable();
-  }
-
-  setAccessToken(token: string) {
-    localStorage.setItem("twitch_token", token);
-  }
-
-  getAccessToken() {
-    return of(localStorage.getItem("twitch_token"));
-  }
-
-  setUserName(username: string) {
-    localStorage.setItem("username", username);
-  }
-  getUserName() {
-    return of(localStorage.getItem("username"));
   }
 
   setCurrentChannel(name: string) {
@@ -79,6 +76,34 @@ export class SettingsService {
 
   async openExternalLink(url: string) {
     return await (window as any).electronAPI.openExternalLink(url);
+  }
+
+  async saveUserData(data: any) {
+    return await (window as any).electronAPI.saveUserData(data);
+  }
+
+  async getToken() {
+    return await (window as any).electronAPI.getToken();
+  }
+
+  async getStoredUsername() {
+    return await (window as any).electronAPI.getUsername();
+  }
+
+  async getStoredCreatedAt() {
+    return await (window as any).electronAPI.getCreatedAt();
+  }
+
+  async getStoredUserId() {
+    return await (window as any).electronAPI.getUserId();
+  }
+
+  async getStoredDesc() {
+    return await (window as any).electronAPI.getDesc();
+  }
+
+  async getStoredProfileImageUrl() {
+    return await (window as any).electronAPI.getProfileImageUrl();
   }
 
   async openEmojiPicker() {
@@ -152,9 +177,8 @@ export class SettingsService {
     return settingsJSON[0]["timeStampFormat"];
   }
 
-  getUserId() {
+  getUserId(token: string) {
     const url = "https://api.twitch.tv/helix/users";
-    const token: any = localStorage.getItem("twitch_token");
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
@@ -219,8 +243,11 @@ export class SettingsService {
     return this.http.get(url, { headers });
   }
 
-  getChatSettings(broadcaster_id: string) {
-    const token: any = localStorage.getItem("twitch_token");
+  getChatSettings(broadcaster_id: string, token: string) {
+    if (!token) {
+      console.log("token invalid");
+      return of([]);
+    }
     const url = "https://api.twitch.tv/helix/chat/settings?broadcaster_id=" + broadcaster_id;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -232,7 +259,7 @@ export class SettingsService {
   }
 
   getBroadCasterId(token: string, channel: string) {
-    const url = "https://api.twitch.tv/helix/users?login=" + channel || "";
+    const url = "https://api.twitch.tv/helix/users?login=" + channel;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
@@ -254,9 +281,6 @@ export class SettingsService {
     return this.http.get(url, { headers }).pipe(
       map((response) => true),
       catchError((error) => {
-        if (error.status === 401) {
-          return of(false);
-        }
         return of(false);
       }),
     );
@@ -264,9 +288,8 @@ export class SettingsService {
 
 
 
-  getUserCardInfo(name: string) {
+  getUserCardInfo(name: string, token: string) {
     const url = `https://api.twitch.tv/helix/users?login=${name}`;
-    const token: any = localStorage.getItem("twitch_token");
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
@@ -275,19 +298,17 @@ export class SettingsService {
   }
 
 
-
-  getUserInfo(): Observable<string> {
+  getUserInfo(): Observable<any> {
     const url = "https://api.twitch.tv/helix/users";
-
-    return this.getAccessToken().pipe(
-      switchMap((token) => {
+    return from(this.getToken()).pipe(
+      switchMap(token => {
+        console.log("user info", token);
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
         });
         return this.http.get<any>(url, { headers });
-      }),
-      map((response) => response.data),
+      })
     );
   }
 }

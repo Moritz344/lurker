@@ -7,7 +7,7 @@
       }
     </div>
 }
-<app-topbar (clearChat)="onClearChat()"></app-topbar>
+<app-topbar (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()"></app-topbar>
 <div class="container">
   
    <div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">

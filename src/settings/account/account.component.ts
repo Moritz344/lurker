@@ -22,16 +22,14 @@ export class AccountComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
-    this.settings.getUserName().subscribe((name) => {
-      if (name) {
-        this.username = name;
-      }
-    });
-    this.account_description = localStorage.getItem("description");
-    this.account_profile_picture = localStorage.getItem("profile_image_url");
-    this.account_view_count = localStorage.getItem("view_count");
-    this.account_created_at = localStorage.getItem("created_at");
+  async ngOnInit() {
+    const name = await this.settings.getStoredUsername();
+    if (name) {
+      this.username = name;
+    }
+    this.account_description = await this.settings.getStoredDesc();
+    this.account_profile_picture = await this.settings.getStoredProfileImageUrl();
+    this.account_created_at = await this.settings.getStoredCreatedAt();
     this.account_created_at = new Date(this.account_created_at).toLocaleDateString();
   }
 

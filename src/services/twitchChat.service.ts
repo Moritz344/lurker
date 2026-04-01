@@ -138,10 +138,8 @@ export class TwitchChatService implements OnDestroy {
   }
 
 
-  getChannelBadges(broadcaster_id: string) {
+  getChannelBadges(broadcaster_id: string, token: string) {
     const url = "https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + broadcaster_id;
-
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -152,9 +150,8 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
-  fetchStreamerInfo(channel: string): Observable<any> {
+  fetchStreamerInfo(channel: string, token: string): Observable<any> {
     if (!channel) return of(null);
-    const token: any = localStorage.getItem("twitch_token");
     return this.getStreamInfo(channel, token).pipe(
       map((result: any) => {
         if (result.data.length === 0) {
@@ -186,10 +183,8 @@ export class TwitchChatService implements OnDestroy {
     );
   }
 
-  getGlobalChatBadges() {
+  getGlobalChatBadges(token: string) {
     const url = "https://api.twitch.tv/helix/chat/badges/global";
-
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -225,6 +220,7 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getStreamInfo(channel: string, token: string) {
+    if (!token) { return of([]); }
     const url = "https://api.twitch.tv/helix/streams?user_login=" + channel;
 
     const headers = new HttpHeaders({
@@ -236,9 +232,8 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
-  getChannelEmotes(broadcaster_id: string) {
+  getChannelEmotes(broadcaster_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/chat/emotes?broadcaster_id=${broadcaster_id}`;
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -249,9 +244,8 @@ export class TwitchChatService implements OnDestroy {
   }
 
 
-  getGlobalEmotes() {
+  getGlobalEmotes(token: string) {
     const url = `https://api.twitch.tv/helix/chat/emotes/global`;
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
