@@ -1,6 +1,6 @@
 <div class="container" #container>
     <div class="items">
-        @if (data.function === "change_channel_name") {
+   @if (data.function === "change_channel_name") {
             <span>{{ data.message }}</span>
             <input
                 [(ngModel)]="inputValue"
@@ -25,7 +25,33 @@
         <button (click)="onClose()" class="cancel">Cancel</button>
     </div>
       
+    } @else if (data.function == "show_users_follow_list") {
+      <h1 style="margin-top: -20px;">{{ data.message }} </h1>
+      <div #broadcaster class="broadcaster-container">
+        @if (followListData.length > 0) {
+          @for (broadcaster of followListData; track $index) {
+            <button (click)="onSwitchToFollowedChannel(broadcaster.broadcaster_name)"><img style="margin-right: 5px;border-radius: 0px;" [src]="broadcaster.img" width="40" height="40">
+            <span> {{ broadcaster.broadcaster_name }}</span>
+              @if (broadcaster.live) {
+                <span style="position: absolute;top: 10px;right:10px"> 🔴 {{ broadcaster.viewer }} </span>
+              } @else {
+                <span style="position: absolute;top: 10px;right:10px"> ⚫️ offline </span>
+
+                } 
+            </button>
+            
+          }
+        }
+          
+      </div>
+      @if (followListData.length > 0 && paginationData ) {
+        <div class="page-container">
+          <button (click)="nextPageFollowList()"><img src="arrow.svg"></button>
+        </div>
+
+      }
     }
+
     <button class="close-x" (click)="onClose()">
         <img src="close.svg" />
     </button>

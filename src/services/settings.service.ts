@@ -297,6 +297,28 @@ export class SettingsService {
     return this.http.get(url, { headers });
   }
 
+  getFollowedChannels(token: string, user_id: string, first: number, cursor: string, cursorType: string) {
+    const params = new URLSearchParams();
+    console.log("PAGINATION TYPE:", cursorType);
+    if (cursor) {
+      params.append(cursorType, cursor);
+    }
+
+    const url = "https://api.twitch.tv/helix/channels/followed?user_id=" + user_id + "&" + params.toString();
+    console.log("API URL:", url);
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-Id": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+    });
+
+    return this.http.get(url, { headers });
+
+  }
+
+  getChannelInfo() {
+
+  }
 
   getUserInfo(): Observable<any> {
     const url = "https://api.twitch.tv/helix/users";

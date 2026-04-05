@@ -74,11 +74,31 @@ export class TopbarComponent implements OnInit, OnDestroy {
     );
   }
 
+  onOpenUserFollowList() {
+    this.dialog.open(DialogBoxComponent, {
+      width: "400px",
+      height: "450px",
+      panelClass: "container",
+      data: {
+        message: "Follow List",
+        function: "show_users_follow_list",
+      },
+    });
+    this.showVerticalMenuOptions = false;
+
+  }
+
   async ngOnInit() {
     this.currentTabs = this.tab.getTabs();
     this.tab.removeTab(0);
     this.username = await this.settings.getStoredUsername();
 
+    //const token = await this.settings.getToken();
+    //const user_id = await this.settings.getStoredUserId();
+    //this.settings.getFollowedChannels(token, user_id, 10, "").subscribe((response: any) => {
+    //  let cursor = response.pagination.cursor;
+    //  console.log(response);
+    //});
 
     this.subscriptions.push(
       this.tab.currentTab$.subscribe((tab) => {
