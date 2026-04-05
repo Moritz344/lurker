@@ -135,6 +135,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.clearChat.emit();
   }
 
+  async onReconnect() {
+    const token = await this.settings.getToken();
+    const username = await this.settings.getStoredUsername();
+    const channel: any = localStorage.getItem("channel");
+    this.chat.connect(token, username, channel);
+  }
+
   onDisconnect() {
     this.isConnected = false;
     this.disconnect.emit();

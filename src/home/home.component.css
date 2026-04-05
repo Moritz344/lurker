@@ -1,9 +1,44 @@
 
 .chat-container {
-  height: 85%;
+  height: calc(100% - 120px);
   position: absolute;
   overflow-x: hidden;
   margin: 10px;
+}
+
+.chat-entry {
+   position: absolute;
+   overflow: hidden;
+   overflow-x: hidden;
+	 right: 0;
+	 left: 0;
+	 height: 50px;
+	 bottom: 0px;
+
+}
+
+textarea{
+	overflow: hidden;
+}
+
+.chat-entry textarea {
+  font-size: 20px;
+  color: white;
+  overflow: hidden;
+  color: white;
+  border: none;
+  outline: none;
+  resize: none;
+	height: 50px;
+  width: 100%;
+
+}
+
+.screen{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: -100;
 }
 
 .container {
@@ -87,33 +122,6 @@ a {
     text-align: center;
 }
 
-.chat-entry {
-   position: absolute;
-   overflow: hidden;
-   overflow-x: hidden;
-	 right: 0;
-	 left: 0;
-	 height: 50px;
-	 bottom: 0px;
-
-}
-
-textarea{
-	overflow: hidden;
-}
-
-.chat-entry textarea {
-  font-size: 20px;
-  color: white;
-  overflow: hidden;
-  color: white;
-  border: none;
-  outline: none;
-  resize: none;
-	height: 50px;
-  width: 100%;
-
-}
 
 .toast-container{
   display: grid;

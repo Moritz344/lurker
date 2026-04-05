@@ -6,7 +6,8 @@ import {
   HostListener,
   OnChanges,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  AfterViewInit
 } from "@angular/core";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../services/settings.service";
@@ -26,10 +27,10 @@ import { TabService } from '../services/tab.service';
 // TODO: better tv emotes
 // TODO: channel points
 // TODO: work on perfomance
-// TODO: mark streamer as favourite
 // TODO: show for how long the stream is going for if possible
 // TODO: show replys
 // TODO: update viewer count 
+// TODO: show custom rewards
 
 @Component({
   selector: "app-root",
@@ -47,7 +48,7 @@ import { TabService } from '../services/tab.service';
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("chat") chatBox!: ElementRef;
   @ViewChild("chatEntry") entry!: ElementRef;
 
@@ -56,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   accessToken: any;
   sub?: Subscription;
   messages: string[] = [];
-  scrollAuto: boolean = false;
+  scrollAuto: boolean = true;
   scrollInterval = 100;
   userScrolling: boolean = false;
   currentChannel: string = "";
@@ -207,6 +208,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.checkIfLoggedIn();
   }
 
+  ngAfterViewInit() {
+    this.focusEntry();
+  }
+
+  focusEntry() {
+    this.entry.nativeElement.focus();
+  }
+
   async setCurrentChannel() {
     const username = await this.settings.getStoredUsername();
     localStorage.setItem("channel", username);
@@ -225,12 +234,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   scrollChatbox() {
+    console.log("scroll auto:", this.scrollAuto);
     setInterval(() => {
       if (this.scrollAuto) {
         const element = this.chatBox.nativeElement;
-        if (element.scrollTop > 0) {
-          element.scrollTop += 10;
-        }
+        element.scrollTop = element.scrollHeight;
       }
     }, 10);
   }
