@@ -8,6 +8,15 @@
       }
     </div>
 }
+
+@if (showUserInChat) {
+    <div #chatter class="chatter-container" >
+      @for (chatter of chatterData; track $index) {
+        <button [ngClass]="{ 'chatter-select': selectedChatter == $index }" (click)="onPasteUserInInput(chatter.user_name)">{{ chatter.user_name }}</button>
+      }
+    </div>
+}
+
 <app-topbar (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()"></app-topbar>
 <div class="container" (click)="focusEntry()">
   
@@ -30,3 +39,5 @@
   </div>
 
 </div>
+
+

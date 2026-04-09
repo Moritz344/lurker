@@ -6,6 +6,36 @@
   margin: 10px;
 }
 
+
+.chatter-select{
+  background-color: var(--accent-color);
+}
+
+@keyframes fadeIn{
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.chatter-container{
+  animation: fadeIn 0.5s;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 70px;
+  left: 40%;
+  background-color: var(--bg-color);
+  padding: 10px;
+  height: 100px;
+  overflow-y: scroll;
+  z-index: 100;
+  border: 1px solid white;
+}
+
 .chat-entry {
    position: absolute;
    overflow: hidden;

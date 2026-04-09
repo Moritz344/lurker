@@ -29,7 +29,7 @@ import { TabService } from '../services/tab.service';
 // TODO: work on perfomance
 // TODO: show for how long the stream is going for if possible
 // TODO: show replys
-// TODO: update viewer count 
+// TODO: update viewer count
 // TODO: show custom rewards
 
 @Component({
@@ -50,24 +50,29 @@ import { TabService } from '../services/tab.service';
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("chat") chatBox!: ElementRef;
+  @ViewChild("chatter") chatter!: ElementRef;
   @ViewChild("chatEntry") entry!: ElementRef;
 
-  title = "Lurker";
-  username: string = "";
-  accessToken: any;
-  sub?: Subscription;
-  messages: string[] = [];
-  scrollAuto: boolean = true;
-  scrollInterval = 100;
-  userScrolling: boolean = false;
-  currentChannel: string = "";
-  userChatMessage = "";
-  placeholderString: string = "";
+  public title = "Lurker";
+  public username: string = "";
+  public accessToken: any;
+  public sub?: Subscription;
+  public messages: string[] = [];
+  public scrollAuto: boolean = true;
+  public scrollInterval = 100;
+  public userScrolling: boolean = false;
+  public currentChannel: string = "";
+  public userChatMessage = "";
+  public placeholderString: string = "";
   private currChannelSub?: Subscription;
   private currentTabSub?: Subscription;
-  streamerData: any;
-  chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
-  isConnected: boolean = true;
+  public streamerData: any;
+  public chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
+  public isConnected: boolean = true;
+
+  public showUserInChat: boolean = false;
+  public selectedChatter: number = 0;
+  public chatterData: any;
 
   showToast: boolean = false;
   currentToastData: { message: string, duration: string }[] = [{ message: "", duration: "" }];
@@ -218,7 +223,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async setCurrentChannel() {
     const username = await this.settings.getStoredUsername();
-    localStorage.setItem("channel", username);
     this.currentChannel = username;
   }
 
@@ -234,7 +238,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollChatbox() {
-    console.log("scroll auto:", this.scrollAuto);
     setInterval(() => {
       if (this.scrollAuto) {
         const element = this.chatBox.nativeElement;
@@ -288,9 +291,58 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.messages.length = 0;
   }
 
+  async onShowUserInChat() {
+    const token = await this.settings.getToken();
+    const user_id = await this.settings.getStoredUserId();
+    const channel: any = localStorage.getItem("channel");
+    this.settings.getBroadCasterId(token, channel).subscribe((broadcaster_id: string) => {
+      if (!broadcaster_id) {
+        console.error("No broadcaster id!");
+        return;
+      }
+
+      this.chat.getChatters(broadcaster_id, user_id, token).subscribe((response: any) => {
+        this.chatterData = response.data;
+      });
+
+    });
+  }
 
 
   async onSendMessage(event: KeyboardEvent) {
+    if (event.key == "@") {
+      this.showUserInChat = true;
+      this.onShowUserInChat();
+      return;
+    }
+
+    if (this.showUserInChat) {
+      if (event.key == "Backspace") {
+        this.showUserInChat = false;
+        this.userChatMessage = "";
+      }
+      if (event.key == "ArrowDown") {
+        if (this.selectedChatter < this.chatterData.length - 1) {
+          this.selectedChatter += 1;
+        }
+      } else if (event.key == "ArrowUp") {
+        if (this.selectedChatter > 0) {
+          this.selectedChatter -= 1;
+        }
+      }
+
+      if (event.key == "Enter") {
+        this.userChatMessage += this.chatterData[this.selectedChatter].user_name;
+        this.showUserInChat = false;
+      }
+
+      event.preventDefault();
+      return;
+
+    }
+    this.showUserInChat = false;
+
+
     if (event.key == "Enter" && !this.isConnected) {
       if (this.currentToastData.length < 1) {
         this.currentToastData.push({ message: "Not connected to chat", duration: "5000" });
@@ -300,11 +352,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (event.key === "Enter" && event.shiftKey) {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    if (event.shiftKey) {
       this.userChatMessage += "\n";
       event.preventDefault();
-      return;
-    } else if (event.key !== "Enter") {
       return;
     }
 
@@ -313,7 +367,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const token = await this.settings.getToken();
     this.accessToken = token;
 
-    if (event.key === "Enter" && this.userChatMessage != "") {
+    if (this.userChatMessage != "") {
       event.preventDefault();
       this.settings
         .checkAccessTokenValidity(token)
@@ -368,12 +422,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  onPasteUserInInput(user: string) {
+    this.userChatMessage += user;
+    this.showUserInChat = false;
+  }
+
   @HostListener("wheel", ["$event"])
   onScroll(event: WheelEvent) {
-    const chat = this.chatBox.nativeElement;
+    event.preventDefault();
 
-    const atBottom =
-      chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+    this.chatBox.nativeElement.scrollTop += event.deltaY * 2;
+    if (this.chatter) {
+      this.chatter.nativeElement.scrollTop += event.deltaY;
+    }
+
+    const chat = this.chatBox.nativeElement;
+    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+
 
     if (event.deltaY < 0) {
       this.scrollAuto = false;
