@@ -37,6 +37,7 @@ export class TwitchChatService implements OnDestroy {
       this.socket!.send(`NICK ${username}`);
       this.socket!.send(`JOIN #${channel}`);
       this.socket!.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
+      this.socket!.send("CAP REQ :twitch.tv/membership");
     });
 
     this.socket.addEventListener("message", (event) => {
@@ -266,9 +267,8 @@ export class TwitchChatService implements OnDestroy {
 
 
 
-  getChatters(broadcaster_id: string, moderator_id: string) {
+  getChatters(broadcaster_id: string, moderator_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
