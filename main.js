@@ -57,6 +57,7 @@ async function createWindow() {
 
   });
 
+
   ipcMain.handle("save-user-data", (_, data) => {
     store.set("userData", data);
   });

@@ -8,7 +8,8 @@ import { SettingsComponent } from "./settings/settings.component";
 import { AuthComponent } from "./auth/auth.component";
 import { TopbarComponent } from "./topbar/topbar.component";
 import { routes } from "./app/app.routes";
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
-  providers: [importProvidersFrom(HttpClientModule), provideRouter(routes, withHashLocation())],
+  providers: [importProvidersFrom(HttpClientModule), provideRouter(routes, withHashLocation(),), provideAnimations()],
 });
