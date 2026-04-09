@@ -294,16 +294,32 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   async onShowUserInChat() {
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
+    const username = await this.settings.getStoredUsername();
     const channel: any = localStorage.getItem("channel");
+
     this.settings.getBroadCasterId(token, channel).subscribe((broadcaster_id: string) => {
       if (!broadcaster_id) {
         console.error("No broadcaster id!");
         return;
       }
+      this.settings.getModerators(broadcaster_id, token).subscribe((response: any) => {
+        if (!response) {
+          console.log("Error getting Moderators for channel:", channel);
+          return;
+        }
 
-      this.chat.getChatters(broadcaster_id, user_id, token).subscribe((response: any) => {
-        this.chatterData = response.data;
+        const data = response.data;
+        data.forEach((moderator: any) => {
+          if (user_id == moderator.user_id || channel == username) {
+            this.chat.getChatters(broadcaster_id, user_id, token).subscribe((response: any) => {
+              this.chatterData = response.data;
+              return;
+            });
+          }
+
+        })
       });
+
 
     });
   }
