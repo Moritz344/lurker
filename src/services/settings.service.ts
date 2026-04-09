@@ -208,32 +208,9 @@ export class SettingsService {
   timeoutUser() {
   }
 
-  checkIfUserIsModerator(channel: string) {
-    let isUserMod: boolean = false;
-    const token: any = localStorage.getItem("twitch_token");
-    const username: any = localStorage.getItem("username");
-    if (channel === username) {
-      return true;
-    }
-    this.getBroadCasterId(token, channel).subscribe((result) => {
-      this.getModerators(result).subscribe((data: any) => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].user_name === username) {
-            isUserMod = true;
-            break;
-          } else {
-            isUserMod = false;
-            break;
-          }
-        }
-      });
-    });
-    return isUserMod;
-  }
 
-  getModerators(broadcaster_id: string,) {
+  getModerators(broadcaster_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${broadcaster_id}`;
-    const token: any = localStorage.getItem("twitch_token");
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
