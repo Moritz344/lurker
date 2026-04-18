@@ -101,6 +101,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   loginStatus: boolean = true;
 
+
   applyUserSettings() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
@@ -269,9 +270,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.openExternalLink(url);
   }
 
+
   onVerticalMenu() {
     this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
   }
+
 
   onDisableVerticalMenu() {
     this.showVerticalMenuOptions = false;
