@@ -1,5 +1,14 @@
-import { Component, OnInit, OnChanges, Output, EventEmitter, OnDestroy } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import {
+  Component,
+  OnInit,
+  signal,
+  OnChanges,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  HostListener,
+} from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { CommonModule } from "@angular/common";
@@ -39,8 +48,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
   public currentTabs: any;
   public streamerData: any;
 
+  public isChoosingChannel = signal(false);
+  public isChoosingFollowerList = signal(false);
+
   public showToast: boolean = false;
-  public currentToastData: { message: string, duration: string }[] = [];
+  public currentToastData: { message: string; duration: string }[] = [];
 
   public username: string = "";
   public showVerticalMenuOptions: boolean = false;
@@ -49,13 +61,22 @@ export class TopbarComponent implements OnInit, OnDestroy {
   public loginStatus: boolean = true;
 
   chatSettings: any;
-  channelBadgeInfo: { bits: any, subscriber: any, global: any } = { bits: "", subscriber: "", global: "" };
+  channelBadgeInfo: { bits: any; subscriber: any; global: any } = {
+    bits: "",
+    subscriber: "",
+    global: "",
+  };
 
-  streamInfoToShow: { title: string, thumbnail: string, game_name: string, viewer_count: string } = {
+  streamInfoToShow: {
+    title: string;
+    thumbnail: string;
+    game_name: string;
+    viewer_count: string;
+  } = {
     title: "",
     thumbnail: "",
     game_name: "",
-    viewer_count: ""
+    viewer_count: "",
   };
 
   private subscriptions: Subscription[] = [];
@@ -70,8 +91,31 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.settings.getLoginStatus().subscribe((result) => {
         this.showLoginButton = !result;
-      })
+      }),
     );
+  }
+
+  @HostListener("window:keydown", ["$event"])
+  handleKeybinds(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key == "s") {
+      this.dialog.closeAll();
+      this.onChooseChannel();
+    } else if (event.ctrlKey && event.key == "f") {
+      this.dialog.closeAll();
+      this.onOpenUserFollowList();
+    } else if (event.ctrlKey && event.key == "o") {
+      this.onOpenStreamInBrowser();
+    } else if (event.ctrlKey && event.key == "m") {
+      this.onOpenModView();
+    } else if (event.ctrlKey && event.key == "d") {
+      this.onDisconnect();
+    } else if (event.ctrlKey && event.key == "r") {
+      this.onReconnect();
+    } else if (event.ctrlKey && event.key == "c") {
+      this.onExit();
+    } else if (event.key == "Escape") {
+      this.showVerticalMenuOptions = false;
+    }
   }
 
   onOpenUserFollowList() {
@@ -85,7 +129,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
       },
     });
     this.showVerticalMenuOptions = false;
-
   }
 
   async ngOnInit() {
@@ -122,14 +165,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
           this.currentChannel = result;
           this.onSwitchChannel(result);
         }
-      })
+      }),
     );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
-
 
   onClearChat() {
     this.clearChat.emit();
@@ -180,7 +222,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.showVerticalMenuOptions = false;
   }
 
-
   async onSwitchChannel(name: string) {
     localStorage.setItem("channel", name);
     this.currentChannel = name;
@@ -196,9 +237,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   async saveCurrentBroadcasterId() {
     const token = await this.settings.getToken();
-    this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
-      localStorage.setItem("broadcaster_id", id);
-    });
+    this.settings
+      .getBroadCasterId(token, this.currentChannel)
+      .subscribe((id: string) => {
+        localStorage.setItem("broadcaster_id", id);
+      });
   }
 
   async connectChat(channel: string) {
@@ -212,18 +255,29 @@ export class TopbarComponent implements OnInit, OnDestroy {
     let subscriberBadges: string[];
     let bitsBadges: string[];
 
-    this.settings.getBroadCasterId(token, this.currentChannel).subscribe((broadcaster_id: string) => {
-      this.chat.getChannelBadges(broadcaster_id, token).subscribe((response: any) => {
-        if (response.data.length > 0) {
-          for (const badge of response.data) {
-            if (badge.set_id === "subscriber") subscriberBadges = badge.versions;
-            else if (badge.set_id === "bits") bitsBadges = badge.versions;
-          }
-        }
-        const global_badges = JSON.parse(localStorage.getItem("global_badges") || "[]");
-        this.channelBadgeInfo = { subscriber: subscriberBadges, bits: bitsBadges, global: global_badges };
+    this.settings
+      .getBroadCasterId(token, this.currentChannel)
+      .subscribe((broadcaster_id: string) => {
+        this.chat
+          .getChannelBadges(broadcaster_id, token)
+          .subscribe((response: any) => {
+            if (response.data.length > 0) {
+              for (const badge of response.data) {
+                if (badge.set_id === "subscriber")
+                  subscriberBadges = badge.versions;
+                else if (badge.set_id === "bits") bitsBadges = badge.versions;
+              }
+            }
+            const global_badges = JSON.parse(
+              localStorage.getItem("global_badges") || "[]",
+            );
+            this.channelBadgeInfo = {
+              subscriber: subscriberBadges,
+              bits: bitsBadges,
+              global: global_badges,
+            };
+          });
       });
-    });
   }
 
   onChatterList() {
@@ -255,7 +309,10 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   onAddButton() {
     if (this.currentTabs.length >= 3) {
-      this.currentToastData.push({ message: "You can open a maximum of 3 Tabs", duration: "5000" });
+      this.currentToastData.push({
+        message: "You can open a maximum of 3 Tabs",
+        duration: "5000",
+      });
       this.showToast = true;
       return;
     }
