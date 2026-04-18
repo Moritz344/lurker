@@ -16,5 +16,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getUserId: () => ipcRenderer.invoke("get-user-id"),
   getDesc: () => ipcRenderer.invoke("get-desc"),
   getProfileImageUrl: () => ipcRenderer.invoke("get-profile-image-url"),
-  onTwitchToken: (callback) => ipcRenderer.on("twitch-token", (event, token) => callback(token)),
+  onTwitchToken: (callback) =>
+    ipcRenderer.on("twitch-token", (_, token) => callback(token)),
+  logout: () => ipcRenderer.invoke("logout"),
+  saveToken: (token) => ipcRenderer.invoke("save-token", token),
 });

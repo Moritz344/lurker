@@ -12,26 +12,33 @@
   </div>
 
   <div class="header-center">
-    <span class="channel-name" 
-          (click)="onChooseChannel()"
-          (mouseenter)="onChannelNameHover()"
-          (mouseleave)="onChannelNameLeave()">
-      {{ currentChannel ? currentChannel + "'s chat" : "Not logged in" }}
-    </span>
-    @if (channelNameHover && streamInfoToShow) {
-      <div class="stream-info">
-        <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
-        <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
-        @if (streamInfoToShow.viewer_count) {
-          <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+          <span class="channel-name"
+              (click)="onChooseChannel()"
+              (mouseenter)="onChannelNameHover()"
+              (mouseleave)="onChannelNameLeave()">
+          {{ currentChannel ? currentChannel + "'s chat" : "Not logged in" }}
+        </span>
+        @if (loginStatus) {
+        @if (channelNameHover && streamInfoToShow) {
+          <div class="stream-info">
+            <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
+            <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
+            @if (streamInfoToShow.viewer_count) {
+              <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+            }
+          </div>
         }
-      </div>
-    }
+
+      }
   </div>
 
   <div class="header-right">
     <button (click)="showLoginButton ? onLogin() : onLogout()" [title]="showLoginButton ? 'Login' : 'Logout'">
-      <img src="profile.svg" />
+        @if (showLoginButton) {
+            <img src="login.svg" />
+        }@else {
+            <img src="logout.svg" />
+        }
     </button>
     @if (username == currentChannel) {
       <button title="Chatter List" (click)="onChatterList()"><img src="persons.svg"></button>
@@ -41,13 +48,13 @@
     @if (showVerticalMenuOptions) {
       <div (click)="onVerticalMenu()" class="dropdown-container"></div>
       <div class="dropdown-menu">
-        <button (click)="onChooseChannel()">
+        <button *ngIf="loginStatus" (click)="onChooseChannel()">
           <img src="switch_account.svg">Switch Channel
         </button>
-        <button (click)="onOpenUserFollowList()">
+        <button *ngIf="loginStatus" (click)="onOpenUserFollowList()">
           <img src="switch_account.svg">Open Follows
         </button>
-        <button (click)="onOpenStreamInBrowser()">
+        <button *ngIf="loginStatus" (click)="onOpenStreamInBrowser()">
           <img src="open_in_browser.svg">Open In Browser
         </button>
         @if (currentChannel === username) {
@@ -55,19 +62,19 @@
             <img src="mod_view.svg">Open Mod View
           </button>
         }
-        <button (click)="onClearChat()">
+        <button *ngIf="loginStatus" (click)="onClearChat()">
           <img src="clear.svg">Clear Chat
         </button>
-        @if (isConnected) {
-          <button class="exit-btn" (click)="onDisconnect()">
+        @if (isConnected ) {
+          <button *ngIf="loginStatus" class="exit-btn" (click)="onDisconnect()">
             <img src="cancel.svg">Disconnect
           </button>
         } @else {
-          <button class="connect-btn" (click)="onConnect()">
+          <button *ngIf="loginStatus" class="connect-btn" (click)="onConnect()">
             <img src="connect.png">Connect
           </button>
         }
-          <button class="connect-btn" (click)="onReconnect()">
+          <button *ngIf="loginStatus" class="connect-btn" (click)="onReconnect()">
             <img src="reconnect.svg">Reconnect
           </button>
         <button class="exit-btn" (click)="onExit()">

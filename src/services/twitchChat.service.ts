@@ -6,6 +6,7 @@ import {
   HttpErrorResponse,
 } from "@angular/common/http";
 import { switchMap, map, catchError } from "rxjs/operators";
+import { SettingsService } from "./settings.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,18 +15,20 @@ export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
   private messageSubject = new Subject<string>();
   private badgeInfoSubject = new Subject<string[]>();
-  private replyMessageBody = new Subject<{ to: string, msg: string }>();
+  private replyMessageBody = new Subject<{ to: string; msg: string }>();
   private chatColor = new Subject<string>();
   public messages$: Observable<string> = this.messageSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private settings: SettingsService,
+  ) {}
 
   connect(token: string, username: string, channel: string) {
     this.disconnect();
     console.log("Twitch Chat verbunden");
 
     this.socket = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
-
 
     this.socket.addEventListener("open", () => {
       //console.log("Twitch Chat verbunden");
@@ -36,7 +39,9 @@ export class TwitchChatService implements OnDestroy {
       this.socket!.send(`PASS oauth:${token}`);
       this.socket!.send(`NICK ${username}`);
       this.socket!.send(`JOIN #${channel}`);
-      this.socket!.send("CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership");
+      this.socket!.send(
+        "CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership",
+      );
       this.socket!.send("CAP REQ :twitch.tv/membership");
     });
 
@@ -46,7 +51,6 @@ export class TwitchChatService implements OnDestroy {
         this.socket!.send("PONG :tmi.twitch.tv");
         return;
       }
-
 
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
       if (match) {
@@ -65,7 +69,6 @@ export class TwitchChatService implements OnDestroy {
     });
   }
 
-
   getChatterBadge() {
     return this.badgeInfoSubject.asObservable();
   }
@@ -74,7 +77,9 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getImageFromBadgeName(badges: string[], badgeImages: any) {
-    let badgesFound: { img: string, img_2x: string, title: string }[] = [{ img: "", img_2x: "", title: "" }];
+    let badgesFound: { img: string; img_2x: string; title: string }[] = [
+      { img: "", img_2x: "", title: "" },
+    ];
     let subscriber_ids: string[] = [];
 
     let bits_ids: string[] = [];
@@ -96,24 +101,29 @@ export class TwitchChatService implements OnDestroy {
           global_ids.push(badges[i].split("/")[1]);
         }
       }
-
     }
 
     if (subscriber_ids.length > 0 && badgeImages.subscriber) {
       const subscriberSet = new Set(subscriber_ids);
       badgeImages.subscriber.forEach((badge: any) => {
         if (subscriberSet.has(badge.id)) {
-          badgesFound.push({ img: badge.image_url_1x, img_2x: badge.image_url_2x, title: badge.title });
+          badgesFound.push({
+            img: badge.image_url_1x,
+            img_2x: badge.image_url_2x,
+            title: badge.title,
+          });
         }
       });
-
-
     }
     if (bits_ids.length > 0 && badgeImages.bits) {
       const bitsSet = new Set(bits_ids);
       badgeImages.bits.forEach((badge: any) => {
         if (bitsSet.has(badge.id)) {
-          badgesFound.push({ img: badge.image_url_1x, img_2x: badge.image_url_2x, title: badge.title });
+          badgesFound.push({
+            img: badge.image_url_1x,
+            img_2x: badge.image_url_2x,
+            title: badge.title,
+          });
         }
       });
     }
@@ -125,12 +135,15 @@ export class TwitchChatService implements OnDestroy {
         if (typeSet.has(badge.set_id)) {
           badge.versions.forEach((version: any) => {
             if (idSet.has(version.id)) {
-              badgesFound.push({ img: version.image_url_1x, img_2x: version.image_url_2x, title: version.title });
+              badgesFound.push({
+                img: version.image_url_1x,
+                img_2x: version.image_url_2x,
+                title: version.title,
+              });
             }
           });
         }
       });
-
     }
 
     badgesFound.shift();
@@ -138,9 +151,10 @@ export class TwitchChatService implements OnDestroy {
     return badgesFound;
   }
 
-
   getChannelBadges(broadcaster_id: string, token: string) {
-    const url = "https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + broadcaster_id;
+    const url =
+      "https://api.twitch.tv/helix/chat/badges?broadcaster_id=" +
+      broadcaster_id;
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -169,18 +183,32 @@ export class TwitchChatService implements OnDestroy {
         let viewerString = viewers.toString();
 
         if (viewers >= 1000 && viewers < 10000) {
-          viewerString = viewers_split[0] + "." + viewers_split[1] + viewers_split[2] + viewers_split[3];
+          viewerString =
+            viewers_split[0] +
+            "." +
+            viewers_split[1] +
+            viewers_split[2] +
+            viewers_split[3];
         } else if (viewers >= 10000 && viewers < 100000) {
-          viewerString = viewers_split[0] + viewers_split[1] + "." + viewers_split[2] + viewers_split[3] + viewers_split[4];
+          viewerString =
+            viewers_split[0] +
+            viewers_split[1] +
+            "." +
+            viewers_split[2] +
+            viewers_split[3] +
+            viewers_split[4];
         }
 
         return {
           title: streamerData.title,
-          thumbnail: "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + channel.toLowerCase().replace(/\s/g, '') + "-300x200.jpg",
+          thumbnail:
+            "https://static-cdn.jtvnw.net/previews-ttv/live_user_" +
+            channel.toLowerCase().replace(/\s/g, "") +
+            "-300x200.jpg",
           game_name: streamerData.game_name,
           viewer_count: viewerString,
         };
-      })
+      }),
     );
   }
 
@@ -221,7 +249,9 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getStreamInfo(channel: string, token: string) {
-    if (!token) { return of([]); }
+    if (!token) {
+      return of([]);
+    }
     const url = "https://api.twitch.tv/helix/streams?user_login=" + channel;
 
     const headers = new HttpHeaders({
@@ -234,6 +264,9 @@ export class TwitchChatService implements OnDestroy {
   }
 
   getChannelEmotes(broadcaster_id: string, token: string) {
+    if (!broadcaster_id) {
+      return of([]);
+    }
     const url = `https://api.twitch.tv/helix/chat/emotes?broadcaster_id=${broadcaster_id}`;
 
     const headers = new HttpHeaders({
@@ -244,7 +277,6 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
-
   getGlobalEmotes(token: string) {
     const url = `https://api.twitch.tv/helix/chat/emotes/global`;
 
@@ -254,18 +286,12 @@ export class TwitchChatService implements OnDestroy {
       "Content-Type": "application/json",
     });
 
-
     return this.http.get(url, { headers });
-
-
   }
-
 
   setEmoji(name: string) {
     let emoji = localStorage.setItem("emoji", name);
   }
-
-
 
   getChatters(broadcaster_id: string, moderator_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/chat/chatters?broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`;
@@ -277,9 +303,7 @@ export class TwitchChatService implements OnDestroy {
     });
 
     return this.http.get(url, { headers });
-
   }
-
 
   sendAnnouncement(
     broadcaster_id: string,
@@ -318,7 +342,6 @@ export class TwitchChatService implements OnDestroy {
     });
 
     const choiceObject = choices.map((choice) => ({ title: choice }));
-
 
     const body = {
       duration: duration,
@@ -369,11 +392,11 @@ export class TwitchChatService implements OnDestroy {
     }
   }
 
-  Userlogout() {
+  async Userlogout() {
     this.disconnect();
+    await this.settings.logout();
     localStorage.clear();
   }
-
 
   UserRelog() {
     this.Userlogout();

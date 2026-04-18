@@ -17,15 +17,15 @@
     </div>
 }
 
-<app-topbar (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()"></app-topbar>
+<app-topbar (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
 <div class="container" (click)="focusEntry()">
-  
+
    <div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
         @for (msg of messages; track $index) {
               <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color" ></app-chat>
         }
     </div>
-  
+
   <div class="chat-entry">
       <textarea
           #chatEntry
@@ -35,9 +35,7 @@
           (keydown)="onSendMessage($event)"
       ></textarea>
       <button (click)="onEmojiPicker()" class="emoji"><img width="20" height="20" src="emoji.svg"></button>
-  
+
   </div>
 
 </div>
-
-

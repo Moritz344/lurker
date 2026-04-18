@@ -42,6 +42,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
   @Output() clearChat = new EventEmitter<void>();
   @Output() disconnect = new EventEmitter<void>();
   @Output() connect = new EventEmitter<void>();
+  @Output() logout = new EventEmitter<void>();
 
   public currentChannel: string = "";
   public showLoginButton: boolean = true;
@@ -50,6 +51,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   public isChoosingChannel = signal(false);
   public isChoosingFollowerList = signal(false);
+
+  public disableChannelNameHover = signal(false);
 
   public showToast: boolean = false;
   public currentToastData: { message: string; duration: string }[] = [];
@@ -91,6 +94,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.settings.getLoginStatus().subscribe((result) => {
         this.showLoginButton = !result;
+        console.log("login status:", result);
       }),
     );
   }
@@ -142,22 +146,22 @@ export class TopbarComponent implements OnInit, OnDestroy {
     //  let cursor = response.pagination.cursor;
     //  console.log(response);
     //});
+    const loginStatus = localStorage.getItem("loginStatus");
+    const loginValue = JSON.parse(loginStatus ?? "false");
+    this.loginStatus = loginValue;
+    if (this.loginStatus) {
+      const channel = await this.settings.getStoredUsername();
+      if (channel && channel !== this.currentChannel) {
+        this.currentChannel = channel;
+        this.onSwitchChannel(channel);
+      }
+    }
 
     this.subscriptions.push(
       this.tab.currentTab$.subscribe((tab) => {
         if (tab.name) {
           this.currentChannel = tab.name;
           this.onSwitchChannel(tab.name);
-        }
-      }),
-      this.settings.getLoginStatus().subscribe((result) => {
-        this.loginStatus = result;
-        if (result) {
-          const channel = localStorage.getItem("channel");
-          if (channel && channel !== this.currentChannel) {
-            this.currentChannel = channel;
-            this.onSwitchChannel(channel);
-          }
         }
       }),
       this.settings.getCurrentChannel().subscribe((result) => {
@@ -339,9 +343,12 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.chat.Userlogout();
-    this.settings.setLoginStatus(false);
+    this.currentChannel = "";
+    this.disableChannelNameHover = signal(true);
     this.showLoginButton = true;
+    this.loginStatus = false;
+    this.logout.emit();
+    this.settings.logout();
   }
 
   onSettings() {
@@ -349,6 +356,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
+    this.showLoginButton = false;
     this.settings.setLoginStatus(true);
     this.router.navigate(["auth"]);
   }

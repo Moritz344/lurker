@@ -7,7 +7,7 @@ import {
   OnChanges,
   OnDestroy,
   ChangeDetectorRef,
-  AfterViewInit
+  AfterViewInit,
 } from "@angular/core";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../services/settings.service";
@@ -20,9 +20,9 @@ import { FormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
-import { CommonModule } from '@angular/common';
-import { ToastComponent } from '../toast/toast.component';
-import { TabService } from '../services/tab.service';
+import { CommonModule } from "@angular/common";
+import { ToastComponent } from "../toast/toast.component";
+import { TabService } from "../services/tab.service";
 
 // TODO: better tv emotes
 // TODO: channel points
@@ -67,7 +67,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private currChannelSub?: Subscription;
   private currentTabSub?: Subscription;
   public streamerData: any;
-  public chatterInfo: { color: string, badges: string[], badgeImages: { img: string, title: string }[] } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
+  public chatterInfo: {
+    color: string;
+    badges: string[];
+    badgeImages: { img: string; title: string }[];
+  } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
   public isConnected: boolean = true;
 
   public showUserInChat: boolean = false;
@@ -75,32 +79,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public chatterData: any;
 
   showToast: boolean = false;
-  currentToastData: { message: string, duration: string }[] = [{ message: "", duration: "" }];
+  currentToastData: { message: string; duration: string }[] = [
+    { message: "", duration: "" },
+  ];
 
   chatSettings: any;
 
-  channelBadgeInfo: { bits: any, subscriber: any, global: any } = {
+  channelBadgeInfo: { bits: any; subscriber: any; global: any } = {
     bits: "",
     subscriber: "",
-    global: ""
-  }
+    global: "",
+  };
 
-  streamInfoToShow: { title: string, thumbnail: string, game_name: string, viewer_count: string } = {
+  streamInfoToShow: {
+    title: string;
+    thumbnail: string;
+    game_name: string;
+    viewer_count: string;
+  } = {
     title: "",
     thumbnail: "",
     game_name: "",
-    viewer_count: ""
+    viewer_count: "",
   };
 
-
-  globalEmojiNames: { name: string; url: string, url_2: string }[] = [];
+  globalEmojiNames: { name: string; url: string; url_2: string }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
   channelNameHover: boolean = false;
   zoomLevel: number = 1;
 
   loginStatus: boolean = true;
-
 
   applyUserSettings() {
     const settings: any = localStorage.getItem("settings");
@@ -131,10 +140,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.openEmojiPicker();
   }
 
-
   private handleStorageChange = (event: StorageEvent) => {
     if (event.key == "emoji") {
-      this.userChatMessage += event.newValue || '';
+      this.userChatMessage += event.newValue || "";
     }
   };
 
@@ -144,17 +152,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
       this.channelEmojis = response.data;
     });
-
   }
 
   async loadEmojisForChat() {
     const token = await this.settings.getToken();
     this.chat.getGlobalEmotes(token).subscribe((response: any) => {
       for (let i = 0; i < response.data.length; i++) {
-        this.globalEmojiNames.push({ name: response.data[i]["name"], url: response.data[i]["images"]["url_1x"], url_2: response.data[i]["images"]["url_2x"] });
+        this.globalEmojiNames.push({
+          name: response.data[i]["name"],
+          url: response.data[i]["images"]["url_1x"],
+          url_2: response.data[i]["images"]["url_2x"],
+        });
       }
     });
-
   }
 
   async initBadges() {
@@ -165,37 +175,58 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   async initChatSettings() {
     this.currentToastData.length = 0;
     const token = await this.settings.getToken();
-    this.settings.getBroadCasterId(token, this.currentChannel).subscribe((id: string) => {
-      this.settings.getChatSettings(id, token).subscribe((response: any) => {
-        this.chatSettings = response.data[0];
-        if (this.chatSettings.emote_mode) {
-          this.currentToastData.push({ message: "Emote only mode is on!", duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings.follower_mode) {
-          let follower_mode_duration: string = Math.round(this.chatSettings.follower_mode_duration / 60).toString() + "h";
-          if (follower_mode_duration == "0h") {
-            follower_mode_duration = this.chatSettings.follower_mode_duration.toString() + "m";
+    this.settings
+      .getBroadCasterId(token, this.currentChannel)
+      .subscribe((id: string) => {
+        this.settings.getChatSettings(id, token).subscribe((response: any) => {
+          this.chatSettings = response.data[0];
+          if (this.chatSettings.emote_mode) {
+            this.currentToastData.push({
+              message: "Emote only mode is on!",
+              duration: "5000",
+            });
+            this.showToast = true;
           }
-          this.currentToastData.push({ message: "Follower mode is on! " + follower_mode_duration, duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings.slow_mode) {
-          let slow_mode_duration = Math.round(this.chatSettings.slow_mode_wait_time / 60);
-          let finalString = slow_mode_duration.toString() + "m";
-          if (slow_mode_duration < 1) {
-            slow_mode_duration = this.chatSettings.slow_mode_wait_time.toString();
-            finalString = slow_mode_duration.toString() + "s";
+          if (this.chatSettings.follower_mode) {
+            let follower_mode_duration: string =
+              Math.round(
+                this.chatSettings.follower_mode_duration / 60,
+              ).toString() + "h";
+            if (follower_mode_duration == "0h") {
+              follower_mode_duration =
+                this.chatSettings.follower_mode_duration.toString() + "m";
+            }
+            this.currentToastData.push({
+              message: "Follower mode is on! " + follower_mode_duration,
+              duration: "5000",
+            });
+            this.showToast = true;
           }
-          this.currentToastData.push({ message: "Slow mode is on! " + finalString, duration: "5000" });
-          this.showToast = true;
-        }
-        if (this.chatSettings.subscriber_mode) {
-          this.currentToastData.push({ message: "Subscriber mode is on! ", duration: "2800" });
-          this.showToast = true;
-        }
+          if (this.chatSettings.slow_mode) {
+            let slow_mode_duration = Math.round(
+              this.chatSettings.slow_mode_wait_time / 60,
+            );
+            let finalString = slow_mode_duration.toString() + "m";
+            if (slow_mode_duration < 1) {
+              slow_mode_duration =
+                this.chatSettings.slow_mode_wait_time.toString();
+              finalString = slow_mode_duration.toString() + "s";
+            }
+            this.currentToastData.push({
+              message: "Slow mode is on! " + finalString,
+              duration: "5000",
+            });
+            this.showToast = true;
+          }
+          if (this.chatSettings.subscriber_mode) {
+            this.currentToastData.push({
+              message: "Subscriber mode is on! ",
+              duration: "2800",
+            });
+            this.showToast = true;
+          }
+        });
       });
-    });
   }
 
   onExit() {
@@ -234,9 +265,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private tab: TabService,
     private chat: TwitchChatService,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
-  ) {
-  }
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   scrollChatbox() {
     setInterval(() => {
@@ -251,9 +281,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.openChatterList();
   }
 
-
   onChannelNameHover() {
-    if (!this.loginStatus) { return; }
+    if (!this.loginStatus) {
+      return;
+    }
     this.channelNameHover = true;
   }
   onChannelNameLeave() {
@@ -270,28 +301,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.openExternalLink(url);
   }
 
-
   onVerticalMenu() {
     this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
   }
-
 
   onDisableVerticalMenu() {
     this.showVerticalMenuOptions = false;
   }
 
-
-
   async saveCurrentBroadCasterId() {
     const token = await this.settings.getToken();
-    this.settings.getBroadCasterId(token, this.currentChannel).subscribe(id => {
-      localStorage.setItem("broadcaster_id", id);
-      this.loadChannelEmojisForChat();
-    });
+    this.settings
+      .getBroadCasterId(token, this.currentChannel)
+      .subscribe((id) => {
+        localStorage.setItem("broadcaster_id", id);
+        this.loadChannelEmojisForChat();
+      });
   }
 
   onClearChat() {
     this.messages.length = 0;
+  }
+
+  onLogout() {
+    this.currentChannel = "";
+    this.placeholderString = "Login to send a message";
+    this.currentToastData.push({
+      message: "Please login!",
+      duration: "5000",
+    });
+    this.showToast = true;
+    this.loginStatus = false;
   }
 
   async onShowUserInChat() {
@@ -300,33 +340,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const username = await this.settings.getStoredUsername();
     const channel: any = localStorage.getItem("channel");
 
-    this.settings.getBroadCasterId(token, channel).subscribe((broadcaster_id: string) => {
-      if (!broadcaster_id) {
-        console.error("No broadcaster id!");
-        return;
-      }
-      this.settings.getModerators(broadcaster_id, token).subscribe((response: any) => {
-        if (!response) {
-          console.log("Error getting Moderators for channel:", channel);
+    this.settings
+      .getBroadCasterId(token, channel)
+      .subscribe((broadcaster_id: string) => {
+        if (!broadcaster_id) {
+          console.error("No broadcaster id!");
           return;
         }
-
-        const data = response.data;
-        data.forEach((moderator: any) => {
-          if (user_id == moderator.user_id || channel == username) {
-            this.chat.getChatters(broadcaster_id, user_id, token).subscribe((response: any) => {
-              this.chatterData = response.data;
+        this.settings
+          .getModerators(broadcaster_id, token)
+          .subscribe((response: any) => {
+            if (!response) {
+              console.log("Error getting Moderators for channel:", channel);
               return;
+            }
+
+            const data = response.data;
+            data.forEach((moderator: any) => {
+              if (user_id == moderator.user_id || channel == username) {
+                this.chat
+                  .getChatters(broadcaster_id, user_id, token)
+                  .subscribe((response: any) => {
+                    this.chatterData = response.data;
+                    return;
+                  });
+              }
             });
-          }
-
-        })
+          });
       });
-
-
-    });
   }
-
 
   async onSendMessage(event: KeyboardEvent) {
     if (event.key == "@") {
@@ -351,20 +393,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       if (event.key == "Enter") {
-        this.userChatMessage += this.chatterData[this.selectedChatter].user_name;
+        this.userChatMessage +=
+          this.chatterData[this.selectedChatter].user_name;
         this.showUserInChat = false;
       }
 
       event.preventDefault();
       return;
-
     }
     this.showUserInChat = false;
 
-
     if (event.key == "Enter" && !this.isConnected) {
       if (this.currentToastData.length < 1) {
-        this.currentToastData.push({ message: "Not connected to chat", duration: "5000" });
+        this.currentToastData.push({
+          message: "Not connected to chat",
+          duration: "5000",
+        });
         this.showToast = true;
       }
       event.preventDefault();
@@ -388,15 +432,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.userChatMessage != "") {
       event.preventDefault();
-      this.settings
-        .checkAccessTokenValidity(token)
-        .subscribe((result) => {
-          if (!result) {
-            alert("Your token is not valid. Please login again.");
-            this.logout();
-            return;
-          }
-        });
+      this.settings.checkAccessTokenValidity(token).subscribe((result) => {
+        if (!result) {
+          alert("Your token is not valid. Please login again.");
+          return;
+        }
+      });
       this.settings
         .getUserId(token)
         .pipe(
@@ -421,7 +462,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe(
           (result: any) => {
             if (result.data[0].drop_reason) {
-              this.currentToastData.push({ message: result.data[0].drop_reason.message, duration: "5000" });
+              this.currentToastData.push({
+                message: result.data[0].drop_reason.message,
+                duration: "5000",
+              });
               this.showToast = true;
               return;
             }
@@ -429,7 +473,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           (error) => {
             console.error("Error sending message:", error);
-          }
+          },
         );
     }
   }
@@ -456,8 +500,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const chat = this.chatBox.nativeElement;
-    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
-
+    const atBottom =
+      chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
 
     if (event.deltaY < 0) {
       this.scrollAuto = false;
@@ -489,30 +533,30 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.chat.connect(token, username, channel);
       if (!this.sub || this.sub.closed) {
         this.sub = this.chat.messages$.subscribe((msg) => {
-          this.messages.push(msg)
+          this.messages.push(msg);
         });
-        this.chat.getChatterBadge().subscribe(badges => {
+        this.chat.getChatterBadge().subscribe((badges) => {
           this.chatterInfo.badges = badges;
           this.getImageForBadge();
         });
-        this.chat.getChatterColor().subscribe(color => {
+        this.chat.getChatterColor().subscribe((color) => {
           this.chatterInfo.color = color;
         });
       }
     }
   }
 
-
   getImageForBadge() {
-    let a = this.chat.getImageFromBadgeName(this.chatterInfo.badges, this.channelBadgeInfo)
+    let a = this.chat.getImageFromBadgeName(
+      this.chatterInfo.badges,
+      this.channelBadgeInfo,
+    );
     this.chatterInfo.badgeImages = a;
 
     //console.log("badge images found:");
     //for (const img of a) {
     //  console.log(img);
     //}
-
-
   }
 
   async getBadgesForChannel() {
@@ -521,28 +565,29 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     let subscriberBadges: string[];
     let bitsBadges: string[];
-    this.settings.getBroadCasterId(token, channel).subscribe(response => {
+    this.settings.getBroadCasterId(token, channel).subscribe((response) => {
       const broadcaster_id = response;
-      this.chat.getChannelBadges(broadcaster_id, token).subscribe((response: any) => {
-        // check set_id and then set 
-        if (response.data.length > 0) {
-          for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i]["set_id"] == "subscriber") {
-              subscriberBadges = response.data[i]["versions"];
-            } else if (response.data[i]["set_id"] == "bits") {
-              bitsBadges = response.data[i]["versions"];
+      this.chat
+        .getChannelBadges(broadcaster_id, token)
+        .subscribe((response: any) => {
+          // check set_id and then set
+          if (response.data.length > 0) {
+            for (let i = 0; i < response.data.length; i++) {
+              if (response.data[i]["set_id"] == "subscriber") {
+                subscriberBadges = response.data[i]["versions"];
+              } else if (response.data[i]["set_id"] == "bits") {
+                bitsBadges = response.data[i]["versions"];
+              }
             }
           }
-        }
-        const global_badges: any = localStorage.getItem("global_badges");
-        let global_badges_json = JSON.parse(global_badges);
-        this.channelBadgeInfo = {
-          subscriber: subscriberBadges,
-          bits: bitsBadges,
-          global: global_badges_json
-        }
-
-      });
+          const global_badges: any = localStorage.getItem("global_badges");
+          let global_badges_json = JSON.parse(global_badges);
+          this.channelBadgeInfo = {
+            subscriber: subscriberBadges,
+            bits: bitsBadges,
+            global: global_badges_json,
+          };
+        });
     });
   }
 
@@ -555,19 +600,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async checkIfLoggedIn() {
     const username = await this.settings.getStoredUsername();
-    this.settings.getLoginStatus().subscribe(response => {
-      if (!response) {
-        this.currentChannel = "";
-        this.placeholderString = "Login to send a message";
-        this.currentToastData.push({ message: "Please login!", duration: "5000" });
-        this.showToast = true;
-        this.loginStatus = false;
-      } else {
-        this.placeholderString = "Send a message as " + username;
-        this.initializeLoggedInFeatures();
-        this.loginStatus = true;
-      }
-    });
+    const loginStatus = localStorage.getItem("loginStatus");
+    const loginValue = JSON.parse(loginStatus ?? "false");
+    console.log("login home", typeof loginValue, loginValue);
+    if (!loginValue) {
+      this.currentChannel = "";
+      this.placeholderString = "Login to send a message";
+      this.currentToastData.push({
+        message: "Please login!",
+        duration: "5000",
+      });
+      this.showToast = true;
+      this.loginStatus = false;
+    } else {
+      this.placeholderString = "Send a message as " + username;
+      this.initializeLoggedInFeatures();
+      this.loginStatus = true;
+    }
   }
 
   async initializeLoggedInFeatures() {
@@ -578,7 +627,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initChatSettings();
     this.initBadges();
     const emoji: any = localStorage.getItem("emoji");
-    window.addEventListener('storage', this.handleStorageChange);
+    window.addEventListener("storage", this.handleStorageChange);
 
     this.applyUserSettings();
     const user = await this.settings.getStoredUsername();
@@ -597,7 +646,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.currentChannel = result;
         }
       });
-
   }
 
   logout() {
@@ -606,21 +654,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.setLoginStatus(false);
   }
 
-
   loadUserToken() {
     this.route.fragment.subscribe((fragment) => {
       if (fragment) {
         const params = new URLSearchParams(fragment);
         this.accessToken = params.get("access_token");
         this.settings.getUserInfo().subscribe((data: any) => {
+          if (!data || !data.data || data.data.length === 0) {
+            return;
+          }
           let userData = {
             token: this.accessToken,
-            username: data[0]["display_name"],
-            id: data[0]["id"],
-            desc: data[0]["description"],
-            created_at: data[0]["created_at"],
-            profile_image_url: data[0]["profile_image_url"],
-          }
+            username: data.data[0]["display_name"],
+            id: data.data[0]["id"],
+            desc: data.data[0]["description"],
+            created_at: data.data[0]["created_at"],
+            profile_image_url: data.data[0]["profile_image_url"],
+          };
           this.settings.saveUserData(userData);
           this.settings
             .checkAccessTokenValidity(this.accessToken)
@@ -642,6 +692,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.currentTabSub) {
       this.currentTabSub.unsubscribe();
     }
-    window.removeEventListener('storage', this.handleStorageChange);
+    window.removeEventListener("storage", this.handleStorageChange);
   }
 }

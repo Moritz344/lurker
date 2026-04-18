@@ -4,7 +4,6 @@ import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { Subscription } from "rxjs";
 
-
 @Component({
   selector: "app-auth",
   standalone: true,
@@ -26,10 +25,11 @@ export class AuthComponent implements OnInit {
     public chat: TwitchChatService,
     public route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.settings.onTwitchToken((token: string) => {
+      console.log("got token:", token);
       this.accessToken = token;
       this.afterLogin(token);
     });
@@ -46,29 +46,35 @@ export class AuthComponent implements OnInit {
   }
 
   startAuthProcess() {
+    console.log("start auth process");
     this.settings.startAuth();
   }
 
   private afterLogin(token: string) {
     this.settings.getUserInfo().subscribe((data: any) => {
+      console.log("got data:", data);
+      if (!data || !data.data || data.data.length === 0) {
+        return;
+      }
+      console.log(data);
+
       let userData = {
         token: token,
-        username: data[0]["display_name"],
-        id: data[0]["id"],
-        desc: data[0]["description"],
-        created_at: data[0]["created_at"],
-        profile_image_url: data[0]["profile_image_url"],
-      }
+        username: data.data[0]["display_name"],
+        id: data.data[0]["id"],
+        desc: data.data[0]["description"],
+        created_at: data.data[0]["created_at"],
+        profile_image_url: data.data[0]["profile_image_url"],
+      };
       this.settings.saveUserData(userData);
-      this.settings
-        .checkAccessTokenValidity(token)
-        .subscribe((result) => {
-          if (result) {
-            this.settings.setLoginStatus(true);
-          } else {
-            alert("Your token is not valid. Try logging in again.");
-          }
-        });
+      this.settings.checkAccessTokenValidity(token).subscribe((result) => {
+        if (result) {
+          this.settings.setLoginStatus(true);
+        } else {
+          alert("Your token is not valid. Try logging in again.");
+        }
+      });
+      console.log("okay going to home");
       this.router.navigate([""]);
     });
   }
