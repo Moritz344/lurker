@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Lurker
-Comment=opensource chat client for twitch
+Comment=opensource chat client for twitch.tv
 Exec=/opt/lurker/lurker-0.0.0.AppImage
 Terminal=false
 

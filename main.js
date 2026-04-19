@@ -254,6 +254,6 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-ipcMain.handle("open-external-link", (event, url) => {
+ipcMain.handle("open-external-link", (_, url) => {
   shell.openExternal(url);
 });
