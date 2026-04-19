@@ -72,7 +72,7 @@ export class SettingsService {
     const settings: any = localStorage.getItem("settings");
     if (settings) {
       const settingsJson = JSON.parse(settings);
-      this.setTheme(settingsJson[0]?.theme || "");
+      this.setTheme(settingsJson[0]?.theme || "gnome-dark");
     }
   }
 
@@ -218,7 +218,7 @@ export class SettingsService {
     return this.http.delete(url, { headers });
   }
 
-  timeoutUser() {}
+  timeoutUser() { }
 
   getModerators(broadcaster_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${broadcaster_id}`;
@@ -313,7 +313,7 @@ export class SettingsService {
     return this.http.get(url, { headers });
   }
 
-  getChannelInfo() {}
+  getChannelInfo() { }
 
   getUserInfo(): Observable<any> {
     const url = "https://api.twitch.tv/helix/users";
