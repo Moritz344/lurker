@@ -1,43 +1,28 @@
 <div class="container">
 
-   <div class="submit-buttons">
-       <button (click)="onClose()" class="ok">Ok</button>
-       <button (click)="onClose()" class="cancel">Cancel</button>
-   </div>
+  <div (click)="onClose()" class="close">
+    <button><img src="close.svg"></button>
+  </div>
+
 
     <div class="options">
         <button
-            [ngStyle]="{
-                'background-color':
-                    settingsOption === 'general'
-                        ? 'var(--material-primary)'
-                        : 'transparent',
-            }"
+            [class.active]="settingsOption === 'general' "
             (click)="onSettings('general')"
         >
-            General
+            <span>General</span>
         </button>
         <button
+            [class.active]="settingsOption === 'account' "
             (click)="onSettings('account')"
-            [ngStyle]="{
-                'background-color':
-                    settingsOption === 'account'
-                        ? 'var(--material-primary)'
-                        : 'transparent',
-            }"
         >
-            Account
+            <span>Account</span>
         </button>
         <button
             (click)="onSettings('about')"
-            [ngStyle]="{
-                'background-color':
-                    settingsOption === 'about'
-                        ? 'var(--material-primary)'
-                        : 'transparent',
-            }"
+            [class.active]="settingsOption === 'about' "
         >
-            About
+            <span>About</span>
         </button>
     </div>
 

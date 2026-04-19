@@ -43,8 +43,11 @@
   bottom: 0px;
 }
 
+
+
 textarea {
   overflow: hidden;
+  border-radius: 0px;
 }
 
 .chat-entry textarea {
@@ -75,9 +78,12 @@ a {
 }
 
 .emoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  right: 0px;
-  bottom: 0px;
+  right: 5px;
+  bottom: 7px;
 }
 
 .chatter-list {

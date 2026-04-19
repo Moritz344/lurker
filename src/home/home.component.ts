@@ -97,11 +97,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     game_name: string;
     viewer_count: string;
   } = {
-    title: "",
-    thumbnail: "",
-    game_name: "",
-    viewer_count: "",
-  };
+      title: "",
+      thumbnail: "",
+      game_name: "",
+      viewer_count: "",
+    };
 
   globalEmojiNames: { name: string; url: string; url_2: string }[] = [];
   channelEmojis: any;
@@ -266,7 +266,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private chat: TwitchChatService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   scrollChatbox() {
     setInterval(() => {

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-about',
@@ -7,5 +8,13 @@ import { Component } from '@angular/core';
   styleUrl: './about.component.css'
 })
 export class AboutComponent {
+  public settings = inject(SettingsService);
+
+  constructor() { }
+
+  onOpenExternalLink(link: string) {
+    this.settings.openExternalLink(link);
+
+  }
 
 }

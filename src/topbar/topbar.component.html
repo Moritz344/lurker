@@ -21,11 +21,11 @@
         @if (loginStatus) {
         @if (channelNameHover && streamInfoToShow) {
           <div class="stream-info">
-            <img style="border-radius: 0px" [src]="streamInfoToShow.thumbnail" />
-            <span style="border: 1px solid white;border-radius: 0px">{{ streamInfoToShow.title }}</span>
+            <img [src]="streamInfoToShow.thumbnail" />
             @if (streamInfoToShow.viewer_count) {
-              <span style="border: 1px solid white;border-radius: 0px">Viewer: {{ streamInfoToShow.viewer_count }}</span>
+              <span style="position: absolute;top:10px;right: 10px;background:var(--black-low)"> 🔴 {{ streamInfoToShow.viewer_count }}</span>
             }
+            <span >{{ streamInfoToShow.title }}</span>
           </div>
         }
 

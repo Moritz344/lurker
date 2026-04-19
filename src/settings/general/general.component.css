@@ -16,6 +16,7 @@ body{
 .font{
   display: flex;
   justify-content: row;
+  gap: 10px;
 }
 
 .font select{
@@ -36,6 +37,11 @@ body{
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+}
+
+select{
+  font-size: 17px;
+  height: 35px;
 }
 
 .chat-color input{

@@ -1,5 +1,4 @@
 :root {
-    /* Gruvbox Dark Theme */
     --bg-color: #282828;
     --surface-color: #3c3836;
     --accent-color: #d79921;
@@ -12,6 +11,7 @@
     --radius: 10px;
     --transition: 0.25s ease;
     --input-color: #504945;
+    --primary-lower: rgba(215, 153, 33, 0.7);
     --primary: #d79921;
     --primary-hover: #ebdbb2;
     --secondary: #3c3836;
@@ -24,6 +24,8 @@
     --ghost-hover: rgba(235, 219, 178, 0.2);
     --default-font: "Arial";
     --default-fontSize: 20px;
+    --black-low: rgba(0, 0, 0, 0.5);
+    --blue-low: rgba(53, 132, 228, 0.3);
 
     --gruvbox-dark0: #282828;
     --gruvbox-dark1: #3c3836;
@@ -76,7 +78,7 @@
     --border-color: #404040;
     --border-color-rgb: 64, 64, 64;
     --error-color: #e01b24;
-    --radius: 8px;
+    --radius: 5px;
     --transition: 0.2s ease;
     --input-color: #303030;
     --primary: #3584e4;
@@ -167,28 +169,41 @@ body {
     line-height: 1.5;
 }
 
-select{
-				outline: none;
-				background-color: var(--input-color);
-				color: var(--text-color);
-				border: 1px solid var(--border-color);
+select {
+    outline: none;
+    background-color: var(--input-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition);
 }
 
 button {
     outline: none;
-				background-color:transparent;
-				border:none;
-				color: var(--text-color);
-				transition: 0.3s ease;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition), transform 0.1s ease;
 }
 
-img{
-								justify-content: center;
-								align-items: center;
+button:hover {
+    background-color: var(--primary-hover);
 }
 
-button:hover{
-								background-color: var(--accent-color);
+button:active {
+    transform: scale(0.98);
+}
+
+img {
+    justify-content: center;
+    align-items: center;
 }
 
 input {
@@ -199,7 +214,12 @@ input {
     border: 1px solid var(--border-color);
     color: var(--text-color);
     overflow: hidden;
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-size: 14px;
+    transition: border-color var(--transition), box-shadow var(--transition);
 }
+
 
 textarea {
     background-color: var(--input-color);
@@ -209,7 +229,15 @@ textarea {
     border: 1px solid var(--border-color);
     color: var(--text-color);
     overflow: hidden;
-    font-size: 20px;
+    font-size: 14px;
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(53, 132, 228, 0.3);
 }
 
 ::-webkit-scrollbar {
