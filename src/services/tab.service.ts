@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { TwitchChatService } from "../services/twitchChat.service";
 import { Observable, Subject, of, throwError, BehaviorSubject } from "rxjs";
 
-// TODO: when switching tab clear the chat
 
 interface Tab {
   name: string,

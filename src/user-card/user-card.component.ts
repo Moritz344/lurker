@@ -4,8 +4,6 @@ import { TwitchChatService } from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// TODO: show multiple messages 
-
 @Component({
   selector: 'app-user-card',
   imports: [CommonModule, FormsModule],
