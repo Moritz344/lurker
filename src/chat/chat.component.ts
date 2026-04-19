@@ -9,7 +9,6 @@ import { UserCardComponent } from '../user-card/user-card.component';
 import { TwitchChatService } from '../services/twitchChat.service';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 
-// TODO: show channel emotes
 
 @Component({
   selector: "app-chat",
