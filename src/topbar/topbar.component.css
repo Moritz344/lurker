@@ -127,6 +127,10 @@
   background-color: var(--input-color);
 }
 
+button:hover{
+  background-color: var(--ghost);
+}
+
 .toast-container {
   position: fixed;
   right: 20px;
