@@ -1,24 +1,40 @@
 <div class="container">
-    <h1 style="display:flex;justify-content: center">About</h1>
+  <h1 style="display: flex; justify-content: center; font-size: 30px">About</h1>
 
-    <div class="header">
-        <h1>Lurker</h1>
-        <p>this app is an opensource chat client for twitch.tv</p>
-    </div>
+  <div class="header">
+    <h1>Lurker</h1>
+    <p>this app is an opensource chat client for twitch.tv</p>
+  </div>
 
-    <div class="info">
-        <h1>Development</h1>
-        <p>This app is currently in development.</p>
-        <a
-            title="Link to the github repository"
-            (click)="onOpenExternalLink('https://github.com/Moritz344/lurker')"
-            >Github repo</a
-        >
-        <br />
-        <a
-            title="Link to the github issues tab"
-            (click)="onOpenExternalLink('https://github.com/Moritz344/lurker/issues')"
-            >Open issue here</a
-        >
-    </div>
+  <div>
+    <h1>Version</h1>
+    <span> You are running version: {{ version }}</span>
+  </div>
+
+  <div class="info">
+    <h1>Development</h1>
+    <p>This app is currently in development.</p>
+    <a
+      title="Link to the github repository"
+      (click)="onOpenExternalLink('https://github.com/Moritz344/lurker')"
+      >Github repo</a
+    >
+    <br />
+    <a
+      title="Link to the github issues tab"
+      (click)="onOpenExternalLink('https://github.com/Moritz344/lurker/issues')"
+      >Open issue here</a
+    >
+  </div>
+
+  <h1>Maintainer</h1>
+  <img
+    style="border-radius: 5px"
+    width="100"
+    height="100"
+    [src]="maintainerData.avatar_url"
+  />
+  <a (click)="onOpenExternalLink(maintainerData.html_url)">{{
+    maintainerData.login
+  }}</a>
 </div>

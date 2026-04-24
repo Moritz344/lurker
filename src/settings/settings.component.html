@@ -13,6 +13,12 @@
             <span>General</span>
         </button>
         <button
+            [class.active]="settingsOption === 'hotkeys' "
+            (click)="onSettings('hotkeys')"
+        >
+            <span>Hotkeys</span>
+        </button>
+        <button
             [class.active]="settingsOption === 'account' "
             (click)="onSettings('account')"
         >
@@ -33,6 +39,8 @@
 								<app-account></app-account>
         } @else if (settingsOption === "about") {
 								<app-about></app-about>
+        } @else if (settingsOption === "hotkeys") {
+          <app-hotkeys></app-hotkeys>
         }
     </div>
 </div>

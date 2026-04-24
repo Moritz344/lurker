@@ -1,44 +1,43 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-
 .header {
-    margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 .header h1 {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .header p {
-    margin-top: 0px;
-    color: grey;
+  margin-top: 0px;
+  color: grey;
 }
 
 .info {
-    flex: 1;
+  margin-bottom: 20px;
 }
 
 .info h1 {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .info p {
-    margin-top: 0px;
-    color: grey;
+  margin-top: 0px;
+  color: grey;
 }
 
 a {
-    color: white;
-    text-decoration: underline;
+  color: white;
+  text-decoration: underline;
 }
 
 a:hover {
-    color: var(--material-primary);
+  color: var(--material-primary);
 }

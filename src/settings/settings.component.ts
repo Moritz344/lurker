@@ -5,6 +5,7 @@ import { SettingsService } from "../services/settings.service";
 import { GeneralComponent } from "./general/general.component";
 import { AccountComponent } from "./account/account.component";
 import { AboutComponent } from "./about/about.component";
+import { HotkeysComponent } from "./hotkeys/hotkeys.component";
 
 @Component({
   selector: "app-settings",
@@ -12,6 +13,7 @@ import { AboutComponent } from "./about/about.component";
     CommonModule,
     FormsModule,
     GeneralComponent,
+    HotkeysComponent,
     AccountComponent,
     AboutComponent,
   ],
