@@ -19,4 +19,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onTwitchToken: (callback) =>
     ipcRenderer.on("twitch-token", (_, token) => callback(token)),
   logout: () => ipcRenderer.invoke("logout"),
+  copyTextToClipboard: (text) => ipcRenderer.invoke("copy-to-clipboard", text)
 });
