@@ -2,13 +2,12 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SettingsService } from "../services/settings.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
-import { RouterModule, } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { ComponentFactoryResolver, Injector } from '@angular/core';
-import { UserCardComponent } from '../user-card/user-card.component';
-import { TwitchChatService } from '../services/twitchChat.service';
-import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
-
+import { RouterModule } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { ComponentFactoryResolver, Injector } from "@angular/core";
+import { UserCardComponent } from "../user-card/user-card.component";
+import { TwitchChatService } from "../services/twitchChat.service";
+import { DomSanitizer, SafeUrl, SafeHtml } from "@angular/platform-browser";
 
 @Component({
   selector: "app-chat",
@@ -18,14 +17,13 @@ import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 })
 export class ChatComponent implements OnInit {
   @Input() message: string = "";
-  @Input() color: string = "";
+  @Input() color: string = "white";
   @Input() badges: any;
-  @Input() emojis: { name: string, url: string, url_2: string }[] = [];
+  @Input() emojis: { name: string; url: string; url_2: string }[] = [];
   @Input() emojisChannel: any;
-  @ViewChild('container') containerDiv!: ElementRef;
+  @ViewChild("container") containerDiv!: ElementRef;
 
-
-  title = "Lurker"
+  title = "Lurker";
   currentDate: string = "";
   currentName: string = "";
   currentMessage: string = "";
@@ -49,21 +47,20 @@ export class ChatComponent implements OnInit {
   showBadge: boolean = false;
   hoverBadgeX = 0;
   hoverBadgeY = 0;
-  currentHoverBadge: { title: string, img: SafeUrl } = { title: "", img: "" };
-  currentHoverEmote: { title: string, img: SafeUrl } = { title: "", img: "" };
+  currentHoverBadge: { title: string; img: SafeUrl } = { title: "", img: "" };
+  currentHoverEmote: { title: string; img: SafeUrl } = { title: "", img: "" };
 
   isReply: boolean = false;
   isMention: boolean = false;
 
-  constructor(public settings: SettingsService,
+  constructor(
+    public settings: SettingsService,
     public resolver: ComponentFactoryResolver,
     public chat: TwitchChatService,
     public injector: Injector,
     public router: Router,
     private sanitizer: DomSanitizer,
-  ) {
-
-  }
+  ) {}
 
   checkIfMentions(msg: string) {
     const username: any = localStorage.getItem("username");
@@ -72,7 +69,7 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  init() {
+  async init() {
     this.checkMessage();
     const splitMessage = this.message.split(":");
     this.checkIfMentions(splitMessage[1]);
@@ -80,9 +77,8 @@ export class ChatComponent implements OnInit {
     this.currentMessage = splitMessage[1];
     this.currentBadges = {
       images: this.badges.badgeImages,
-      title: this.badges.badges
+      title: this.badges.badges,
     };
-
 
     let state = this.settings.getUserColorStatus();
     if (state == "disabled") {
@@ -111,30 +107,27 @@ export class ChatComponent implements OnInit {
     } else if (timestampFormat == "h:mm") {
       this.currentDate += " ";
     }
-
   }
 
   ngOnInit() {
     this.init();
   }
 
-
   async onUserCard() {
     const token = await this.settings.getToken();
-    this.settings.getUserCardInfo(this.currentName.trim(), token).subscribe((response: any) => {
-      response.data[0]["last_message"] = this.currentMessage;
-      response.data[0]["current_date"] = this.currentDate;
-      response.data[0]["user_color"] = this.userColor;
-      console.log(response.data[0]);
-      localStorage.setItem("next-user-card", JSON.stringify(response.data[0]));
-      this.settings.openUserCard();
-    });
-
-
+    this.settings
+      .getUserCardInfo(this.currentName.trim(), token)
+      .subscribe((response: any) => {
+        response.data[0]["last_message"] = this.currentMessage;
+        response.data[0]["current_date"] = this.currentDate;
+        response.data[0]["user_color"] = this.userColor;
+        localStorage.setItem(
+          "next-user-card",
+          JSON.stringify(response.data[0]),
+        );
+        this.settings.openUserCard();
+      });
   }
-
-
-
 
   initGlobalEmotes() {
     for (const emoji of this.emojis) {
@@ -145,25 +138,29 @@ export class ChatComponent implements OnInit {
     }
 
     for (let i = 0; i < this.emojisChannel.length; i++) {
-      this.emojis.push({ name: this.emojisChannel[i]["name"], url: this.emojisChannel[i]["images"]["url_1x"], url_2: this.emojisChannel[i]["images"]["url_2x"] })
+      this.emojis.push({
+        name: this.emojisChannel[i]["name"],
+        url: this.emojisChannel[i]["images"]["url_1x"],
+        url_2: this.emojisChannel[i]["images"]["url_2x"],
+      });
     }
-
   }
 
   checkMessage() {
     this.initGlobalEmotes();
 
-    let foundEmotesImages: { url: '' }[] = [];
+    let foundEmotesImages: { url: "" }[] = [];
 
-    const messageParts = this.message.split(': ');
-    const userMessage = messageParts.length > 1 ? messageParts[1] : this.message;
+    const messageParts = this.message.split(": ");
+    const userMessage =
+      messageParts.length > 1 ? messageParts[1] : this.message;
 
     const words = userMessage.split(/\s+/);
-    this.foundEmotes = words.filter(word => this.emojiSet.has(word));
+    this.foundEmotes = words.filter((word) => this.emojiSet.has(word));
 
     if (this.foundEmotes) {
-      this.processedMessageEmoji = words.map(word => {
-        this.emojiIndex = this.emojis.findIndex(emoji => emoji.name === word);
+      this.processedMessageEmoji = words.map((word) => {
+        this.emojiIndex = this.emojis.findIndex((emoji) => emoji.name === word);
         if (this.emojiIndex !== -1) {
           return `<img src="${this.emojis[this.emojiIndex].url}">`;
         }
@@ -176,34 +173,32 @@ export class ChatComponent implements OnInit {
           this.emoteHTML.push(this.emoteMessage[i]);
         }
       }
-
     }
-
   }
 
   sanitizeHtml(html: string) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-
   OnMouseEnterGlobal(item: any, index: number) {
     this.showGlobalEmojiDesc = true;
     this.hoverEmoji = item;
     this.currentHoverEmoteName = this.foundEmotes[index];
     if (this.currentHoverEmoteName == undefined) {
-      this.currentHoverEmoteName = this.foundEmotes[this.foundEmotes.length - 1];
+      this.currentHoverEmoteName =
+        this.foundEmotes[this.foundEmotes.length - 1];
     }
 
     const urlMatch = item.match(/src="([^"]+)"/);
-    let imageUrl = urlMatch ? urlMatch[1] : '';
+    let imageUrl = urlMatch ? urlMatch[1] : "";
     let a = imageUrl.split("/");
     a[a.length - 1] = "2.0";
     imageUrl = a.join("/");
 
     this.currentHoverEmote = {
       title: this.currentHoverEmoteName,
-      img: this.sanitizer.bypassSecurityTrustUrl(imageUrl)
-    }
+      img: this.sanitizer.bypassSecurityTrustUrl(imageUrl),
+    };
   }
 
   OnMouseLeaveGlobal() {
@@ -213,17 +208,21 @@ export class ChatComponent implements OnInit {
   onBadgeHover(img: string, title: string) {
     this.currentHoverBadge = {
       img: this.sanitizer.bypassSecurityTrustUrl(img),
-      title: title
-    }
+      title: title,
+    };
     this.showBadge = true;
-
   }
 
   onBadgeLeave() {
     this.showBadge = false;
   }
 
-  updateHoverPosition(event: MouseEvent, type: 'badge' | 'emoji', posX: number, posY: number) {
+  updateHoverPosition(
+    event: MouseEvent,
+    type: "badge" | "emoji",
+    posX: number,
+    posY: number,
+  ) {
     const offsetY = 0;
     const offsetX = 20;
 
@@ -234,18 +233,12 @@ export class ChatComponent implements OnInit {
       posY -= 100;
     }
 
-    if (type == 'badge') {
+    if (type == "badge") {
       this.hoverBadgeX = posX;
       this.hoverBadgeY = posY;
     } else {
       this.hoverEmojiGlobalX = posX;
       this.hoverEmojiGlobalY = posY;
     }
-
   }
-
-
-
-
-
 }
