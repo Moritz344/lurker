@@ -50,6 +50,9 @@ export class UserCardComponent implements OnInit, OnDestroy {
 
   }
 
+  onCopyUserId() {
+    this.settings.copyTextToClipboard(this.infos.id);
+  }
 
   ngOnDestroy() {
     localStorage.removeItem("next-user-card");

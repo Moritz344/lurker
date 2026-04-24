@@ -15,10 +15,39 @@ span,p,strong{
 .username{
 }
 
+.right{
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  right: 0px;
+  gap: 0px;
+}
+
+.right img{
+  width: 20px;
+}
+
+.right button{
+  align-items: center;
+  width: 40px;
+  margin:0px;
+}
+
+.pfp{
+  border-radius: 5px;
+  transition: 0.3s ease;
+}
+.pfp:hover{
+  transform: scale(1.02);
+}
+
+.right button:hover{
+  background: transparent;
+}
+
+
+
 .id{
-	position: absolute;
-	right: 10px;
-	top: 10px;
   font-size: 15px;
   color: grey;
 }
@@ -26,8 +55,25 @@ span,p,strong{
 .open-user-card{
   position: absolute;
   right: 10px;
-  top: 140px;
+  top: 130px;
   font-size: 17px;
+  background-color: var(--ghost);
+}
+
+.open-user-card:hover{
+  background-color: var(--primary);
+}
+
+.block-user{
+  position: absolute;
+  right: 150px;
+  font-size: 17px;
+  top: 130px;
+  background-color: var(--ghost);
+}
+
+.block-user:hover{
+  background-color: var(--danger);
 }
 
 .desc{
