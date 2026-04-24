@@ -4,16 +4,14 @@ import {
   ViewChild,
   ElementRef,
   HostListener,
-  OnChanges,
   OnDestroy,
-  ChangeDetectorRef,
   AfterViewInit,
 } from "@angular/core";
-import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
+import { RouterOutlet, ActivatedRoute } from "@angular/router";
 import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { Subscription } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 import { ChatComponent } from "../chat/chat.component";
 import { TopbarComponent } from "../topbar/topbar.component";
 import { FormsModule } from "@angular/forms";
@@ -22,8 +20,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import { CommonModule } from "@angular/common";
 import { ToastComponent } from "../toast/toast.component";
-import { TabService } from "../services/tab.service";
 
+// TODO: remove gruvbox theme
 // TODO: better tv emotes
 // TODO: channel points
 // TODO: work on perfomance
@@ -97,11 +95,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     game_name: string;
     viewer_count: string;
   } = {
-      title: "",
-      thumbnail: "",
-      game_name: "",
-      viewer_count: "",
-    };
+    title: "",
+    thumbnail: "",
+    game_name: "",
+    viewer_count: "",
+  };
 
   globalEmojiNames: { name: string; url: string; url_2: string }[] = [];
   channelEmojis: any;
@@ -114,12 +112,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   applyUserSettings() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
-    if (settingsJson) {
-      document.documentElement.style.setProperty(
-        "--default-font",
-        settingsJson[0].font,
-      );
-    }
   }
 
   onOpenFollowerList() {
@@ -259,14 +251,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
-    private tab: TabService,
     private chat: TwitchChatService,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   scrollChatbox() {
     setInterval(() => {
@@ -511,7 +500,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @HostListener("mouseup", ["$event"])
-  onMouseUp(event: MouseEvent) {
+  onMouseUp() {
     this.userScrolling = false;
     this.scrollAuto = true;
   }
