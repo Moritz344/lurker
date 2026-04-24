@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, Inject, ElementRef, signal, ViewChild, AfterViewInit } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { AppComponent } from "../app/app.component";
 import { SettingsService } from "../services/settings.service";
@@ -8,6 +8,8 @@ import { CommonModule } from "@angular/common";
 import { TabService } from "../services/tab.service";
 import { switchMap, map } from "rxjs/operators";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+
+// TODO: Follow list loading indicator
 
 @Component({
   selector: "app-dialog-box",
@@ -19,19 +21,21 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   @ViewChild("container") containerDiv!: ElementRef;
   @ViewChild("broadcaster") broadcaster!: ElementRef;
 
-  inputValue: string = "";
-  currentChannel: string = "";
-  tabName: string = "";
+  public inputValue: string = "";
+  public currentChannel: string = "";
+  public tabName: string = "";
 
-  previousPageCursor: string | null = null;
-  previousPageCursorOriginal: string | null = null;
-  nextPageCursor: string | null = null;
-  cursorStack: string[] = [];
-  currentPage: number = 0;
-  followListData: any[] = [];
-  paginationData: any[] = [];
-  searchValue: string = "";
-  searchResult: string[] = [];
+  public isLoadingFollowList = signal(false);
+
+  public previousPageCursor: string | null = null;
+  public previousPageCursorOriginal: string | null = null;
+  public nextPageCursor: string | null = null;
+  public cursorStack: string[] = [];
+  public currentPage: number = 0;
+  public followListData: any[] = [];
+  public paginationData: any[] = [];
+  public searchValue: string = "";
+  public searchResult: string[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<AppComponent>,
@@ -65,6 +69,7 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   }
 
   async initFollowList(cursor: string, type: string) {
+    this.isLoadingFollowList.update((x: boolean) => x = true);
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
 
@@ -73,6 +78,7 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
       this.cursorStack.push(response.pagination.cursor);
       this.followListData = response.data;
       this.paginationData = response.pagination;
+      this.isLoadingFollowList.update((x: boolean) => x = false);
       for (let i = 0; i < this.followListData.length; i++) {
         this.settings.getUserCardInfo(this.followListData[i]["broadcaster_name"], token).subscribe((response: any) => {
           this.followListData[i]["img"] = response.data[0].profile_image_url;

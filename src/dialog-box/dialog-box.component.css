@@ -112,6 +112,13 @@ input {
     font-size: 20px;
 }
 
+.loading-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
 .close-x {
     display: flex;
     justify-content: center;

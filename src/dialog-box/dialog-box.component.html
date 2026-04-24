@@ -28,6 +28,11 @@
     } @else if (data.function == "show_users_follow_list") {
       <h1 style="margin-top: -20px;">{{ data.message }} </h1>
       <div #broadcaster class="broadcaster-container">
+        @if (isLoadingFollowList()) {
+          <div class="loading-container">
+            <span class="loader"></span>
+          </div>
+        }
         @if (followListData.length > 0) {
           @for (broadcaster of followListData; track $index) {
             <button (click)="onSwitchToFollowedChannel(broadcaster.broadcaster_name)"><img style="margin-right: 5px;border-radius: 0px;" [src]="broadcaster.img" width="40" height="40">
