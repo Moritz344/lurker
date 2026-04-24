@@ -7,6 +7,7 @@ const {
   clipboard,
 } = require("electron");
 const path = require("path");
+const fs = require("fs");
 
 let openUserCardWindow;
 let openSettingsWindow;
@@ -59,6 +60,13 @@ async function createWindow() {
     openUserCardWindow.webContents.on("did-finish-load", () => {
       openUserCardWindow.webContents.send("data", data);
     });
+  });
+
+  ipcMain.handle("get-version", () => {
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "package.json"), "utf-8"),
+    );
+    return pkg.version;
   });
 
   ipcMain.handle("logout", () => {
