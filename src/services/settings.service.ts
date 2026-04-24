@@ -132,6 +132,10 @@ export class SettingsService {
     return await (window as any).electronAPI.exit();
   }
 
+  async copyTextToClipboard(text: string) {
+    return await (window as any).electronAPI.copyTextToClipboard(text);
+  }
+
   async openChatterList() {
     return await (window as any).electronAPI.openChatterList();
   }
@@ -218,7 +222,7 @@ export class SettingsService {
     return this.http.delete(url, { headers });
   }
 
-  timeoutUser() { }
+  timeoutUser() {}
 
   getModerators(broadcaster_id: string, token: string) {
     const url = `https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=${broadcaster_id}`;
@@ -313,7 +317,7 @@ export class SettingsService {
     return this.http.get(url, { headers });
   }
 
-  getChannelInfo() { }
+  getChannelInfo() {}
 
   getUserInfo(): Observable<any> {
     const url = "https://api.twitch.tv/helix/users";
