@@ -4,51 +4,63 @@
   box-sizing: border-box;
 }
 
-.theme{
+.theme {
   display: flex;
   flex-direction: column;
 }
 
-
-body{
+.user-box {
+  background-color: var(--surface-color);
+  padding: 10px;
 }
 
-.font{
+body {
+}
+
+.font {
   display: flex;
   justify-content: row;
   gap: 10px;
 }
 
-.font select{
+.font select {
   width: 100%;
 }
 
-.chat{}
+.chat {
+}
 
-.interface, .chat {
+.interface,
+.chat {
   margin-bottom: 30px;
 }
 
-.interface h1, .chat h1 {
-    margin-bottom: 15px;
+.interface h1,
+.chat h1 {
+  margin-bottom: 15px;
 }
 
-.chat-color{
+.chat-color {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+  margin-bottom: 30px;
 }
 
-select{
+.chat-custom-color {
+  margin-top: 10px;
+}
+
+select {
   font-size: 17px;
   height: 35px;
 }
 
-.chat-color input{
+.chat-color input {
   width: 20px;
 }
 
-.chat-color span{
+.chat-color span {
   width: 100%;
 }
 
@@ -57,12 +69,10 @@ select{
   flex-direction: column;
 }
 
-.chat-time-format select{
+.chat-time-format select {
   margin-top: -16px;
 }
 
-select{
+select {
   padding: 4px;
 }
-
-

@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../../services/settings.service";
+import { TwitchChatService } from "../../services/twitchChat.service";
 
 // TODO: change font size
 // TODO: change message timestamp format
@@ -14,24 +15,45 @@ import { SettingsService } from "../../services/settings.service";
   styleUrl: "./general.component.css",
 })
 export class GeneralComponent implements OnInit {
-  currentTheme: string = "";
-  currentFontSize: string = "";
-  currentFont: string = "";
-  currentTimeStampFormat: string = "";
-  currentChatColorState: boolean = true;
+  chat = inject(TwitchChatService);
+  public currentTheme: string = "";
+  public currentTimeStampFormat: string = "";
+  public currentChatColorState: boolean = true;
+  public currentUserColor: string = "";
 
   customChatColor: boolean = false;
+  colorMap: Record<string, string> = {
+    "#0000FF": "blue",
+    "#8A2BE2": "blue_violet",
+    "#5F9EA0": "cadet_blue",
+    "#D2691E": "chocolate",
+    "#FF7F50": "coral",
+    "#1E90FF": "dodger_blue",
+    "#B22222": "firebrick",
+    "#DAA520": "golden_rod",
+    "#008000": "green",
+    "#FF69B4": "hot_pink",
+    "#FF4500": "orange_red",
+    "#FF0000": "red",
+    "#2E8B57": "sea_green",
+    "#00FF7F": "spring_green",
+    "#9ACD32": "yellow_green",
+  };
+  public username: string = "";
 
   saveSettings = [{}];
+
+  getColorNameFromHex(hex: string) {
+    return this.colorMap[hex.toUpperCase()];
+  }
 
   updateSettings() {
     this.saveSettings = [
       {
         theme: this.currentTheme,
-        font: this.currentFont,
-        fontSize: this.currentFontSize,
         timeStampFormat: this.currentTimeStampFormat,
-        chatColorState: (this.currentChatColorState == true) ? "enabled" : "disabled",
+        chatColorState:
+          this.currentChatColorState == true ? "enabled" : "disabled",
       },
     ];
     localStorage.setItem("settings", JSON.stringify(this.saveSettings));
@@ -42,25 +64,33 @@ export class GeneralComponent implements OnInit {
 
   applyUserSettings(settings: any) {
     const settingsJson = JSON.parse(settings);
-    if (settingsJson) {
-      document.documentElement.style.setProperty(
-        "--default-font",
-        settingsJson[0].font,
-      );
-      document.documentElement.style.setProperty(
-        "--default-fontSize",
-        settingsJson[0].fontSize,
-      );
-    }
+  }
+
+  async initData() {
+    this.username = await this.settings.getStoredUsername();
+    const token = await this.settings.getToken();
+    const user_id = await this.settings.getStoredUserId();
+    this.settings.getUserColor(token, user_id).subscribe((response: any) => {
+      this.currentUserColor = response.data[0]["color"];
+    });
+  }
+
+  async onChangeUserColor() {
+    console.log("change color:" + this.currentUserColor);
+    const token = await this.settings.getToken();
+    const user_id = await this.settings.getStoredUserId();
+    const color = this.getColorNameFromHex(this.currentUserColor);
+    this.chat
+      .updateUserChatColor(user_id, color, token)
+      .subscribe((response: any) => {
+        console.log(response);
+      });
   }
 
   loadDefault() {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
     if (settingsJson) {
-      this.currentFont = settingsJson[0].font;
-      this.currentFontSize = settingsJson[0].fontSize;
-
       if (settingsJson[0].chatColorState == "enabled") {
         this.currentChatColorState = true;
       } else {
@@ -82,7 +112,8 @@ export class GeneralComponent implements OnInit {
         this.applyUserSettings(settings);
       }
     });
+    this.initData();
   }
 
-  constructor(public settings: SettingsService) { }
+  constructor(public settings: SettingsService) {}
 }

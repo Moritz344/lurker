@@ -1,61 +1,70 @@
 <div class="container">
-    <h1 style="display:flex;justify-content: center;">General</h1>
+  <h1 style="display: flex; justify-content: center">General</h1>
 
-    <div class="interface">
-			<div class="inputs">
-				</div>
-        <br />
-        Theme:
-        <div class="theme">
-            <select
-                [(ngModel)]="currentTheme"
-                (change)="updateSettings()">
-                <option value="" disabled selected hidden>gruvbox</option>
-                <option value="gruvbox">Gruvbox </option>
-                <option value="gnome-dark">Dark Blue</option>
-            </select>
-        </div>
-        <br />
-        Font:
-        <div class="font">
-            <select
-                style=""
-                [(ngModel)]="currentFont"
-                (change)="updateSettings()"
-            >
-								<option value="" disable selected hidden>Arial</option>
-                <option value="Arial">Arial</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Courier New">Courier New</option>
-                <option value="Trebuchet MS">Trebuchet MS</option>
-                <option value="Comic Sans MS">Comic Sans MS</option>
-                <option value="Impact">Impact</option>
-            </select>
-            <select [(ngModel)]="currentFontSize" (change)="updateSettings()">
-								<option value="" disable selected hidden>20px</option>
-                <option value="10px">10px</option>
-                <option value="20px">20px (Default)</option>
-                <option value="30px">30px</option>
-            </select>
-        </div>
+  <div class="interface">
+    <div class="inputs"></div>
+    <br />
+    Theme:
+    <div class="theme">
+      <select [(ngModel)]="currentTheme" (change)="updateSettings()">
+        <option value="" disabled selected hidden>gruvbox</option>
+        <option value="gruvbox">Gruvbox</option>
+        <option value="gnome-dark">Dark Blue</option>
+      </select>
     </div>
+    <br />
 
     <div class="chat">
-        <h1>Chat</h1>
-						<div class="chat-time-format">
-								<select [(ngModel)]="currentTimeStampFormat" (change)="updateSettings()">
-            		    <option value="" disable selected hidden>h:mm</option>
-            		    <option value="disabled">disabled</option>
-            		    <option value="h:mm">h:mm</option>
-            		    <option value="h:mm:ss">h:mm:ss</option>
-            		</select>
-                
-						</div>
-            <div class="chat-color">
-              <span>Chat Color </span>
-              <input [(ngModel)]="currentChatColorState" (change)="updateSettings()" type="checkbox">
-            </div>
+      <h1>Chat</h1>
+      <div class="chat-time-format">
+        <select
+          [(ngModel)]="currentTimeStampFormat"
+          (change)="updateSettings()"
+        >
+          <option value="" disable selected hidden>h:mm</option>
+          <option value="disabled">disabled</option>
+          <option value="h:mm">h:mm</option>
+          <option value="h:mm:ss">h:mm:ss</option>
+        </select>
+      </div>
+      <div class="chat-color">
+        <span>Chat Color </span>
+        <input
+          [(ngModel)]="currentChatColorState"
+          (change)="updateSettings()"
+          type="checkbox"
+        />
+      </div>
+      <div class="chat-custom-color">
+        <span>Custom User Color</span>
+        <br />
+        <div class="user-box">
+          <span style="color: {{ currentUserColor }}">{{ username }}</span
+          >: Hello World!
+        </div>
+        <select
+          style="margin-top: 10px"
+          [(ngModel)]="currentUserColor"
+          (change)="onChangeUserColor()"
+          name="color"
+        >
+          <option value="#0000FF" style="color: #0000ff">blue</option>
+          <option value="#8A2BE2" style="color: #8a2be2">blue_violet</option>
+          <option value="#5F9EA0" style="color: #5f9ea0">cadet_blue</option>
+          <option value="#D2691E" style="color: #d2691e">chocolate</option>
+          <option value="#FF7F50" style="color: #ff7f50">coral</option>
+          <option value="#1E90FF" style="color: #1e90ff">dodger_blue</option>
+          <option value="#B22222" style="color: #b22222">firebrick</option>
+          <option value="#DAA520" style="color: #daa520">golden_rod</option>
+          <option value="#008000" style="color: #008000">green</option>
+          <option value="#FF69B4" style="color: #ff69b4">hot_pink</option>
+          <option value="#FF4500" style="color: #ff4500">orange_red</option>
+          <option value="#FF0000" style="color: #ff0000">red</option>
+          <option value="#2E8B57" style="color: #2e8b57">sea_green</option>
+          <option value="#00FF7F" style="color: #00ff7f">spring_green</option>
+          <option value="#9ACD32" style="color: #9acd32">yellow_green</option>
+        </select>
+      </div>
     </div>
+  </div>
 </div>

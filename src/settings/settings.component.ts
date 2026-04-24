@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
@@ -23,9 +22,7 @@ export class SettingsComponent {
   currentChannel: string = "";
   settingsOption: string = "general";
 
-  constructor(
-    private settings: SettingsService,
-  ) { }
+  constructor(private settings: SettingsService) {}
 
   onSwitch() {
     this.settings.setCurrentChannel(this.currentChannel);
