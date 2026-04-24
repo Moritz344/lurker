@@ -2,6 +2,7 @@ import { Injectable, OnDestroy, ɵɵpureFunction0 } from "@angular/core";
 import { Observable, Subject, of, throwError, BehaviorSubject } from "rxjs";
 import {
   HttpClient,
+  HttpParams,
   HttpHeaders,
   HttpErrorResponse,
 } from "@angular/common/http";
@@ -55,8 +56,13 @@ export class TwitchChatService implements OnDestroy {
       const match = raw.match(/:(\w+)!.* PRIVMSG #\w+ :(.+)/);
       if (match) {
         let badgesArray = raw.split(";")[1].split("badges=")[1].split(",");
-        let chatColorString = raw.split(";")[3].split("color=")[1];
+
+        let chatColorString = raw.match(/color=(#[A-Fa-f0-9]{6})/)?.[1];
         const [, user, message] = match;
+
+        if (!chatColorString) {
+          chatColorString = "white";
+        }
 
         this.messageSubject.next(`${user}: ${message}`);
         this.badgeInfoSubject.next(badgesArray);
@@ -149,6 +155,19 @@ export class TwitchChatService implements OnDestroy {
     badgesFound.shift();
 
     return badgesFound;
+  }
+
+  updateUserChatColor(user_id: string, color: string, token: string) {
+    const params = new HttpParams().set("color", color).set("user_id", user_id);
+
+    let url = "https://api.twitch.tv/helix/chat/color";
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.put(url, null, { headers, params });
   }
 
   getChannelBadges(broadcaster_id: string, token: string) {
