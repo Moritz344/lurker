@@ -10,6 +10,7 @@
 }
 
 .user-box {
+  border-radius: 5px;
   background-color: var(--surface-color);
   padding: 10px;
 }
@@ -33,11 +34,6 @@ body {
 .interface,
 .chat {
   margin-bottom: 30px;
-}
-
-.interface h1,
-.chat h1 {
-  margin-bottom: 15px;
 }
 
 .chat-color {
@@ -70,9 +66,22 @@ select {
 }
 
 .chat-time-format select {
-  margin-top: -16px;
+  margin-top: 0px;
+}
+
+.reset {
+  margin-left: 10px;
+  background-color: var(--ghost);
+}
+
+.reset:hover {
+  background-color: var(--danger);
 }
 
 select {
   padding: 4px;
+}
+
+h1 {
+  margin-bottom: 0px;
 }

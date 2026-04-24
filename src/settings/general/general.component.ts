@@ -20,6 +20,7 @@ export class GeneralComponent implements OnInit {
   public currentTimeStampFormat: string = "";
   public currentChatColorState: boolean = true;
   public currentUserColor: string = "";
+  public oldUserColor: string = "";
 
   customChatColor: boolean = false;
   colorMap: Record<string, string> = {
@@ -72,19 +73,20 @@ export class GeneralComponent implements OnInit {
     const user_id = await this.settings.getStoredUserId();
     this.settings.getUserColor(token, user_id).subscribe((response: any) => {
       this.currentUserColor = response.data[0]["color"];
+      this.oldUserColor = response.data[0]["color"];
     });
   }
 
+  onResetColor() {
+    this.currentUserColor = this.oldUserColor;
+    this.onChangeUserColor();
+  }
+
   async onChangeUserColor() {
-    console.log("change color:" + this.currentUserColor);
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
     const color = this.getColorNameFromHex(this.currentUserColor);
-    this.chat
-      .updateUserChatColor(user_id, color, token)
-      .subscribe((response: any) => {
-        console.log(response);
-      });
+    this.chat.updateUserChatColor(user_id, color, token).subscribe(() => {});
   }
 
   loadDefault() {

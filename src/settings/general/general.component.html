@@ -3,8 +3,7 @@
 
   <div class="interface">
     <div class="inputs"></div>
-    <br />
-    Theme:
+    <h1>Theme:</h1>
     <div class="theme">
       <select [(ngModel)]="currentTheme" (change)="updateSettings()">
         <option value="" disabled selected hidden>gruvbox</option>
@@ -36,8 +35,7 @@
         />
       </div>
       <div class="chat-custom-color">
-        <span>Custom User Color</span>
-        <br />
+        <h1>Custom User Color</h1>
         <div class="user-box">
           <span style="color: {{ currentUserColor }}">{{ username }}</span
           >: Hello World!
@@ -64,6 +62,7 @@
           <option value="#00FF7F" style="color: #00ff7f">spring_green</option>
           <option value="#9ACD32" style="color: #9acd32">yellow_green</option>
         </select>
+        <button class="reset" (click)="onResetColor()">Reset</button>
       </div>
     </div>
   </div>
