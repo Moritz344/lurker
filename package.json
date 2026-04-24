@@ -1,6 +1,6 @@
 {
   "name": "lurker",
-  "version": "0.0.0",
+  "version": "0.10.0",
   "main": "main.js",
   "author": "Moritz moritzmaier353@gmail.com",
   "description": "opensource twitch chat client",
