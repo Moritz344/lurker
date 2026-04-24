@@ -1,4 +1,11 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  shell,
+  clipboard,
+} = require("electron");
 const path = require("path");
 
 let openUserCardWindow;
@@ -34,10 +41,10 @@ async function createWindow() {
     },
   });
 
-  ipcMain.handle("open-user-card", (event, data) => {
+  ipcMain.handle("open-user-card", (_, data) => {
     openUserCardWindow = new BrowserWindow({
-      width: 500,
-      height: 400,
+      width: 400,
+      height: 300,
       parent: win,
       modal: true,
       webPreferences: {
@@ -65,6 +72,10 @@ async function createWindow() {
   ipcMain.handle("get-token", () => {
     let userData = store.get("userData");
     return userData ? userData.token : null;
+  });
+
+  ipcMain.handle("copy-to-clipboard", (_, text) => {
+    clipboard.writeText(text);
   });
 
   ipcMain.handle("get-username", () => {
@@ -108,7 +119,7 @@ async function createWindow() {
     });
 
     const scopes =
-      "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows";
+      "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows user:manage:chat_color";
     const authUrl = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=https://localhost&scope=${scopes}`;
 
     authWindow.loadURL(authUrl);
@@ -146,7 +157,7 @@ async function createWindow() {
     authWindow.webContents.on("will-redirect", handleAuth);
   });
 
-  ipcMain.handle("open-settings", (event, data) => {
+  ipcMain.handle("open-settings", (_, data) => {
     openSettingsWindow = new BrowserWindow({
       width: 510,
       height: 450,
