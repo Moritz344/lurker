@@ -36,6 +36,11 @@ export class SettingsService {
     }
   }
 
+  getMaintainer() {
+    const url = "https://api.github.com/users/Moritz344";
+    return this.http.get(url);
+  }
+
   setLoginStatus(isLogged: boolean) {
     this.loginStatus = isLogged;
     this.loginStatusSubject.next(this.loginStatus);
@@ -82,6 +87,10 @@ export class SettingsService {
 
   async saveUserData(data: any) {
     return await (window as any).electronAPI.saveUserData(data);
+  }
+
+  async getVersion() {
+    return await (window as any).electronAPI.getVersion();
   }
 
   async getToken() {
