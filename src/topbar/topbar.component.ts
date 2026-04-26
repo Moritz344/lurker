@@ -94,7 +94,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.settings.getLoginStatus().subscribe((result) => {
         this.showLoginButton = !result;
-        console.log("login status:", result);
       }),
     );
   }
@@ -140,12 +139,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.tab.removeTab(0);
     this.username = await this.settings.getStoredUsername();
 
-    //const token = await this.settings.getToken();
-    //const user_id = await this.settings.getStoredUserId();
-    //this.settings.getFollowedChannels(token, user_id, 10, "").subscribe((response: any) => {
-    //  let cursor = response.pagination.cursor;
-    //  console.log(response);
-    //});
     const loginStatus = localStorage.getItem("loginStatus");
     const loginValue = JSON.parse(loginStatus ?? "false");
     this.loginStatus = loginValue;
@@ -349,6 +342,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.loginStatus = false;
     this.logout.emit();
     this.settings.logout();
+    this.chat.disconnect();
   }
 
   onSettings() {
