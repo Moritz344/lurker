@@ -30,6 +30,7 @@
       <textarea
           #chatEntry
           spellcheck="false"
+          [disabled]="!loginStatus"
           [placeholder]="placeholderString"
           [(ngModel)]="userChatMessage"
           (keydown)="onSendMessage($event)"

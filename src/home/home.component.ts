@@ -21,7 +21,6 @@ import { DialogBoxComponent } from "../dialog-box/dialog-box.component";
 import { CommonModule } from "@angular/common";
 import { ToastComponent } from "../toast/toast.component";
 
-// TODO: remove gruvbox theme
 // TODO: better tv emotes
 // TODO: channel points
 // TODO: work on perfomance
@@ -52,7 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("chatEntry") entry!: ElementRef;
 
   public title = "Lurker";
-  public username: string = "";
   public accessToken: any;
   public sub?: Subscription;
   public messages: string[] = [];
@@ -101,6 +99,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     viewer_count: "",
   };
 
+  userData: any;
+
   globalEmojiNames: { name: string; url: string; url_2: string }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
@@ -140,23 +140,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async loadChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
-    const token = await this.settings.getToken();
-    this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
-      this.channelEmojis = response.data;
-    });
+    this.chat
+      .getChannelEmotes(id, this.userData.token)
+      .subscribe((response: any) => {
+        this.channelEmojis = response.data;
+      });
   }
 
   async loadEmojisForChat() {
-    const token = await this.settings.getToken();
-    this.chat.getGlobalEmotes(token).subscribe((response: any) => {
-      for (let i = 0; i < response.data.length; i++) {
-        this.globalEmojiNames.push({
-          name: response.data[i]["name"],
-          url: response.data[i]["images"]["url_1x"],
-          url_2: response.data[i]["images"]["url_2x"],
-        });
-      }
-    });
+    this.chat
+      .getGlobalEmotes(this.userData.token)
+      .subscribe((response: any) => {
+        for (let i = 0; i < response.data.length; i++) {
+          this.globalEmojiNames.push({
+            name: response.data[i]["name"],
+            url: response.data[i]["images"]["url_1x"],
+            url_2: response.data[i]["images"]["url_2x"],
+          });
+        }
+      });
   }
 
   async initBadges() {
@@ -166,58 +168,59 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async initChatSettings() {
     this.currentToastData.length = 0;
-    const token = await this.settings.getToken();
     this.settings
-      .getBroadCasterId(token, this.currentChannel)
+      .getBroadCasterId(this.userData.token, this.currentChannel)
       .subscribe((id: string) => {
-        this.settings.getChatSettings(id, token).subscribe((response: any) => {
-          this.chatSettings = response.data[0];
-          if (this.chatSettings.emote_mode) {
-            this.currentToastData.push({
-              message: "Emote only mode is on!",
-              duration: "5000",
-            });
-            this.showToast = true;
-          }
-          if (this.chatSettings.follower_mode) {
-            let follower_mode_duration: string =
-              Math.round(
-                this.chatSettings.follower_mode_duration / 60,
-              ).toString() + "h";
-            if (follower_mode_duration == "0h") {
-              follower_mode_duration =
-                this.chatSettings.follower_mode_duration.toString() + "m";
+        this.settings
+          .getChatSettings(id, this.userData.token)
+          .subscribe((response: any) => {
+            this.chatSettings = response.data[0];
+            if (this.chatSettings.emote_mode) {
+              this.currentToastData.push({
+                message: "Emote only mode is on!",
+                duration: "5000",
+              });
+              this.showToast = true;
             }
-            this.currentToastData.push({
-              message: "Follower mode is on! " + follower_mode_duration,
-              duration: "5000",
-            });
-            this.showToast = true;
-          }
-          if (this.chatSettings.slow_mode) {
-            let slow_mode_duration = Math.round(
-              this.chatSettings.slow_mode_wait_time / 60,
-            );
-            let finalString = slow_mode_duration.toString() + "m";
-            if (slow_mode_duration < 1) {
-              slow_mode_duration =
-                this.chatSettings.slow_mode_wait_time.toString();
-              finalString = slow_mode_duration.toString() + "s";
+            if (this.chatSettings.follower_mode) {
+              let follower_mode_duration: string =
+                Math.round(
+                  this.chatSettings.follower_mode_duration / 60,
+                ).toString() + "h";
+              if (follower_mode_duration == "0h") {
+                follower_mode_duration =
+                  this.chatSettings.follower_mode_duration.toString() + "m";
+              }
+              this.currentToastData.push({
+                message: "Follower mode is on! " + follower_mode_duration,
+                duration: "5000",
+              });
+              this.showToast = true;
             }
-            this.currentToastData.push({
-              message: "Slow mode is on! " + finalString,
-              duration: "5000",
-            });
-            this.showToast = true;
-          }
-          if (this.chatSettings.subscriber_mode) {
-            this.currentToastData.push({
-              message: "Subscriber mode is on! ",
-              duration: "2800",
-            });
-            this.showToast = true;
-          }
-        });
+            if (this.chatSettings.slow_mode) {
+              let slow_mode_duration = Math.round(
+                this.chatSettings.slow_mode_wait_time / 60,
+              );
+              let finalString = slow_mode_duration.toString() + "m";
+              if (slow_mode_duration < 1) {
+                slow_mode_duration =
+                  this.chatSettings.slow_mode_wait_time.toString();
+                finalString = slow_mode_duration.toString() + "s";
+              }
+              this.currentToastData.push({
+                message: "Slow mode is on! " + finalString,
+                duration: "5000",
+              });
+              this.showToast = true;
+            }
+            if (this.chatSettings.subscriber_mode) {
+              this.currentToastData.push({
+                message: "Subscriber mode is on! ",
+                duration: "2800",
+              });
+              this.showToast = true;
+            }
+          });
       });
   }
 
@@ -234,6 +237,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.settings.initDiscordRPC();
     this.checkIfLoggedIn();
   }
 
@@ -246,8 +250,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async setCurrentChannel() {
-    const username = await this.settings.getStoredUsername();
-    this.currentChannel = username;
+    this.userData.username = await this.settings.getStoredUsername();
+    this.currentChannel = this.userData.username;
   }
 
   constructor(
@@ -299,9 +303,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async saveCurrentBroadCasterId() {
-    const token = await this.settings.getToken();
     this.settings
-      .getBroadCasterId(token, this.currentChannel)
+      .getBroadCasterId(this.userData.token, this.currentChannel)
       .subscribe((id) => {
         localStorage.setItem("broadcaster_id", id);
         this.loadChannelEmojisForChat();
@@ -326,7 +329,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   async onShowUserInChat() {
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
-    const username = await this.settings.getStoredUsername();
     const channel: any = localStorage.getItem("channel");
 
     this.settings
@@ -345,22 +347,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             const data = response.data;
-            data.forEach((moderator: any) => {
-              if (user_id == moderator.user_id || channel == username) {
+            for (let i = 0; i < data.length; i++) {
+              if (user_id == data[i].user_id) {
                 this.chat
                   .getChatters(broadcaster_id, user_id, token)
                   .subscribe((response: any) => {
                     this.chatterData = response.data;
-                    return;
+                    console.log("get chatters");
                   });
+                return;
               }
-            });
+            }
           });
       });
   }
 
   async onSendMessage(event: KeyboardEvent) {
-    if (event.key == "@") {
+    if (event.key == "@" && this.currentChannel == this.userData.username) {
       this.showUserInChat = true;
       this.onShowUserInChat();
       return;
@@ -516,10 +519,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isConnected = true;
     this.scrollToBottom();
 
-    const username = await this.settings.getStoredUsername();
-    const token = await this.settings.getToken();
-    if (token && username) {
-      this.chat.connect(token, username, channel);
+    if (this.userData.token && this.userData.username) {
+      this.chat.connect(this.userData.token, this.userData.username, channel);
       if (!this.sub || this.sub.closed) {
         this.sub = this.chat.messages$.subscribe((msg) => {
           this.messages.push(msg);
@@ -549,49 +550,50 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async getBadgesForChannel() {
-    const token = await this.settings.getToken();
     const channel: any = localStorage.getItem("channel");
 
     let subscriberBadges: string[];
     let bitsBadges: string[];
-    this.settings.getBroadCasterId(token, channel).subscribe((response) => {
-      const broadcaster_id = response;
-      this.chat
-        .getChannelBadges(broadcaster_id, token)
-        .subscribe((response: any) => {
-          // check set_id and then set
-          if (response.data.length > 0) {
-            for (let i = 0; i < response.data.length; i++) {
-              if (response.data[i]["set_id"] == "subscriber") {
-                subscriberBadges = response.data[i]["versions"];
-              } else if (response.data[i]["set_id"] == "bits") {
-                bitsBadges = response.data[i]["versions"];
+    this.settings
+      .getBroadCasterId(this.userData.token, channel)
+      .subscribe((response) => {
+        const broadcaster_id = response;
+        this.chat
+          .getChannelBadges(broadcaster_id, this.userData.token)
+          .subscribe((response: any) => {
+            // check set_id and then set
+            if (response.data.length > 0) {
+              for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i]["set_id"] == "subscriber") {
+                  subscriberBadges = response.data[i]["versions"];
+                } else if (response.data[i]["set_id"] == "bits") {
+                  bitsBadges = response.data[i]["versions"];
+                }
               }
             }
-          }
-          const global_badges: any = localStorage.getItem("global_badges");
-          let global_badges_json = JSON.parse(global_badges);
-          this.channelBadgeInfo = {
-            subscriber: subscriberBadges,
-            bits: bitsBadges,
-            global: global_badges_json,
-          };
-        });
-    });
+            const global_badges: any = localStorage.getItem("global_badges");
+            let global_badges_json = JSON.parse(global_badges);
+            this.channelBadgeInfo = {
+              subscriber: subscriberBadges,
+              bits: bitsBadges,
+              global: global_badges_json,
+            };
+          });
+      });
   }
 
   async getGlobalBadges() {
-    const token = await this.settings.getToken();
-    this.chat.getGlobalChatBadges(token).subscribe((response: any) => {
-      localStorage.setItem("global_badges", JSON.stringify(response.data));
-    });
+    this.chat
+      .getGlobalChatBadges(this.userData.token)
+      .subscribe((response: any) => {
+        localStorage.setItem("global_badges", JSON.stringify(response.data));
+      });
   }
 
   async checkIfLoggedIn() {
-    const username = await this.settings.getStoredUsername();
+    await this.initUserData();
     const loginStatus = localStorage.getItem("loginStatus");
     const loginValue = JSON.parse(loginStatus ?? "false");
-    console.log("login home", typeof loginValue, loginValue);
     if (!loginValue) {
       this.currentChannel = "";
       this.placeholderString = "Login to send a message";
@@ -602,28 +604,34 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showToast = true;
       this.loginStatus = false;
     } else {
-      this.placeholderString = "Send a message as " + username;
+      this.placeholderString = "Send a message as " + this.userData.username;
       this.initializeLoggedInFeatures();
       this.loginStatus = true;
     }
   }
 
+  async initUserData() {
+    const user = await this.settings.getStoredUsername();
+    const token = await this.settings.getToken();
+    this.userData = {
+      username: user,
+      token: token,
+    };
+  }
+
   async initializeLoggedInFeatures() {
-    this.setCurrentChannel();
-    this.loadChannelEmojisForChat();
-    this.loadEmojisForChat();
-    this.saveCurrentBroadCasterId();
-    this.initChatSettings();
-    this.initBadges();
+    await this.setCurrentChannel();
+    await this.loadChannelEmojisForChat();
+    await this.loadEmojisForChat();
+    await this.saveCurrentBroadCasterId();
+    await this.initChatSettings();
+    await this.initBadges();
+    await this.loadChatMessages(this.currentChannel);
     const emoji: any = localStorage.getItem("emoji");
     window.addEventListener("storage", this.handleStorageChange);
 
-    this.applyUserSettings();
-    const user = await this.settings.getStoredUsername();
-    this.username = user;
-    this.loadChatMessages(this.currentChannel);
-    const token = await this.settings.getToken();
-    this.settings.getUserId(token).subscribe((id) => {
+    //this.applyUserSettings();
+    this.settings.getUserId(this.userData.token).subscribe((id) => {
       this.settings.setUserId(id);
     });
     this.scrollChatbox();

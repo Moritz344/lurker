@@ -43,8 +43,6 @@
   bottom: 0px;
 }
 
-
-
 textarea {
   overflow: hidden;
   border-radius: 0px;
@@ -84,6 +82,10 @@ a {
   position: absolute;
   right: 5px;
   bottom: 7px;
+}
+
+.emoji:hover {
+  background-color: var(--ghost);
 }
 
 .chatter-list {
