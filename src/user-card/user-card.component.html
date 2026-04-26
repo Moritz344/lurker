@@ -20,7 +20,11 @@
 								<span class="view-count">Type: {{ infos.broadcaster_type}}</span>
 							}
               <button (click)="onUserCard()" class="open-user-card">Open Usercard</button>
-              <button class="block-user">Block User</button>
+              @if(!isBlocked) {
+                <button (click)="onBlockUser()" class="block-user">Block User</button>
+              } @else {
+                <button (click)="onUnblockUser()" class="unblock-user">Unblock User</button>
+              }
 					</div>
 			</div>
 

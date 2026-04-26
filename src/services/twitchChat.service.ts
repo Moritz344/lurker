@@ -75,6 +75,40 @@ export class TwitchChatService implements OnDestroy {
     });
   }
 
+  getUserBlockList(token: string, user_id: string) {
+    const url = "https://api.twitch.tv/helix/users/blocks";
+    const params = new HttpParams().set("broadcaster_id", user_id);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+    return this.http.get(url, { headers: headers, params });
+  }
+
+  unblockUser(token: string, target_id: string) {
+    const url = "https://api.twitch.tv/helix/users/blocks";
+    const params = new HttpParams().set("target_user_id", target_id);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+
+    return this.http.delete(url, { headers, params });
+  }
+
+  blockUser(target_id: string, token: string) {
+    const url = "https://api.twitch.tv/helix/users/blocks";
+    const params = new HttpParams().set("target_user_id", target_id);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      "Client-ID": "ds3ban6ylu8w882wox7f1xyr9s7v56",
+      "Content-Type": "application/json",
+    });
+    return this.http.put(url, null, { headers, params });
+  }
+
   getChatterBadge() {
     return this.badgeInfoSubject.asObservable();
   }

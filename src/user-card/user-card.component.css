@@ -1,21 +1,22 @@
-.container{
+.container {
 }
 
-
-span,p,strong{
-	font-size: 17px;
+span,
+p,
+strong {
+  font-size: 17px;
 }
 
-.top{
-	background-color: var(--ghost);
-	padding: 10px;
-	height: 150px;
+.top {
+  background-color: var(--ghost);
+  padding: 10px;
+  height: 150px;
 }
 
-.username{
+.username {
 }
 
-.right{
+.right {
   display: flex;
   flex-direction: row;
   position: absolute;
@@ -23,36 +24,34 @@ span,p,strong{
   gap: 0px;
 }
 
-.right img{
+.right img {
   width: 20px;
 }
 
-.right button{
+.right button {
   align-items: center;
   width: 40px;
-  margin:0px;
+  margin: 0px;
 }
 
-.pfp{
+.pfp {
   border-radius: 5px;
   transition: 0.3s ease;
 }
-.pfp:hover{
+.pfp:hover {
   transform: scale(1.02);
 }
 
-.right button:hover{
+.right button:hover {
   background: transparent;
 }
 
-
-
-.id{
+.id {
   font-size: 15px;
   color: grey;
 }
 
-.open-user-card{
+.open-user-card {
   position: absolute;
   right: 10px;
   top: 130px;
@@ -60,11 +59,11 @@ span,p,strong{
   background-color: var(--ghost);
 }
 
-.open-user-card:hover{
+.open-user-card:hover {
   background-color: var(--primary);
 }
 
-.block-user{
+.unblock-user {
   position: absolute;
   right: 150px;
   font-size: 17px;
@@ -72,36 +71,46 @@ span,p,strong{
   background-color: var(--ghost);
 }
 
-.block-user:hover{
+.unblock-user:hover {
+  background-color: var(--success);
+}
+
+.block-user {
+  position: absolute;
+  right: 150px;
+  font-size: 17px;
+  top: 130px;
+  background-color: var(--ghost);
+}
+
+.block-user:hover {
   background-color: var(--danger);
 }
 
-.desc{
- margin-top: 0px;
- margin-bottom: 0px;
- overflow: scroll;
- overflow-x: hidden;
- max-height: 60px;
+.desc {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 60px;
 }
 
-.layout{
-	display: grid;
-	grid-template-columns: repeat(1,1fr);
-	gap: 0px;
-
+.layout {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0px;
 }
 
-.top img{
-	float: left;
-	margin-right: 10px;
+.top img {
+  float: left;
+  margin-right: 10px;
 }
 
-
-.message{
+.message {
 }
 
-.message-container{
+.message-container {
   overflow-y: scroll;
-	margin-top: -20px;
-	margin-left: 10px;
+  margin-top: -20px;
+  margin-left: 10px;
 }
