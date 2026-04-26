@@ -113,6 +113,10 @@ export class SettingsService {
     return await (window as any).electronAPI.getUsername();
   }
 
+  async initDiscordRPC() {
+    return await (window as any).electronAPI.discordRpc();
+  }
+
   async getStoredCreatedAt() {
     return await (window as any).electronAPI.getCreatedAt();
   }
