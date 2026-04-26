@@ -8,6 +8,7 @@ const {
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const rpc = require("discord-rpc");
 
 let openUserCardWindow;
 let openSettingsWindow;
@@ -86,6 +87,20 @@ async function createWindow() {
     clipboard.writeText(text);
   });
 
+  ipcMain.handle("discord-rpc", () => {
+    const client = new rpc.Client({ transport: "websocket" });
+    client.on("ready", () => {
+      client.setActivity({
+        state: "",
+        details: "lurking in twitch chat",
+        startTimestamp: Date.now(),
+        largeImageKey: "app_icon",
+      });
+      console.log("Discord RPC connected!");
+    });
+    client.login({ clientId: "1497569565977214986" });
+  });
+
   ipcMain.handle("get-username", () => {
     let userData = store.get("userData");
     return userData ? userData.username : null;
@@ -127,7 +142,7 @@ async function createWindow() {
     });
 
     const scopes =
-      "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows user:manage:chat_color";
+      "chat:edit moderator:manage:announcements moderation:read moderator:read:chatters channel:manage:moderators channel:manage:polls user:write:chat chat:read user:read:follows user:manage:chat_color user:manage:blocked_users";
     const authUrl = `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=ds3ban6ylu8w882wox7f1xyr9s7v56&redirect_uri=https://localhost&scope=${scopes}`;
 
     authWindow.loadURL(authUrl);
