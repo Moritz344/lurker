@@ -52,11 +52,9 @@ export class AuthComponent implements OnInit {
 
   private afterLogin(token: string) {
     this.settings.getUserInfo().subscribe((data: any) => {
-      console.log("got data:", data);
       if (!data || !data.data || data.data.length === 0) {
         return;
       }
-      console.log(data);
 
       let userData = {
         token: token,
