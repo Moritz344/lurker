@@ -1,34 +1,32 @@
-.tabs{
+.tabs {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   background-color: var(--input-color);
 }
 
-button{
-  background-color: var(--ghost);
-}
-
-button:hover{
-  background-color: var(--material-primary);
-}
-
-.tab{
+.tab {
   display: grid;
-  grid-template-columns: repeat(11,1fr);
+  grid-template-columns: repeat(11, 1fr);
   margin: 10px;
   overflow-x: hidden;
 }
-.tab button{
+.tab button {
   background: transparent;
 }
 
-.tab button:hover{
-  background-color: var(--material-primary);
+.tab button:hover {
+  background-color: var(--ghost);
 }
 
-.search-bar{
+.search-bar {
   display: flex;
   justify-content: center;
   padding: 10px;
 }
+.search-bar input {
+  font-size: 20px;
+}
 
+.active {
+  background-color: var(--accent-color);
+}

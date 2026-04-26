@@ -3,8 +3,8 @@
     <input spellcheck=false [(ngModel)]="searchValue"  placeholder="Search...">
   </div>
   <div class="tabs">
-    <button [ngStyle]="{ 'background-color': currentTab == 'global' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onGlobalTab()">Global</button>
-    <button [ngStyle]="{ 'background-color': currentTab == 'Channel_Emotes' ? 'var(--material-primary)': 'var(--ghost)' }"(click)="onChannelTab()">Channel</button>
+    <button [class.active]="currentTab == 'global'" (click)="onGlobalTab()">Global</button>
+    <button [class.active]="currentTab == 'Channel_Emotes' "(click)="onChannelTab()">Channel</button>
   </div>
   @if (currentTab == "global") {
     <div class="tab">
@@ -42,7 +42,7 @@
       <img [src]="channelEmotes.template">
     </div>
     @if (channelEmotes.length == 0) {
-        <span style="display:flex;justify-content: center">This channel has no channel emotes!</span>
+        <span style="display:flex;justify-content: center;margin-top: 300px;color: var(--text-muted)">This channel has no channel emotes!</span>
     }
   }
 
