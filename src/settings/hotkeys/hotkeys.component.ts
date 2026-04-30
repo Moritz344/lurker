@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-hotkeys',
+  selector: "app-hotkeys",
   imports: [],
-  templateUrl: './hotkeys.component.html',
-  styleUrl: './hotkeys.component.css'
+  templateUrl: "./hotkeys.component.html",
+  styleUrl: "./hotkeys.component.css",
 })
-export class HotkeysComponent {
-
-}
+export class HotkeysComponent {}
