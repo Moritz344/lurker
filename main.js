@@ -52,6 +52,7 @@ function isDiscordRunning() {
   });
 }
 
+
 async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
@@ -108,6 +109,15 @@ async function createWindow() {
   ipcMain.handle("copy-to-clipboard", (_, text) => {
     clipboard.writeText(text);
   });
+
+  ipcMain.handle("show-warning-box",(_,msg,title) => {
+    dialog.showMessageBox({
+        type: "warning",
+        title: title,
+        message: msg,
+        buttons: ["Close"],
+      });
+  })
 
   ipcMain.handle("discord-rpc", async () => {
     const client = new rpc.Client({ transport: "websocket" });
