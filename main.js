@@ -9,6 +9,7 @@ const {
 const path = require("path");
 const fs = require("fs");
 const rpc = require("discord-rpc");
+const { exec } = require("child_process");
 
 let openUserCardWindow;
 let openSettingsWindow;
@@ -28,6 +29,21 @@ function loadAngularRoute(window, route = "") {
       hash: route,
     });
   }
+}
+
+function isDiscordRunning() {
+  return new Promise((resolve) => {
+    command = 'pgrep -i "(discord|vesktop)"';
+
+    exec(command, (err, stdout) => {
+      console.log(stdout.includes("Discord"));
+      if (stdout.includes("Discord")) {
+        return resolve(true);
+      } else {
+        return resolve(false);
+      }
+    });
+  });
 }
 
 async function createWindow() {
@@ -87,8 +103,13 @@ async function createWindow() {
     clipboard.writeText(text);
   });
 
-  ipcMain.handle("discord-rpc", () => {
+  ipcMain.handle("discord-rpc", async () => {
     const client = new rpc.Client({ transport: "websocket" });
+    const running = await isDiscordRunning();
+    console.log("Discord is not running. Not connecting to RPC.");
+    if (!running) {
+      return;
+    }
     client.on("ready", () => {
       client.setActivity({
         state: "",
