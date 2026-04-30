@@ -126,13 +126,14 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   }
 
   onChannelNameSave() {
-    if (!this.inputValue) {
-      alert("Please enter a valid channel name");
+    if (this.inputValue.length < 4) {
+      this.settings.showWarning("The channel name must be more then 4 character's!","Invalid Input");
       return;
+
     }
 
     if (this.currentChannel == this.inputValue) {
-      alert("You are already connected with " + this.inputValue + "'s chat!");
+      this.settings.showWarning("You are already connected with " + this.inputValue + "'s chat!","Already Connected");
       return;
     }
 
