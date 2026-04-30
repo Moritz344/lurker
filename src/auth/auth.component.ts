@@ -69,7 +69,7 @@ export class AuthComponent implements OnInit {
         if (result) {
           this.settings.setLoginStatus(true);
         } else {
-          alert("Your token is not valid. Try logging in again.");
+          this.settings.showWarning("Your token is not valid. Try logging in again.","Invalid Token")
         }
       });
       console.log("okay going to home");

@@ -426,7 +426,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       event.preventDefault();
       this.settings.checkAccessTokenValidity(token).subscribe((result) => {
         if (!result) {
-          alert("Your token is not valid. Please login again.");
+          this.settings.showWarning("Your token is not valid. Please login again.","Invalid Token")
           return;
         }
       });
@@ -673,7 +673,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             .checkAccessTokenValidity(this.accessToken)
             .subscribe((result) => {
               if (!result) {
-                alert("Your token is not valid. Try logging in again.");
+                this.settings.showWarning("Your token is not valid. Please login again.","Invalid Token")
                 this.logout();
               }
             });

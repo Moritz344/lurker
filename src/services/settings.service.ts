@@ -121,6 +121,10 @@ export class SettingsService {
     return await (window as any).electronAPI.getCreatedAt();
   }
 
+  async showWarning(msg: string,title: string) {
+    return await (window as any).electronAPI.showWarning(msg,title);
+  }
+
   async getStoredUserId() {
     return await (window as any).electronAPI.getUserId();
   }
