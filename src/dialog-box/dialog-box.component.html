@@ -33,7 +33,7 @@
             <span class="loader"></span>
           </div>
         }
-        @if (followListData.length > 0) {
+        @if (followListData.length > 0 && !isLoadingFollowList()) {
           @for (broadcaster of followListData; track $index) {
             <button (click)="onSwitchToFollowedChannel(broadcaster.broadcaster_name)"><img style="margin-right: 5px;border-radius: 0px;" [src]="broadcaster.img" width="40" height="40">
             <span> {{ broadcaster.broadcaster_name }}</span>
