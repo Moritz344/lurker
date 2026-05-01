@@ -1,4 +1,10 @@
+@if (isReply) {
+  <div class="reply-container">
+    <span class="reply-msg">Answer To {{ reply.name }}: {{ reply.msg }}</span>
+  </div>
+}
 <div class="container" #container [class.mention]="isMention">
+
       @if (showBadge) {
         <div class="hover-container" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
           <div class="hover-items">
@@ -41,7 +47,7 @@
             }
           }
         } @else {
-           {{ currentMessage }}
+           <span class="msg">{{ currentMessage }} </span>
          }
         </span><br>
 

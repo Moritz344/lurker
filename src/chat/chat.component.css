@@ -5,6 +5,23 @@
   width: 97vw;
 }
 
+.reply-container{
+  display: flex;
+}
+
+.reply-msg{
+  color: var(--text-muted);
+  word-wrap: break-word;
+  max-width: 500px;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.msg{
+  word-wrap: break-word;
+  max-width: 500px;
+}
+
 .hover-container{
   position: fixed;
 }

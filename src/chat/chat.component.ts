@@ -21,6 +21,7 @@ export class ChatComponent implements OnInit {
   @Input() badges: any;
   @Input() emojis: { name: string; url: string; url_2: string }[] = [];
   @Input() emojisChannel: any;
+  @Input() reply: any;
   @ViewChild("container") containerDiv!: ElementRef;
 
   title = "Lurker";
@@ -53,6 +54,8 @@ export class ChatComponent implements OnInit {
   isReply: boolean = false;
   isMention: boolean = false;
 
+  messageReplyData: any;
+
   constructor(
     public settings: SettingsService,
     public resolver: ComponentFactoryResolver,
@@ -79,6 +82,12 @@ export class ChatComponent implements OnInit {
       images: this.badges.badgeImages,
       title: this.badges.badges,
     };
+
+    if (this.reply) {
+      this.isReply = true;
+      this.reply.msg = this.reply.msg.replace(/\\s/g, " ");
+    }
+
 
     let state = this.settings.getUserColorStatus();
     if (state == "disabled") {
