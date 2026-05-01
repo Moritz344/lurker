@@ -12,9 +12,14 @@ export class TabComponent {
   @Output() remove = new EventEmitter<any>();
   @Output() tabChange = new EventEmitter<any>();
 
-  constructor() { }
+  public connectedTo: string = "";
+
+  constructor() {
+    console.log("data:",this.data);
+  }
 
   onChangeTab() {
+    console.log("change",this.data);
     this.tabChange.emit(this.data);
   }
 

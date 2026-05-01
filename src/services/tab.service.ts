@@ -5,14 +5,15 @@ import { Observable, Subject, of, throwError, BehaviorSubject } from "rxjs";
 
 interface Tab {
   name: string,
+  connected: boolean
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class TabService {
-  private tabs: Tab[] = [{ name: "" }];
-  private currentTabSubject = new BehaviorSubject<Tab>({ name: "" });
+  private tabs: Tab[] = [{ name: "",connected: false }];
+  private currentTabSubject = new BehaviorSubject<Tab>({ name: "",connected: false });
   currentTab$ = this.currentTabSubject.asObservable();
   private clearChatSubject = new Subject<void>();
   clearChat$ = this.clearChatSubject.asObservable();
@@ -30,6 +31,12 @@ export class TabService {
     const username: any = localStorage.getItem("username");
     this.chat.connect(token, username, tab.name);
     this.currentTabSubject.next(tab);
+  }
+
+  setConnectedStatusForAllFalse() {
+    this.tabs.forEach( (x: any) => {
+      x.connected = false;
+    });
   }
 
 

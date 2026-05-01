@@ -56,7 +56,7 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   }
 
   onTabChange() {
-    this.tab.addTab({ name: this.tabName });
+    this.tab.addTab({ name: this.tabName,connected: false });
     this.onClose();
   }
 

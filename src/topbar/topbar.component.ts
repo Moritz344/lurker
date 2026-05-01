@@ -114,7 +114,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.onDisconnect();
     } else if (event.ctrlKey && event.key == "r") {
       this.onReconnect();
-    } else if (event.ctrlKey && event.key == "c") {
+    } else if (event.ctrlKey && event.key == "q") {
       this.onExit();
     } else if (event.key == "Escape") {
       this.showVerticalMenuOptions = false;
@@ -306,11 +306,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   onAddButton() {
     if (this.currentTabs.length >= 3) {
-      this.currentToastData.push({
-        message: "You can open a maximum of 3 Tabs",
-        duration: "5000",
-      });
-      this.showToast = true;
+      this.settings.showWarning("You can only have 3 Tabs max!","Tabs");
       return;
     }
     this.dialog.open(DialogBoxComponent, {
@@ -332,6 +328,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onChangeTab(tab: any) {
+    this.tab.setConnectedStatusForAllFalse();
+    tab.connected = true;
     this.tab.changeTab(tab);
   }
 

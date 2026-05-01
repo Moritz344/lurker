@@ -1,4 +1,4 @@
 <div class="container">
-  <span (click)="onChangeTab()">{{ data.name }}</span>
-  <button (click)="onRemoveTab()"><img src="close.svg"></button>
+  <span [class.active]="data.connected == true" (click)="onChangeTab()">{{ data.name }}</span>
+  <button (click)="onRemoveTab()"><img width="23" src="close.svg"></button>
 </div>
