@@ -34,30 +34,28 @@
 }
 
 .chat-entry {
+  display: inline-flex;
   position: absolute;
   overflow: hidden;
   overflow-x: hidden;
   right: 0;
   left: 0;
-  height: 50px;
-  bottom: 0px;
+  bottom: 0;
 }
 
-textarea {
-  overflow: hidden;
-  border-radius: 0px;
-}
 
 .chat-entry textarea {
+  display: inline-flex;
   font-size: 20px;
   color: white;
   overflow: hidden;
   color: white;
   border: none;
   outline: none;
-  resize: none;
-  height: 50px;
   width: 100%;
+  border-radius: 0px;
+  max-height: 100px;
+  height: 30px;
 }
 
 .screen {

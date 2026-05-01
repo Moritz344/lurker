@@ -21,8 +21,8 @@
 <div class="container" (click)="focusEntry()">
 
    <div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
-        @for (msg of messages; track $index) {
-              <app-chat [emojis]="globalEmojiNames" [badges]="chatterInfo" [emojisChannel]="channelEmojis" [message]="msg"  [color]="chatterInfo.color" ></app-chat>
+        @for (msg of messageObjects; track $index) {
+              <app-chat [reply]="msg.reply" [emojis]="globalEmojiNames" [badges]="msg" [emojisChannel]="channelEmojis" [message]="msg.text"  [color]="msg.color" ></app-chat>
         }
     </div>
 
@@ -34,6 +34,7 @@
           [placeholder]="placeholderString"
           [(ngModel)]="userChatMessage"
           (keydown)="onSendMessage($event)"
+          (input)="adjustTextareaHeight()"
       ></textarea>
       <button (click)="onEmojiPicker()" class="emoji"><img width="20" height="20" src="emoji.svg"></button>
 

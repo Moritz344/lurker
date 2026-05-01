@@ -29,6 +29,8 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: update viewer count
 // TODO: show custom rewards
 
+// BUG: scrolling manually not workling
+
 @Component({
   selector: "app-root",
   standalone: true,
@@ -53,7 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public title = "Lurker";
   public accessToken: any;
   public sub?: Subscription;
-  public messages: string[] = [];
+  public messages: string[] = []; // TODO: remove after verifying messageObjects works
   public scrollAuto: boolean = true;
   public scrollInterval = 100;
   public userScrolling: boolean = false;
@@ -68,11 +70,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     badges: string[];
     badgeImages: { img: string; title: string }[];
   } = { color: "", badges: [], badgeImages: [{ img: "", title: "" }] };
+
+  public messageObjects: {
+    text: string;
+    badges: string[];
+    badgeImages: { img:string,title: string}[],
+    color: string;
+    reply: { name: string; msg: string } | null;
+  }[] = [];
   public isConnected: boolean = true;
 
   public showUserInChat: boolean = false;
   public selectedChatter: number = 0;
   public chatterData: any;
+
 
   showToast: boolean = false;
   currentToastData: { message: string; duration: string }[] = [
@@ -312,7 +323,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onClearChat() {
-    this.messages.length = 0;
+    this.messageObjects.length = 0;
   }
 
   onLogout() {
@@ -422,6 +433,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const token = await this.settings.getToken();
     this.accessToken = token;
 
+    if (this.userChatMessage.length >= 500) {
+      this.settings.showWarning("Too Many Characters!","");
+      this.userChatMessage = "";
+      this.entry.nativeElement.style.height = "30px";
+      return;
+    }
+
+
     if (this.userChatMessage != "") {
       event.preventDefault();
       this.settings.checkAccessTokenValidity(token).subscribe((result) => {
@@ -462,6 +481,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
               return;
             }
             this.userChatMessage = "";
+            this.entry.nativeElement.style.height = "30px";
           },
           (error) => {
             console.error("Error sending message:", error);
@@ -522,31 +542,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.userData.token && this.userData.username) {
       this.chat.connect(this.userData.token, this.userData.username, channel);
       if (!this.sub || this.sub.closed) {
-        this.sub = this.chat.messages$.subscribe((msg) => {
-          this.messages.push(msg);
-        });
-        this.chat.getChatterBadge().subscribe((badges) => {
-          this.chatterInfo.badges = badges;
-          this.getImageForBadge();
-        });
-        this.chat.getChatterColor().subscribe((color) => {
-          this.chatterInfo.color = color;
+        this.sub = this.chat.messages$.subscribe((msgObj) => {
+          this.messageObjects.push(msgObj);
+          this.getImageForBadge(msgObj);
         });
       }
     }
   }
 
-  getImageForBadge() {
+  adjustTextareaHeight() {
+    this.entry.nativeElement.style.height = '30px';
+    if (this.userChatMessage.length >= 106) {
+      this.entry.nativeElement.style.height = this.entry.nativeElement.scrollHeight + 'px';
+    }
+  }
+
+  getImageForBadge(chatterInfo: any) {
+    const index = this.messageObjects.indexOf(chatterInfo);
     let a = this.chat.getImageFromBadgeName(
-      this.chatterInfo.badges,
+      this.messageObjects[index].badges,
       this.channelBadgeInfo,
     );
-    this.chatterInfo.badgeImages = a;
-
-    //console.log("badge images found:");
-    //for (const img of a) {
-    //  console.log(img);
-    //}
+    this.messageObjects[index].badgeImages = a;
   }
 
   async getBadgesForChannel() {
