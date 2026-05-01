@@ -9,6 +9,16 @@
     flex-direction: row;
 }
 
+.topbar{
+  position: absolute;
+  -webkit-app-region: drag;
+  top: 0px;
+  width: 100%;
+  height: 30px;
+  z-index: 10000;
+  background-color: transparent;
+}
+
 .options {
     display: flex;
     flex-direction: column;

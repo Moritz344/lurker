@@ -16,6 +16,8 @@ let openSettingsWindow;
 
 let store;
 
+// https://stackoverflow.com/questions/35876939/frameless-window-with-controls-in-electron-windows
+
 async function initStore() {
   const StoreModule = await import("electron-store");
   store = new StoreModule.default();
@@ -72,6 +74,7 @@ async function createWindow() {
       height: 300,
       parent: win,
       modal: true,
+      frame: false,
       webPreferences: {
         contextIsolation: true,
         enableRemoteModule: false,
@@ -170,6 +173,7 @@ async function createWindow() {
   ipcMain.handle("start-auth", async () => {
     const authWindow = new BrowserWindow({
       width: 600,
+      frame: false,
       height: 800,
       webPreferences: {
         nodeIntegration: false,
@@ -221,6 +225,7 @@ async function createWindow() {
     openSettingsWindow = new BrowserWindow({
       width: 510,
       height: 450,
+      frame: false,
       parent: win,
       modal: true,
       webPreferences: {
@@ -239,6 +244,7 @@ async function createWindow() {
   ipcMain.handle("open-emoji-picker", (event, data) => {
     openEmojiPicker = new BrowserWindow({
       width: 510,
+      frame: false,
       height: 450,
       parent: win,
       modal: true,
@@ -257,6 +263,7 @@ async function createWindow() {
       width: 510,
       height: 450,
       parent: win,
+      frame: false,
       modal: true,
       webPreferences: {
         contextIsolation: true,
