@@ -14,11 +14,14 @@ import { SettingsService } from "./settings.service";
 })
 export class TwitchChatService implements OnDestroy {
   private socket?: WebSocket;
-  private messageSubject = new Subject<string>();
-  private badgeInfoSubject = new Subject<string[]>();
-  private replyMessageBody = new Subject<{ to: string; msg: string }>();
-  private chatColor = new Subject<string>();
-  public messages$: Observable<string> = this.messageSubject.asObservable();
+  private messageSubject = new Subject<{
+    text: string;
+    badges: string[];
+    badgeImages: {img: string,title: string}[];
+    color: string;
+    reply: { name: string; msg: string } | null;
+  }>();
+  public messages$ = this.messageSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -60,13 +63,31 @@ export class TwitchChatService implements OnDestroy {
         let chatColorString = raw.match(/color=(#[A-Fa-f0-9]{6})/)?.[1];
         const [, user, message] = match;
 
+        let replyMsgParent = "";
+        let replyParentName = "";
+
+        raw.split(";").forEach( (x: any) => {
+          if (x.startsWith("reply-parent-msg-body")) {
+            replyMsgParent = x.split('=')[1];
+          }
+          if (x.startsWith("reply-parent-display-name")) {
+            replyParentName  = x.split('=')[1];
+          }
+        })
+
         if (!chatColorString) {
           chatColorString = "white";
         }
 
-        this.messageSubject.next(`${user}: ${message}`);
-        this.badgeInfoSubject.next(badgesArray);
-        this.chatColor.next(chatColorString);
+        const replyData = replyMsgParent ? { name: replyParentName, msg: replyMsgParent } : null;
+
+        this.messageSubject.next({
+          text: `${user}: ${message}`,
+          badges: badgesArray,
+          color: chatColorString,
+          reply: replyData,
+          badgeImages: []
+        });
       }
     });
 
@@ -109,12 +130,7 @@ export class TwitchChatService implements OnDestroy {
     return this.http.put(url, null, { headers, params });
   }
 
-  getChatterBadge() {
-    return this.badgeInfoSubject.asObservable();
-  }
-  getChatterColor() {
-    return this.chatColor.asObservable();
-  }
+
 
   getImageFromBadgeName(badges: string[], badgeImages: any) {
     let badgesFound: { img: string; img_2x: string; title: string }[] = [
