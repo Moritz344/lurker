@@ -2,14 +2,13 @@
 
 an opensource app for listening and writing twitch chat messages.
 
-<img width="1927" height="1080" alt="lurker_1" src="https://github.com/user-attachments/assets/a75252c3-c9e9-4e83-85f4-64c0d459306e" />
+<img width="1086" height="923" alt="screenshot-2026-05-01_18-31-32" src="https://github.com/user-attachments/assets/799d914f-034f-45db-a2f6-fb607eda201e" />
+
+
 <details>
 <summary>Screenshots</summary>
-<img width="890" height="733" alt="lurker_user_card" title="user card" src="https://github.com/user-attachments/assets/7a6ed28a-f47f-42e9-9db3-24f0eeb5abd9" />
-<img width="988" height="817" alt="lurker_settings" title="settings" src="https://github.com/user-attachments/assets/e5276f67-def5-4eb0-bbf0-1d3a97a7b659" />
-<img width="499" height="528" alt="screenshot-2026-04-05_20-31-49" title="Follow List" src="https://github.com/user-attachments/assets/d138e9d0-d3eb-4cef-9b19-ec246513c6f9" />
-
-
+<img width="1070" height="753" alt="screenshot-2026-05-01_18-31-43" src="https://github.com/user-attachments/assets/4f96457b-009c-48d9-9869-2e0e13551079" />
+<img width="869" height="768" alt="screenshot-2026-05-01_18-32-15" src="https://github.com/user-attachments/assets/114b7500-a72e-45c3-bebb-8b427f3e2e61" />
 </details>
 
 
