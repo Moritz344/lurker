@@ -1,10 +1,11 @@
 .header {
-  -webkit-app-region: drag;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 50px;
   padding: 0 10px;
+  -webkit-app-region: drag;
+  user-select: none;
 }
 
 .header-left,
@@ -13,7 +14,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  -webkit-app-region: no-drag;
+}
+
+.active{
+  background-color: var(--ghost);
 }
 
 .header-left { flex: 1; }
@@ -57,6 +61,7 @@
 .channel-name {
   cursor: pointer;
   color: var(--material-primary);
+  -webkit-app-region: no-drag;
 }
 
 .channel-name:hover {
@@ -70,6 +75,7 @@
   background-color: var(--input-color);
   border-radius: 10px;
   z-index: 1000;
+  -webkit-app-region: no-drag;
 }
 
 .dropdown-menu button {
@@ -129,6 +135,11 @@
 
 button:hover{
   background-color: var(--ghost);
+}
+
+.header button,
+.header .channel-name {
+  -webkit-app-region: no-drag;
 }
 
 .toast-container {

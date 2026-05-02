@@ -54,11 +54,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   public disableChannelNameHover = signal(false);
 
+  public menuIsActive: boolean = false;
+
   public showToast: boolean = false;
   public currentToastData: { message: string; duration: string }[] = [];
 
   public username: string = "";
-  public showVerticalMenuOptions: boolean = false;
+  public showMenuOptions: boolean = false;
   public isConnected: boolean = true;
   public channelNameHover: boolean = false;
   public loginStatus: boolean = true;
@@ -117,7 +119,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     } else if (event.ctrlKey && event.key == "q") {
       this.onExit();
     } else if (event.key == "Escape") {
-      this.showVerticalMenuOptions = false;
+      this.showMenuOptions = false;
     }
   }
 
@@ -131,7 +133,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
         function: "show_users_follow_list",
       },
     });
-    this.showVerticalMenuOptions = false;
+    this.showMenuOptions = false;
   }
 
   async ngOnInit() {
@@ -216,7 +218,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
         function: "change_channel_name",
       },
     });
-    this.showVerticalMenuOptions = false;
+    this.showMenuOptions = false;
   }
 
   async onSwitchChannel(name: string) {
@@ -229,7 +231,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.saveCurrentBroadcasterId();
     this.connectChat(name);
     this.clearChat.emit();
-    this.showVerticalMenuOptions = false;
+    this.showMenuOptions = false;
   }
 
   async saveCurrentBroadcasterId() {
@@ -300,8 +302,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.settings.openExternalLink(url);
   }
 
-  onVerticalMenu() {
-    this.showVerticalMenuOptions = !this.showVerticalMenuOptions;
+  onMenu() {
+    this.showMenuOptions = !this.showMenuOptions;
   }
 
   onAddButton() {

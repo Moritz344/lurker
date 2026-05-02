@@ -43,10 +43,10 @@
     @if (username == currentChannel) {
       <button title="Chatter List" (click)="onChatterList()"><img src="persons.svg"></button>
     }
-    <button (click)="onVerticalMenu()"><img src="menu.svg"></button>
+    <button [class.active]="showMenuOptions" (click)="onMenu()"><img src="menu.svg"></button>
 
-    @if (showVerticalMenuOptions) {
-      <div (click)="onVerticalMenu()" class="dropdown-container"></div>
+    @if (showMenuOptions) {
+      <div (click)="onMenu()" class="dropdown-container"></div>
       <div class="dropdown-menu">
         <button *ngIf="loginStatus" (click)="onChooseChannel()">
           <img src="switch_account.svg">Switch Channel
