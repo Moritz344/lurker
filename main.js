@@ -13,6 +13,7 @@ const { exec } = require("child_process");
 
 let openUserCardWindow;
 let openSettingsWindow;
+let openChatterList;
 
 let store;
 
@@ -57,8 +58,8 @@ function isDiscordRunning() {
 
 async function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     frame: false,
     titleBarStyle: "hidden",
     webPreferences: {
@@ -70,8 +71,8 @@ async function createWindow() {
 
   ipcMain.handle("open-user-card", (_, data) => {
     openUserCardWindow = new BrowserWindow({
-      width: 400,
-      height: 300,
+      width: 700,
+      height: 650,
       parent: win,
       modal: true,
       frame: false,
@@ -223,8 +224,8 @@ async function createWindow() {
 
   ipcMain.handle("open-settings", (_, data) => {
     openSettingsWindow = new BrowserWindow({
-      width: 510,
-      height: 450,
+      width: 800,
+      height: 650,
       frame: false,
       parent: win,
       modal: true,
@@ -243,9 +244,9 @@ async function createWindow() {
   });
   ipcMain.handle("open-emoji-picker", (event, data) => {
     openEmojiPicker = new BrowserWindow({
-      width: 510,
+      width: 800,
+      height: 600,
       frame: false,
-      height: 450,
       parent: win,
       modal: true,
       webPreferences: {
@@ -258,7 +259,7 @@ async function createWindow() {
     loadAngularRoute(openEmojiPicker, "emoji");
   });
 
-  ipcMain.handle("open-chatter-list", (event, data) => {
+  ipcMain.handle("open-chatter-list", (_, data) => {
     openChatterList = new BrowserWindow({
       width: 510,
       height: 450,
@@ -275,16 +276,23 @@ async function createWindow() {
     loadAngularRoute(openChatterList, "chatter");
   });
 
-  ipcMain.handle("close-window", (event, window_name) => {
+  ipcMain.handle("close-window", (_, window_name) => {
+    console.log("Closed " + window_name + " window");
     if (window_name == "settings") {
       if (openSettingsWindow) {
         openSettingsWindow.close();
-        openSettingsWindow = null;
       }
-    } else {
+    } else if (window_name == "user-card"){
       if (openUserCardWindow) {
         openUserCardWindow.close();
-        openUserCardWindow = null;
+      }
+    } else if (window_name == "chatter") {
+      if (openChatterList) {
+        openChatterList.close();
+      }
+    } else if (window_name == "emoji") {
+      if (openEmojiPicker) {
+        openEmojiPicker.close();
       }
     }
   });
