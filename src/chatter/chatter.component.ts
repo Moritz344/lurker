@@ -3,12 +3,13 @@ import { SettingsService } from '../services/settings.service';
 import { TwitchChatService } from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MenubarComponent } from  '../menubar/menubar.component';
 
-// TODO: man sieht gerade nur die letzte nachricht
+
 
 @Component({
   selector: 'app-chatter',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenubarComponent],
   templateUrl: './chatter.component.html',
   styleUrl: './chatter.component.css'
 })
@@ -20,6 +21,10 @@ export class ChatterComponent {
   constructor(public settings: SettingsService,
     public chat: TwitchChatService) {
     this.initData();
+  }
+
+  onClose() {
+    this.settings.closeWindow("chatter");
   }
 
 

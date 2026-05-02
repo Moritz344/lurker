@@ -1,5 +1,13 @@
 .container {
+  user-select: none;
 }
+
+.topbar{
+  height: 20px;
+  background-color: black;
+}
+
+
 
 span,
 p,

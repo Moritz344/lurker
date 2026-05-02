@@ -6,6 +6,7 @@ import { GeneralComponent } from "./general/general.component";
 import { AccountComponent } from "./account/account.component";
 import { AboutComponent } from "./about/about.component";
 import { HotkeysComponent } from "./hotkeys/hotkeys.component";
+import { MenubarComponent } from "../menubar/menubar.component";
 
 @Component({
   selector: "app-settings",
@@ -16,6 +17,7 @@ import { HotkeysComponent } from "./hotkeys/hotkeys.component";
     HotkeysComponent,
     AccountComponent,
     AboutComponent,
+    MenubarComponent
   ],
   templateUrl: "./settings.component.html",
   styleUrl: "./settings.component.css",

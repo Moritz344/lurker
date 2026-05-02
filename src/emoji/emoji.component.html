@@ -1,3 +1,4 @@
+<app-menubar (close)="onExit()"></app-menubar>
 <div class="top">
   <div class="search-bar">
     <input spellcheck=false [(ngModel)]="searchValue"  placeholder="Search...">
@@ -42,7 +43,7 @@
       <img [src]="channelEmotes.template">
     </div>
     @if (channelEmotes.length == 0) {
-        <span style="display:flex;justify-content: center;margin-top: 300px;color: var(--text-muted)">This channel has no channel emotes!</span>
+        <span style="display:flex;justify-content: center;margin-top: 200px;color: var(--text-muted)">This channel has no channel emotes!</span>
     }
   }
 

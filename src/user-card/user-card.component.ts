@@ -3,10 +3,11 @@ import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { MenubarComponent } from "../menubar/menubar.component";
 
 @Component({
   selector: "app-user-card",
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenubarComponent],
   templateUrl: "./user-card.component.html",
   styleUrl: "./user-card.component.css",
 })
@@ -46,6 +47,10 @@ export class UserCardComponent implements OnInit, OnDestroy {
       token: token,
       id: user_id,
     };
+  }
+
+  onExit() {
+    this.settings.closeWindow("user-card");
   }
 
   async startChat() {

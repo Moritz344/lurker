@@ -1,3 +1,4 @@
+<app-menubar (close)="onClose()"></app-menubar>
 <div class="container">
 	<input [(ngModel)]="searchValue" (change)="search()" placeholder="Search...">
 	<span style="color: grey">Searching: {{ searchValue }} </span>

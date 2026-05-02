@@ -7,6 +7,11 @@
    overflow-x: hidden;
 }
 
+
 .user{
 	margin-top: 0px;
+}
+
+.container input{
+  font-size: 20px;
 }

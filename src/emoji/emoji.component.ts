@@ -3,10 +3,11 @@ import { TwitchChatService } from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SettingsService } from '../services/settings.service';
+import { MenubarComponent } from '../menubar/menubar.component';
 
 @Component({
   selector: 'app-emoji',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenubarComponent],
   templateUrl: './emoji.component.html',
   styleUrl: './emoji.component.css'
 })
@@ -28,6 +29,10 @@ export class EmojiComponent implements OnInit {
     public settings: SettingsService) {
     this.initGlobalEmotesData();
     this.initChannelEmotes();
+  }
+
+  onExit() {
+    this.settings.closeWindow("emoji");
   }
 
   async initChannelEmotes() {

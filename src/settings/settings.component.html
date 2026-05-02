@@ -1,9 +1,11 @@
-<div class="topbar"></div>
+
 <div class="container">
 
+  <!-- 
   <div (click)="onClose()" class="close">
     <button><img src="close.svg"></button>
   </div>
+  -->
 
 
     <div class="options">
@@ -32,6 +34,8 @@
             <span>About</span>
         </button>
     </div>
+    
+    <app-menubar color="transparent" (close)="onClose()"></app-menubar>
 
     <div class="content-container">
         @if (settingsOption === "general") {
