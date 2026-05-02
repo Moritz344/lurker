@@ -2,10 +2,6 @@
   user-select: none;
 }
 
-.topbar{
-  height: 20px;
-  background-color: black;
-}
 
 
 
@@ -16,7 +12,7 @@ strong {
 }
 
 .top {
-  background-color: var(--ghost);
+  background-color: var(--bg-secondary);
   padding: 10px;
   height: 150px;
 }
@@ -114,11 +110,23 @@ strong {
   margin-right: 10px;
 }
 
-.message {
+.message-bg {
+  background-color: var(--bg-panel);
+  position: absolute;
+  top: 200px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
 }
+
 
 .message-container {
   overflow-y: scroll;
-  margin-top: -20px;
-  margin-left: 10px;
+  margin-top: -29px;
+  margin-left: 0px;
+  height: 90%;
+  margin: 4px;
 }
+
+
+

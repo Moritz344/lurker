@@ -13,13 +13,14 @@ import { MenubarComponent } from "../menubar/menubar.component";
 })
 export class UserCardComponent implements OnInit, OnDestroy {
   title = "";
-  account_creation: string = "";
+  account_creation: number;
   infos: any;
   userData: any;
   messages: [{ name: any; date: string; msg: any }] = [
     { name: "", date: "", msg: "" },
   ];
   isBlocked: boolean = false;
+  showBlockedButton: boolean = true;
 
   constructor(
     public settings: SettingsService,
@@ -28,9 +29,7 @@ export class UserCardComponent implements OnInit, OnDestroy {
     const b: any = localStorage.getItem("next-user-card");
     const settingsJson = JSON.parse(b);
     this.infos = settingsJson;
-    this.account_creation = new Date(
-      this.infos.created_at,
-    ).toLocaleDateString();
+    this.account_creation = new Date(this.infos.created_at).getTime();
     this.startChat();
   }
 
@@ -77,6 +76,10 @@ export class UserCardComponent implements OnInit, OnDestroy {
   }
 
   async checkIfUserIsBlocked() {
+    if (this.userData.id == this.infos.id) {
+      this.showBlockedButton = false;
+      return;
+    }
     this.chat
       .getUserBlockList(this.userData.token, this.userData.id)
       .subscribe((response: any) => {
