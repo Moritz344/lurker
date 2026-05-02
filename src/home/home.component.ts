@@ -341,12 +341,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
     const channel: any = localStorage.getItem("channel");
+    let broadcaster = "";
 
     this.settings
       .getBroadCasterId(token, channel)
       .subscribe((broadcaster_id: string) => {
         if (!broadcaster_id) {
           console.error("No broadcaster id!");
+          return;
+        }
+        if (user_id == broadcaster_id) {
+         this.chat
+           .getChatters(broadcaster_id, user_id, token)
+           .subscribe((response: any) => {
+             this.chatterData = response.data;
+           });
           return;
         }
         this.settings
@@ -359,14 +368,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             const data = response.data;
             for (let i = 0; i < data.length; i++) {
-              if (user_id == data[i].user_id) {
+              if (user_id == data[i].user_id ) {
                 this.chat
                   .getChatters(broadcaster_id, user_id, token)
                   .subscribe((response: any) => {
                     this.chatterData = response.data;
-                    console.log("get chatters");
                   });
-                return;
+                  break;
               }
             }
           });
@@ -374,7 +382,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onSendMessage(event: KeyboardEvent) {
-    if (event.key == "@" && this.currentChannel == this.userData.username) {
+    if (event.key == "@") {
       this.showUserInChat = true;
       this.onShowUserInChat();
       return;

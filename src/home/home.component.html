@@ -9,11 +9,12 @@
     </div>
 }
 
-@if (showUserInChat) {
+@if (showUserInChat && chatterData && chatterData.length > 0) {
     <div #chatter class="chatter-container" >
-      @for (chatter of chatterData; track $index) {
-        <button [ngClass]="{ 'chatter-select': selectedChatter == $index }" (click)="onPasteUserInInput(chatter.user_name)">{{ chatter.user_name }}</button>
-      }
+        @for (chatter of chatterData; track $index) {
+          <button [ngClass]="{ 'chatter-select': selectedChatter == $index }" (click)="onPasteUserInInput(chatter.user_name)">{{ chatter.user_name }}</button>
+        }
+
     </div>
 }
 
