@@ -224,7 +224,7 @@ async function createWindow() {
 
   ipcMain.handle("open-settings", (_, data) => {
     openSettingsWindow = new BrowserWindow({
-      width: 800,
+      width: 900,
       height: 650,
       frame: false,
       parent: win,
@@ -245,7 +245,7 @@ async function createWindow() {
   ipcMain.handle("open-emoji-picker", (event, data) => {
     openEmojiPicker = new BrowserWindow({
       width: 800,
-      height: 600,
+      height: 650,
       frame: false,
       parent: win,
       modal: true,
