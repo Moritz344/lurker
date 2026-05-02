@@ -1,0 +1,17 @@
+.container {
+  -webkit-app-region: drag;
+  height: 30px;
+  background: transport;
+
+}
+
+.container button{
+  float: right;
+  -webkit-app-region: no-drag;
+}
+
+.container button:hover{
+  background-color: var(--ghost);
+}
+
+
