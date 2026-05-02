@@ -4,6 +4,12 @@
   background-color: var(--input-color);
 }
 
+:host{
+  display: block;
+  min-height: 100vh;
+  background-color: var(--bg-panel);
+}
+
 .tab {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
@@ -20,11 +26,12 @@
 
 .search-bar {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   padding: 10px;
 }
 .search-bar input {
   font-size: 20px;
+  width: 100%;
 }
 
 .active {

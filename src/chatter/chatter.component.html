@@ -1,10 +1,14 @@
+<div class="screen"></div>
 <app-menubar (close)="onClose()"></app-menubar>
-<div class="container">
-	<input [(ngModel)]="searchValue" (change)="search()" placeholder="Search...">
-	<span style="color: grey">Searching: {{ searchValue }} </span>
-	@for (x of data; track $index) {
-		@if (x["user_name"].includes(searchValue) || searchValue == "") {
-		  <span class="user">{{ x["user_name"]}}</span>
-		}
-	}
-</div>
+  <div class="container">
+  	<input [(ngModel)]="searchValue" (change)="search()" placeholder="Search...">
+    <br>
+  	<span style="color: grey">Searching: {{ searchValue }} </span>
+    <div class="items">
+  	  @for (x of data; track $index) {
+  	  	@if (x["user_name"].includes(searchValue) || searchValue == "") {
+  	  	  <span class="user">{{ x["user_name"]}}</span>
+  	  	}
+  	  }
+    </div>
+  </div>

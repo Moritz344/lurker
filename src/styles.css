@@ -20,6 +20,9 @@
   --success-hover: #ebdbb2;
   --danger: #cc241d;
   --danger-hover: #fb4934;
+  --green-button: #689d6a;
+  --green-button-hover: #427b58;
+  --green-bright: #b8bb26;
   --ghost: rgba(235, 219, 178, 0.1);
   --ghost-hover: rgba(235, 219, 178, 0.2);
   --default-font: "Arial";
@@ -65,10 +68,20 @@
   --material-secondary: #d79921;
   --material-primary: #d79921;
 
+  --bg-secondary: #32302f;
+  --bg-elevated: #3c3836;
+  --bg-sidebar: #1d2021;
+  --bg-card: #3c3836;
+  --bg-panel: #32302f;
   --message-size: 17px;
 }
 
 [data-theme="gnome-dark"] {
+  --bg-secondary: #2d2d2d;
+  --bg-elevated: #333333;
+  --bg-sidebar: #181818;
+  --bg-card: #2d2d2d;
+  --bg-panel: #252525;
   --bg-color: #1e1e1e;
   --surface-color: #2d2d2d;
   --accent-color: #3584e4;
@@ -89,6 +102,9 @@
   --success-hover: #57e389;
   --danger: #e01b24;
   --danger-hover: #ff7b63;
+  --green-button: #26a269;
+  --green-button-hover: #1a5f4a;
+  --green-bright: #33d17a;
   --ghost: rgba(255, 255, 255, 0.1);
   --ghost-hover: rgba(255, 255, 255, 0.15);
 

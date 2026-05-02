@@ -1,7 +1,7 @@
 .container {
   -webkit-app-region: drag;
   height: 30px;
-  background: transport;
+  background: transparent;
 
 }
 

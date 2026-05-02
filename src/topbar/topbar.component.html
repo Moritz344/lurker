@@ -33,7 +33,7 @@
   </div>
 
   <div class="header-right">
-    <button (click)="showLoginButton ? onLogin() : onLogout()" [title]="showLoginButton ? 'Login' : 'Logout'">
+    <button [class.logout]="!showLoginButton" [class.login]="showLoginButton" (click)="showLoginButton ? onLogin() : onLogout()" [title]="showLoginButton ? 'Login' : 'Logout'">
         @if (showLoginButton) {
             <img src="login.svg" />
         }@else {

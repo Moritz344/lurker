@@ -20,14 +20,23 @@
   background-color: var(--ghost);
 }
 
+.logout:hover{
+  background-color: var(--danger);
+}
+
+.login:hover{
+  background-color: var(--green-button);
+}
+
+
 .header-left { flex: 1; }
-.header-center { 
-  flex: 2; 
+.header-center {
+  flex: 2;
   justify-content: center;
 }
-.header-right { 
-  flex: 1; 
-  justify-content: flex-end; 
+.header-right {
+  flex: 1;
+  justify-content: flex-end;
   position: relative;
 }
 
