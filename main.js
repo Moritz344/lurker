@@ -285,14 +285,17 @@ async function createWindow() {
     } else if (window_name == "user-card"){
       if (openUserCardWindow) {
         openUserCardWindow.close();
+        openUserCardWindow = null;
       }
     } else if (window_name == "chatter") {
       if (openChatterList) {
         openChatterList.close();
+        openChatterList = null;
       }
     } else if (window_name == "emoji") {
       if (openEmojiPicker) {
         openEmojiPicker.close();
+        openEmojiPicker = null;
       }
     }
   });
