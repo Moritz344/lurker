@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, ElementRef, EventEmitter,Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SettingsService } from "../services/settings.service";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
@@ -22,6 +22,8 @@ export class ChatComponent implements OnInit {
   @Input() emojis: { name: string; url: string; url_2: string }[] = [];
   @Input() emojisChannel: any;
   @Input() reply: any;
+  @Input() id: string = "";
+  @Output() onReply = new EventEmitter<{name: string,message: string,id: string,color: string}>;
   @ViewChild("container") containerDiv!: ElementRef;
 
   title = "Lurker";
@@ -44,6 +46,7 @@ export class ChatComponent implements OnInit {
   processedMessageEmoji: string[] = [];
   hoverEmoji: string = "";
   userToListenTo: string = "";
+  isHoveringMessage: boolean = false;
 
   showBadge: boolean = false;
   hoverBadgeX = 0;
@@ -53,6 +56,8 @@ export class ChatComponent implements OnInit {
 
   isReply: boolean = false;
   isMention: boolean = false;
+
+  isOwnMessage: boolean = false;
 
   messageReplyData: any;
 
@@ -82,6 +87,11 @@ export class ChatComponent implements OnInit {
       images: this.badges.badgeImages,
       title: this.badges.badges,
     };
+
+    const username = await this.settings.getStoredUsername();
+    if (this.currentName == username) {
+      this.isOwnMessage = true;
+    }
 
     if (this.reply) {
       this.isReply = true;
@@ -120,6 +130,18 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     this.init();
+  }
+
+  onMessageHover() {
+    this.isHoveringMessage = true;
+  }
+
+  onReplyToMessage() {
+    this.onReply.emit({name: this.currentName,message: this.message,id: this.id,color: this.color});
+  }
+
+  onLeaveMessageHover() {
+    this.isHoveringMessage = false;
   }
 
   async onUserCard() {

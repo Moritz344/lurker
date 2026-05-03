@@ -17,6 +17,16 @@
   white-space: normal;
 }
 
+.reply-button{
+  display: flex;
+  justify-content: center;
+  float: right;
+  width: 40px;
+}
+.reply-button:hover{
+  background-color: var(--ghost);
+}
+
 .msg{
   word-wrap: break-word;
   max-width: 500px;
