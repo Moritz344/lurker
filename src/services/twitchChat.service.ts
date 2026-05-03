@@ -19,7 +19,8 @@ export class TwitchChatService implements OnDestroy {
     badges: string[];
     badgeImages: {img: string,title: string}[];
     color: string;
-    reply: { name: string; msg: string } | null;
+    reply: { name: string; msg: string, } | null;
+    msgId: string,
   }>();
   public messages$ = this.messageSubject.asObservable();
 
@@ -60,11 +61,13 @@ export class TwitchChatService implements OnDestroy {
       if (match) {
         let badgesArray = raw.split(";")[1].split("badges=")[1].split(",");
 
-        let chatColorString = raw.match(/color=(#[A-Fa-f0-9]{6})/)?.[1];
+        let chatColorString = "";
         const [, user, message] = match;
 
         let replyMsgParent = "";
         let replyParentName = "";
+        let replyParentId = "";
+        let msgId = "";
 
         raw.split(";").forEach( (x: any) => {
           if (x.startsWith("reply-parent-msg-body")) {
@@ -73,7 +76,21 @@ export class TwitchChatService implements OnDestroy {
           if (x.startsWith("reply-parent-display-name")) {
             replyParentName  = x.split('=')[1];
           }
-        })
+
+          if (x.startsWith("reply-parent-msg-id")) {
+            replyParentId = x.split('=')[1];
+          }
+
+          if (x.startsWith("id")) {
+            msgId = x.split('=')[1];
+          }
+
+          if (x.startsWith("color")) {
+            chatColorString = x.split('=')[1];
+          }
+
+
+        });
 
         if (!chatColorString) {
           chatColorString = "white";
@@ -86,7 +103,8 @@ export class TwitchChatService implements OnDestroy {
           badges: badgesArray,
           color: chatColorString,
           reply: replyData,
-          badgeImages: []
+          badgeImages: [],
+          msgId
         });
       }
     });
@@ -435,6 +453,7 @@ export class TwitchChatService implements OnDestroy {
     broadcastId: string,
     message: string,
     token: string,
+    replyId: string
   ) {
     const url = "https://api.twitch.tv/helix/chat/messages";
 
@@ -449,6 +468,7 @@ export class TwitchChatService implements OnDestroy {
       message: message,
       sender_id: senderId,
       broadcaster_id: broadcastId,
+      reply_parent_message_id: replyId
     };
 
     return this.http.post(url, body, { headers });
