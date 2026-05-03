@@ -18,12 +18,34 @@
     </div>
 }
 
+@if (isReplying) {
+    <div class="reply-container">
+      <button (click)="onCancelReply()" style="position: absolute; top: 4px;right: 0px"><img src="close.svg"></button>
+      <span style="font-size: 19px;color: var(--text-muted)">Antwort an: {{ replyData.name }} </span>
+      <br>
+      <div class="reply-msg-container">
+        <span style="font-size: 19px;color: {{ replyData.color }};">
+          {{ replyData.name }}: 
+        </span> <span> {{ replyData.message }}</span>
+      </div>
+    </div>
+}
+
 <app-topbar (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
 <div class="container" (click)="focusEntry()">
 
-   <div class="chat-container" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
+   <div class="chat-container" (mouseup)="onMouseUp()" (mousedown)="onMouseDown()" (wheel)="onScroll($event)" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
         @for (msg of messageObjects; track $index) {
-              <app-chat [reply]="msg.reply" [emojis]="globalEmojiNames" [badges]="msg" [emojisChannel]="channelEmojis" [message]="msg.text"  [color]="msg.color" ></app-chat>
+              <app-chat
+                [reply]="msg.reply"
+                [id]="msg.msgId"
+                [emojis]="globalEmojiNames"
+                [badges]="msg"
+                [emojisChannel]="channelEmojis"
+                [message]="msg.text"
+                (onReply)="onReplyingToMessage($event)"
+                [color]="msg.color">
+              </app-chat>
         }
     </div>
 

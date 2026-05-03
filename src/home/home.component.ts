@@ -29,7 +29,7 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: update viewer count
 // TODO: show custom rewards
 
-// BUG: scrolling manually not workling
+// BUG: when mentioned message gets removed for some reason 
 
 @Component({
   selector: "app-root",
@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     badgeImages: { img:string,title: string}[],
     color: string;
     reply: { name: string; msg: string } | null;
+    msgId: string
   }[] = [];
   public isConnected: boolean = true;
 
@@ -84,6 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedChatter: number = 0;
   public chatterData: any;
 
+  public replyData: any;
 
   showToast: boolean = false;
   currentToastData: { message: string; duration: string }[] = [
@@ -117,6 +119,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showVerticalMenuOptions: boolean = false;
   channelNameHover: boolean = false;
   zoomLevel: number = 1;
+
+  isReplying: boolean = false;
 
   loginStatus: boolean = true;
 
@@ -381,6 +385,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  onReplyingToMessage(data: { id: string,name: string,message: string,color: string}) {
+    this.replyData = data;
+    this.replyData.message = this.replyData.message.split(":")[1];
+    this.isReplying = true;
+  }
+
+  onCancelReply() {
+    this.isReplying = false;
+    this.replyData.id = "";
+    this.focusEntry();
+  }
+
   async onSendMessage(event: KeyboardEvent) {
     if (event.key == "@") {
       this.showUserInChat = true;
@@ -473,6 +489,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     broadcasterId,
                     this.userChatMessage,
                     token,
+                    (this.replyData) ? this.replyData.id : ""
                   );
                 }),
               );
@@ -490,6 +507,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.userChatMessage = "";
             this.entry.nativeElement.style.height = "30px";
+            this.isReplying = false;
+            if (this.replyData) {
+              this.replyData.id = "";
+            }
           },
           (error) => {
             console.error("Error sending message:", error);
@@ -510,7 +531,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showUserInChat = false;
   }
 
-  @HostListener("wheel", ["$event"])
   onScroll(event: WheelEvent) {
     event.preventDefault();
 
@@ -520,8 +540,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const chat = this.chatBox.nativeElement;
-    const atBottom =
-      chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
 
     if (event.deltaY < 0) {
       this.scrollAuto = false;
@@ -530,10 +549,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  @HostListener("mouseup", ["$event"])
   onMouseUp() {
     this.userScrolling = false;
     this.scrollAuto = true;
+  }
+
+  onMouseDown() {
+    this.userScrolling = true;
+    this.scrollAuto = false;
   }
 
   onDisconnect() {
