@@ -29,6 +29,10 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: update viewer count
 // TODO: show custom rewards
 
+// https://betterttv.com/developers/api 
+// GET EMOTES > format static und animated einfach static durch animated ersetzen in der url
+
+
 // BUG: when mentioned message gets removed for some reason 
 
 @Component({
@@ -114,7 +118,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   userData: any;
 
-  globalEmojiNames: { name: string; url: string; url_2: string }[] = [];
+  globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
   channelEmojis: any;
   showVerticalMenuOptions: boolean = false;
   channelNameHover: boolean = false;
@@ -171,6 +175,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             name: response.data[i]["name"],
             url: response.data[i]["images"]["url_1x"],
             url_2: response.data[i]["images"]["url_2x"],
+            format: response.data[i]["format"]
           });
         }
       });

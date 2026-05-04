@@ -19,7 +19,7 @@ export class ChatComponent implements OnInit {
   @Input() message: string = "";
   @Input() color: string = "white";
   @Input() badges: any;
-  @Input() emojis: { name: string; url: string; url_2: string }[] = [];
+  @Input() emojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
   @Input() emojisChannel: any;
   @Input() reply: any;
   @Input() id: string = "";
@@ -173,6 +173,7 @@ export class ChatComponent implements OnInit {
         name: this.emojisChannel[i]["name"],
         url: this.emojisChannel[i]["images"]["url_1x"],
         url_2: this.emojisChannel[i]["images"]["url_2x"],
+        format: this.emojisChannel[i]["format"]
       });
     }
   }
@@ -193,7 +194,16 @@ export class ChatComponent implements OnInit {
       this.processedMessageEmoji = words.map((word) => {
         this.emojiIndex = this.emojis.findIndex((emoji) => emoji.name === word);
         if (this.emojiIndex !== -1) {
-          return `<img src="${this.emojis[this.emojiIndex].url}">`;
+          let formatInEmojiUrl = this.emojis[this.emojiIndex].url.split("/");
+
+          if (this.emojis[this.emojiIndex].format.includes('animated')) {
+            formatInEmojiUrl[6] = 'animated';
+          } else {
+            formatInEmojiUrl[6] = 'static';
+          }
+          let url = formatInEmojiUrl.join("/");
+
+          return `<img src="${url}">`;
         }
         return word;
       });
