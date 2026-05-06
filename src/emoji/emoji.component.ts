@@ -12,18 +12,18 @@ import { MenubarComponent } from '../menubar/menubar.component';
   styleUrl: './emoji.component.css'
 })
 export class EmojiComponent implements OnInit {
+  public currentTab: string = "global";
+  public globalEmotes: any;
+  public searchValue: string = "";
+  public showEmojiDesc: boolean = false;
 
-  currentTab: string = "global";
-  globalEmotes: any;
-  searchValue: string = "";
-  showEmojiDesc: boolean = false;
+  public hoverEmojiName: string = "";
+  public hoverEmojiUrl: string = "";
+  public hoverX: number = 0;
+  public hoverY: number = 0;
 
-  hoverEmojiName: string = "";
-  hoverEmojiUrl: string = "";
-  hoverX: number = 0;
-  hoverY: number = 0;
-
-  channelEmotes: any;
+  public channelEmotes: any;
+  public isLoading: boolean = true;
 
   constructor(public chat: TwitchChatService,
     public settings: SettingsService) {
@@ -36,17 +36,33 @@ export class EmojiComponent implements OnInit {
   }
 
   async initChannelEmotes() {
+    this.isLoading = true;
     const token = await this.settings.getToken();
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
       this.channelEmotes = response.data;
+      this.checkForAnimatedFormatAndSetIt(this.channelEmotes);
+      this.isLoading = false;
     });
+  }
+
+  checkForAnimatedFormatAndSetIt(emojiArray: any) {
+      for (let i=0;i<emojiArray.length;i++) {
+        const emote = emojiArray[i];
+        if (emote["format"].includes('animated')) {
+          const parts = emote.images.url_1x.split('/');
+          parts[6] = 'animated';
+          emote.images.url_1x = parts.join('/');
+        }
+      }
   }
 
   async initGlobalEmotesData() {
     const token = await this.settings.getToken();
     this.chat.getGlobalEmotes(token).subscribe((response: any) => {
       this.globalEmotes = response.data;
+      this.checkForAnimatedFormatAndSetIt(this.globalEmotes);
+      this.isLoading = false;
     });
 
   }
@@ -62,6 +78,7 @@ export class EmojiComponent implements OnInit {
   onGlobalTab() {
     this.currentTab = "global";
   }
+
 
   onEmojiTab() {
     this.currentTab = "emoji";

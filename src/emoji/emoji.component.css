@@ -4,6 +4,13 @@
   background-color: var(--input-color);
 }
 
+.loader-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 300px;
+
+}
+
 :host{
   display: block;
   min-height: 100vh;

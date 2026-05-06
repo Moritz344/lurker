@@ -8,25 +8,14 @@
     <button [class.active]="currentTab == 'Channel_Emotes' "(click)="onChannelTab()">Channel</button>
   </div>
   @if (currentTab == "global") {
-    <div class="tab">
-        @for (x of globalEmotes; track $index) {
-          @if (x['name'].includes(searchValue) || searchValue == '' ) {
-            <button
-                (mousemove)="updateHoverPositionGlobal($event)"
-                (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
-                (mouseleave)="OnMouseLeaveGlobal()"
-                (click)="onEmote(x['name'])"
-                >
-                <img [src]="x['images']['url_1x']"> 
-            </button>
-
-          }
-        }
-    </div>
-
-  }@else if (currentTab == "Channel_Emotes") {
-    <div class="tab">
-        @for (x of channelEmotes; track $index) {
+    @if (isLoading) {
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    }
+    @if (!isLoading) {
+      <div class="tab">
+          @for (x of globalEmotes; track $index) {
             @if (x['name'].includes(searchValue) || searchValue == '' ) {
               <button
                   (mousemove)="updateHoverPositionGlobal($event)"
@@ -34,17 +23,44 @@
                   (mouseleave)="OnMouseLeaveGlobal()"
                   (click)="onEmote(x['name'])"
                   >
-                  <img [src]="x['images']['url_1x']">
+                  <img [src]="x['images']['url_1x']"> 
               </button>
 
-              }
+            }
           }
+      </div>
+    }
 
-      <img [src]="channelEmotes.template">
+  }@else if (currentTab == "Channel_Emotes") {
+    @if (isLoading) {
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    }
+
+    @if (!isLoading) {
+      <div class="tab">
+          @for (x of channelEmotes; track $index) {
+              @if (x['name'].includes(searchValue) || searchValue == '' ) {
+                <button
+                    (mousemove)="updateHoverPositionGlobal($event)"
+                    (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                    (mouseleave)="OnMouseLeaveGlobal()"
+                    (click)="onEmote(x['name'])"
+                    >
+                    <img [src]="x['images']['url_1x']">
+                </button>
+
+                }
+            }
+
+            <img [src]="channelEmotes.template">
+
     </div>
-    @if (channelEmotes.length == 0) {
+    @if (channelEmotes && channelEmotes.length == 0) {
         <span style="display:flex;justify-content: center;margin-top: 200px;color: var(--text-muted)">This channel has no channel emotes!</span>
     }
+  }
   }
 
   @if(showEmojiDesc) {
