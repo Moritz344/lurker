@@ -11,7 +11,7 @@ import {
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
-import { CommonModule } from "@angular/common";
+
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
 import { TabService } from "../services/tab.service";
@@ -30,11 +30,10 @@ import { Subscription } from "rxjs";
     MatToolbarModule,
     DialogBoxComponent,
     MatButtonModule,
-    CommonModule,
     ToastComponent,
     TabComponent,
-    FormsModule,
-  ],
+    FormsModule
+],
   templateUrl: "./topbar.component.html",
   styleUrl: "./topbar.component.css",
 })
