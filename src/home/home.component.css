@@ -5,10 +5,26 @@
   margin: 10px;
 }
 
+.enter-animation{
+  animation: 0.3s fadeIn;
+}
+
+.leave-animation{
+  animation: 0.3s fadeOut;
+}
 
 
 .chatter-select {
   background-color: var(--accent-color);
+}
+
+@keyframes fadeOut  {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fadeIn {
@@ -21,7 +37,6 @@
 }
 
 .chatter-container {
-  animation: fadeIn 0.5s;
   display: flex;
   flex-direction: column;
   position: absolute;

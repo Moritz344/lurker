@@ -6,8 +6,8 @@
 <div class="container" (mouseenter)="onMessageHover()" (mouseleave)="onLeaveMessageHover()" #container [class.mention]="isMention">
 
       @if (showBadge) {
-        <div class="hover-container" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
-          <div class="hover-items">
+        <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
+          <div class="hover-items" >
             <img  width="50" height="50" [src]="currentHoverBadge.img"> 
             <span>{{ currentHoverBadge.title }}</span>
           </div>
@@ -26,7 +26,7 @@
       }
 		  <a (click)="onUserCard()"><span class="name" [ngStyle]="{ 'color': userColor }">{{ currentName }}</span></a>:
       @if (showGlobalEmojiDesc) {
-        <div class="hover-container" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
+        <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverEmojiGlobalY + 'px', left: hoverEmojiGlobalX + 'px' }">
             <div class="hover-items">
               <img [src]="currentHoverEmote.img">
               <span>{{ currentHoverEmote.title }}</span>
