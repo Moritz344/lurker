@@ -28,11 +28,15 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: show replys
 // TODO: update viewer count
 // TODO: show custom rewards
+// TODO: Timeout/Ban
+// TODO: First Time Chatter indicator
+// TODO: Desktop Notifications for mentions?
+// TODO: Discord rpc?
+// TODO: whispers?
+// TODO: Chat Search
+// TODO: Emote autocomplete
 
 // https://betterttv.com/developers/api 
-// GET EMOTES > format static und animated einfach static durch animated ersetzen in der url
-
-
 // BUG: when mentioned message gets removed for some reason 
 
 @Component({
