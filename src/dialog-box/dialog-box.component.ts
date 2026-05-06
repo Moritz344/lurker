@@ -4,7 +4,7 @@ import { AppComponent } from "../app/app.component";
 import { SettingsService } from "../services/settings.service";
 import { TwitchChatService } from "../services/twitchChat.service";
 import { FormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
+
 import { TabService } from "../services/tab.service";
 import { switchMap, map } from "rxjs/operators";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -13,7 +13,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-dialog-box",
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: "./dialog-box.component.html",
   styleUrl: "./dialog-box.component.css",
 })

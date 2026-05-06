@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../../services/settings.service";
 import { TwitchChatService } from "../../services/twitchChat.service";
@@ -10,7 +10,7 @@ import { TwitchChatService } from "../../services/twitchChat.service";
 @Component({
   selector: "app-general",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: "./general.component.html",
   styleUrl: "./general.component.css",
 })

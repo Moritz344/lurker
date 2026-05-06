@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
 import { TwitchChatService } from '../services/twitchChat.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MenubarComponent } from  '../menubar/menubar.component';
 
@@ -9,7 +9,7 @@ import { MenubarComponent } from  '../menubar/menubar.component';
 
 @Component({
   selector: 'app-chatter',
-  imports: [CommonModule, FormsModule,MenubarComponent],
+  imports: [FormsModule, MenubarComponent],
   templateUrl: './chatter.component.html',
   styleUrl: './chatter.component.css'
 })

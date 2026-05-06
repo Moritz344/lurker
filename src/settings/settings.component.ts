@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
 import { GeneralComponent } from "./general/general.component";
@@ -11,14 +11,13 @@ import { MenubarComponent } from "../menubar/menubar.component";
 @Component({
   selector: "app-settings",
   imports: [
-    CommonModule,
     FormsModule,
     GeneralComponent,
     HotkeysComponent,
     AccountComponent,
     AboutComponent,
     MenubarComponent
-  ],
+],
   templateUrl: "./settings.component.html",
   styleUrl: "./settings.component.css",
 })
