@@ -19,8 +19,9 @@ export class ChatComponent implements OnInit {
   @Input() message: string = "";
   @Input() color: string = "white";
   @Input() badges: any;
-  @Input() emojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
-  @Input() emojisChannel: any;
+  @Input() emojis: { name: string; url: string; url_2: string,format: string[] | string }[] = [];
+  @Input() emojisChannel: any[] = [];
+  @Input() betterttvGlobalEmotes: { name: string; url: string; url_2: string,format: string }[] = [];
   @Input() reply: any;
   @Input() id: string = "";
   @Output() onReply = new EventEmitter<{name: string,message: string,id: string,color: string}>;
@@ -63,12 +64,12 @@ export class ChatComponent implements OnInit {
 
   constructor(
     public settings: SettingsService,
-    public resolver: ComponentFactoryResolver,
     public chat: TwitchChatService,
     public injector: Injector,
     public router: Router,
     private sanitizer: DomSanitizer,
-  ) {}
+  ) {
+  }
 
   checkIfMentions(msg: string) {
     const username: any = localStorage.getItem("username");
@@ -129,6 +130,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initEmotes();
     this.init();
   }
 
@@ -160,7 +162,7 @@ export class ChatComponent implements OnInit {
       });
   }
 
-  initGlobalEmotes() {
+  initEmotes() {
     for (const emoji of this.emojis) {
       this.emojiSet.add(emoji.name);
     }
@@ -168,47 +170,48 @@ export class ChatComponent implements OnInit {
       this.emojiSet.add(emoji.name);
     }
 
-    for (let i = 0; i < this.emojisChannel.length; i++) {
-      this.emojis.push({
-        name: this.emojisChannel[i]["name"],
-        url: this.emojisChannel[i]["images"]["url_1x"],
-        url_2: this.emojisChannel[i]["images"]["url_2x"],
-        format: this.emojisChannel[i]["format"]
-      });
+    for (const emoji of this.betterttvGlobalEmotes) {
+      this.emojiSet.add(emoji.name);
     }
+
+    this.emojis = this.emojis.concat(this.emojisChannel,this.betterttvGlobalEmotes)
   }
 
   checkMessage() {
-    this.initGlobalEmotes();
-
-    let foundEmotesImages: { url: "" }[] = [];
-
-    const messageParts = this.message.split(": ");
-    const userMessage =
-      messageParts.length > 1 ? messageParts[1] : this.message;
-
-    const words = userMessage.split(/\s+/);
-    this.foundEmotes = words.filter((word) => this.emojiSet.has(word));
+    const parts = this.message.split(/(\s+)/);
+    this.foundEmotes = parts.filter((word: any) => this.emojiSet.has(word));
 
     if (this.foundEmotes) {
-      this.processedMessageEmoji = words.map((word) => {
+      this.processedMessageEmoji = parts.map((word) => {
         this.emojiIndex = this.emojis.findIndex((emoji) => emoji.name === word);
+        console.log(this.foundEmotes);
         if (this.emojiIndex !== -1) {
           let formatInEmojiUrl = this.emojis[this.emojiIndex].url.split("/");
+          let emojiUrl = "";
 
-          if (this.emojis[this.emojiIndex].format.includes('animated')) {
-            formatInEmojiUrl[6] = 'animated';
+          const emojiFormat = this.emojis[this.emojiIndex].format;
+
+          if (emojiFormat != "betterttv") {
+            if (emojiFormat.includes('animated')) {
+              formatInEmojiUrl[6] = 'animated';
+              emojiUrl = formatInEmojiUrl.join("/");
+            } else {
+              formatInEmojiUrl[6] = 'static';
+              emojiUrl = formatInEmojiUrl.join("/");
+            }
           } else {
-            formatInEmojiUrl[6] = 'static';
+              emojiUrl = this.emojis[this.emojiIndex].url;
           }
-          let url = formatInEmojiUrl.join("/");
 
-          return `<img src="${url}">`;
+              console.log(emojiUrl);
+          return `<img src="${emojiUrl}">`;
         }
         return word;
       });
 
       this.emoteMessage = this.processedMessageEmoji;
+      this.emoteMessage.shift();
+      console.log(this.emoteMessage);
       for (let i = 0; i < this.emoteMessage.length; i++) {
         if (this.emoteMessage[i].includes("<img")) {
           this.emoteHTML.push(this.emoteMessage[i]);
@@ -224,21 +227,12 @@ export class ChatComponent implements OnInit {
   OnMouseEnterGlobal(item: any, index: number) {
     this.showGlobalEmojiDesc = true;
     this.hoverEmoji = item;
-    this.currentHoverEmoteName = this.foundEmotes[index];
-    if (this.currentHoverEmoteName == undefined) {
-      this.currentHoverEmoteName =
-        this.foundEmotes[this.foundEmotes.length - 1];
-    }
-
-    const urlMatch = item.match(/src="([^"]+)"/);
-    let imageUrl = urlMatch ? urlMatch[1] : "";
-    let a = imageUrl.split("/");
-    a[a.length - 1] = "2.0";
-    imageUrl = a.join("/");
+    this.currentHoverEmoteName = this.foundEmotes[0];
+    let emojiItem = this.emojis.find( (x: any) => x.name == this.currentHoverEmoteName);
 
     this.currentHoverEmote = {
-      title: this.currentHoverEmoteName,
-      img: this.sanitizer.bypassSecurityTrustUrl(imageUrl),
+      title: emojiItem!.name,
+      img: this.sanitizer.bypassSecurityTrustUrl(emojiItem!.url_2),
     };
   }
 
@@ -270,7 +264,7 @@ export class ChatComponent implements OnInit {
     posX = event.clientX + offsetX;
     posY = event.clientY + offsetY;
 
-    if (posY >= 600) {
+    if (posY >= 500) {
       posY -= 100;
     }
 
