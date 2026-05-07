@@ -36,8 +36,8 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: Chat Search
 // TODO: Emote autocomplete
 
-// https://betterttv.com/developers/api 
-// BUG: when mentioned message gets removed for some reason 
+// https://betterttv.com/developers/api
+// BUG: when mentioned message gets removed for some reason
 
 @Component({
   selector: "app-root",
