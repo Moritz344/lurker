@@ -25,14 +25,47 @@ export class EmojiComponent implements OnInit {
   public channelEmotes: any;
   public isLoading: boolean = true;
 
+  public betterttvGlobal: any[] = [];
+  public betterttvChannel: any ;
+
   constructor(public chat: TwitchChatService,
     public settings: SettingsService) {
     this.initGlobalEmotesData();
     this.initChannelEmotes();
+    this.initBetterTTVGlobal();
+    this.initBetterTTVChannel();
   }
 
   onExit() {
     this.settings.closeWindow("emoji");
+  }
+
+  initBetterTTVGlobal() {
+    this.chat.getBetterTTVGlobal().subscribe( (response: any) => {
+      this.betterttvGlobal = response;
+      for (let i=0;i<this.betterttvGlobal.length;i++) {
+        const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvGlobal[i].id + "/1x." + this.betterttvGlobal[i].imageType;
+        const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvGlobal[i].id + "/2x." + this.betterttvGlobal[i].imageType;
+        this.betterttvGlobal[i]["img"] = {
+          "1x": url_1x,
+          "2x": url_2x
+        }
+      }
+    });
+  }
+  async initBetterTTVChannel() {
+    const id: any = localStorage.getItem("broadcaster_id");
+    this.chat.getBetterTTVChannel(id).subscribe( (response: any) => {
+      this.betterttvChannel = response.channelEmotes;
+      for (let i=0;this.betterttvChannel.length;i++) {
+        const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/1x." + this.betterttvChannel[i].imageType;
+        const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/2x." + this.betterttvChannel[i].imageType;
+        this.betterttvChannel[i]["img"] = {
+          "1x": url_1x,
+          "2x": url_2x
+        }
+      }
+    })
   }
 
   async initChannelEmotes() {
@@ -75,18 +108,29 @@ export class EmojiComponent implements OnInit {
     this.chat.setEmoji(name);
   }
 
-  onGlobalTab() {
-    this.currentTab = "global";
+
+  onTab(tab: string) {
+    switch(tab) {
+      case "global":
+        this.currentTab = "global"
+        break;
+      case "channel":
+        this.currentTab = "channel";
+        break;
+      case "betterttv-global":
+        this.currentTab = "betterttv-global";
+        break;
+      case "betterttv-channel":
+        this.currentTab = "betterttv-channel";
+        break;
+      default:
+        this.currentTab = "global";
+    }
+
+
   }
 
 
-  onEmojiTab() {
-    this.currentTab = "emoji";
-  }
-
-  onChannelTab() {
-    this.currentTab = "Channel_Emotes";
-  }
 
   OnMouseEnterGlobal(name: string, url: string) {
     this.hoverEmojiName = name;

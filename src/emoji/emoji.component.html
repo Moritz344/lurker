@@ -4,8 +4,10 @@
     <input spellcheck=false [(ngModel)]="searchValue"  placeholder="Search...">
   </div>
   <div class="tabs">
-    <button [class.active]="currentTab == 'global'" (click)="onGlobalTab()">Global</button>
-    <button [class.active]="currentTab == 'Channel_Emotes' "(click)="onChannelTab()">Channel</button>
+    <button [class.active]="currentTab == 'global'"         (click)="onTab('global')">Global</button>
+    <button [class.active]="currentTab == 'channel'" (click)="onTab('channel')">Channel</button>
+    <button [class.active]="currentTab == 'betterttv-global' "     (click)="onTab('betterttv-global')">BetterTTV (Global)</button>
+    <button [class.active]="currentTab == 'betterttv-channel' "     (click)="onTab('betterttv-channel')">BetterTTV (Channel)</button>
   </div>
   @if (currentTab == "global") {
     @if (isLoading) {
@@ -14,7 +16,7 @@
       </div>
     }
     @if (!isLoading) {
-      <div class="tab">
+      <div class="tab" animate.enter="enter-animation">
           @for (x of globalEmotes; track $index) {
             @if (x['name'].includes(searchValue) || searchValue == '' ) {
               <button
@@ -31,7 +33,7 @@
       </div>
     }
 
-  }@else if (currentTab == "Channel_Emotes") {
+  }@else if (currentTab == "channel") {
     @if (isLoading) {
       <div class="loader-container">
         <div class="loader"></div>
@@ -39,7 +41,7 @@
     }
 
     @if (!isLoading) {
-      <div class="tab">
+      <div class="tab" animate.enter="enter-animation">
           @for (x of channelEmotes; track $index) {
               @if (x['name'].includes(searchValue) || searchValue == '' ) {
                 <button
@@ -58,13 +60,46 @@
 
     </div>
     @if (channelEmotes && channelEmotes.length == 0) {
-        <span style="display:flex;justify-content: center;margin-top: 200px;color: var(--text-muted)">This channel has no channel emotes!</span>
+        <span style="display:flex;justify-content: center;margin-top: 180px;color: var(--text-muted)">This channel has no channel emotes!</span>
     }
   }
+  }@else if (currentTab == 'betterttv-global') {
+    <div class="tab" animate.enter="enter-animation" >
+      @for (emote of betterttvGlobal;track $index) {
+        @if (emote['code'].includes(searchValue) || searchValue == '' ) {
+        <button
+         (mousemove)="updateHoverPositionGlobal($event)"
+         (mouseenter)="OnMouseEnterGlobal(emote.code,emote['img']['2x'])"
+         (mouseleave)="OnMouseLeaveGlobal()"
+         (click)="onEmote(emote.code)">
+          <img [src]="emote.img['1x']">
+        </button>
+        }
+      }
+    </div>
+  } @else if (currentTab == 'betterttv-channel'){
+      @if (betterttvChannel.length > 0) {
+        <div class="tab" animate.enter="enter-animation">
+        @for (emote of betterttvChannel; track $index) {
+          @if (emote.code.includes(searchValue) || searchValue == '') {
+            <button
+             (mousemove)="updateHoverPositionGlobal($event)"
+             (mouseenter)="OnMouseEnterGlobal(emote.code,emote['img']['2x'])"
+             (mouseleave)="OnMouseLeaveGlobal()"
+             (click)="onEmote(emote.code)">
+              <img [src]="emote.img['1x']">
+            </button>
+          }
+        }
+
+      </div>
+      }@else {
+        <span style="display:flex;justify-content: center;margin-top: 180px;color: var(--text-muted)">This channel has no BetterTTV Channel Emotes!</span>
+      }
   }
 
   @if(showEmojiDesc) {
-    <div class="hover-container" [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
+    <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
       <div class="hover-items">
         <img width="40" height="30" [src]="hoverEmojiUrl"> 
         <span>{{ hoverEmojiName }}</span> 
