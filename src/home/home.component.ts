@@ -33,8 +33,11 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: Desktop Notifications for mentions?
 // TODO: Discord rpc?
 // TODO: whispers?
+// TODO: Add and remove accounts in Settings > Account
 // TODO: Chat Search
 // TODO: Emote autocomplete
+// TODO: check if emote hovering in chat is at bottom
+// TODO: chat animations
 
 // https://betterttv.com/developers/api
 // BUG: when mentioned message gets removed for some reason
@@ -87,6 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     reply: { name: string; msg: string } | null;
     msgId: string
   }[] = [];
+  public betterttvGlobal: any;
   public isConnected: boolean = true;
 
   public showUserInChat: boolean = false;
@@ -161,27 +165,41 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-  async loadChannelEmojisForChat() {
+  initChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat
       .getChannelEmotes(id, this.userData.token)
       .subscribe((response: any) => {
-        this.channelEmojis = response.data;
+        this.channelEmojis = response.data.map( (emote: any) => ({
+          name: emote.name,
+          url: emote.images.url_1x,
+          url_2: emote.images.url_2x,
+          format: emote.format
+        }));
       });
   }
 
-  async loadEmojisForChat() {
+  initBetterTTVGlobalEmojisForChat() {
+    this.chat.getBetterTTVGlobal().subscribe( (response: any) => {
+        this.betterttvGlobal = response.map((emote: any) => ({
+        name: emote.code,
+        url: "https://cdn.betterttv.net/emote/" + emote.id + "/1x." + emote.imageType,
+        url_2: "https://cdn.betterttv.net/emote/" + emote.id + "/2x." + emote.imageType,
+        format: "betterttv" 
+      }));
+    })
+  }
+
+  initGlobalEmojisForChat() {
     this.chat
       .getGlobalEmotes(this.userData.token)
       .subscribe((response: any) => {
-        for (let i = 0; i < response.data.length; i++) {
-          this.globalEmojiNames.push({
-            name: response.data[i]["name"],
-            url: response.data[i]["images"]["url_1x"],
-            url_2: response.data[i]["images"]["url_2x"],
-            format: response.data[i]["format"]
-          });
-        }
+        this.globalEmojiNames = response.data.map( (emote: any) => ({
+          name: emote.name,
+          url: emote.images.url_1x,
+          url_2: emote.images.url_2x,
+          format: emote.format
+        }));
       });
   }
 
@@ -331,7 +349,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       .getBroadCasterId(this.userData.token, this.currentChannel)
       .subscribe((id) => {
         localStorage.setItem("broadcaster_id", id);
-        this.loadChannelEmojisForChat();
+        this.initChannelEmojisForChat();
       });
   }
 
@@ -678,8 +696,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async initializeLoggedInFeatures() {
     await this.setCurrentChannel();
-    await this.loadChannelEmojisForChat();
-    await this.loadEmojisForChat();
+    await this.initChannelEmojisForChat();
+    await this.initBetterTTVGlobalEmojisForChat();
+    await this.initGlobalEmojisForChat();
     await this.saveCurrentBroadCasterId();
     await this.initChatSettings();
     await this.initBadges();
