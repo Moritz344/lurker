@@ -19,15 +19,19 @@ an opensource app for listening and writing twitch chat messages.
 
 # TODOS
 - [x] Tabsystem (kinda)
-- [ ] Support 7tv emotes
+- [ ] Support 7tv Emotes
+- [ ] Support Betterttv Emotes
+- [ ] Whispers
+- [ ] Emote autocomplete
+- [ ] Search Chat 
 - [x] View user info
 - [x] Settings menu (kinda)
-- [x] Show channel emotes and global emotes
-- [x] show badges
+- [x] Show twitch channel emotes and twitch global emotes
+- [x] show twitch badges
 - [x] show stream info: Stream thumbnail,title and viewer
 - [x] View and send chat messages
 - [x] Switch between streamer
-- [x] User chat color
+- [x] Change and see user chat color
 
 # Author
 - Moritz344
