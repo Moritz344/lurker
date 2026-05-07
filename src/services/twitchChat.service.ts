@@ -350,6 +350,16 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
+  getBetterTTVGlobal() {
+    const url = "https://api.betterttv.net/3/cached/emotes/global";
+    return this.http.get(url,);
+  }
+
+  getBetterTTVChannel(user_id: string) {
+    const url = "https://api.betterttv.net/3/cached/users/twitch/" + user_id;
+    return this.http.get(url);
+  }
+
   getChannelEmotes(broadcaster_id: string, token: string) {
     if (!broadcaster_id) {
       return of([]);
