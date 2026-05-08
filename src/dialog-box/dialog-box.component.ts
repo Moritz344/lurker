@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 
 import { TabService } from "../services/tab.service";
 import { switchMap, map } from "rxjs/operators";
+import { forkJoin } from "rxjs";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 // TODO: Follow list loading indicator
@@ -73,29 +74,34 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
     const token = await this.settings.getToken();
     const user_id = await this.settings.getStoredUserId();
 
-
     this.settings.getFollowedChannels(token, user_id, 20, cursor, type).subscribe((response: any) => {
       this.cursorStack.push(response.pagination.cursor);
       this.followListData = response.data;
       this.paginationData = response.pagination;
-      this.isLoadingFollowList.update((x: boolean) => x = false);
-      for (let i = 0; i < this.followListData.length; i++) {
-        this.settings.getUserCardInfo(this.followListData[i]["broadcaster_name"], token).subscribe((response: any) => {
-          this.followListData[i]["img"] = response.data[0].profile_image_url;
-        })
 
-        this.chat.getStreamInfo(this.followListData[i]["broadcaster_name"], token).subscribe((response: any) => {
-          if (response.data.length > 0) {
+      const detailRequests = this.followListData.map((item, i) => {
+        return forkJoin({
+          userCard: this.settings.getUserCardInfo(item["broadcaster_name"], token),
+          stream: this.chat.getStreamInfo(item["broadcaster_name"], token)
+        }).pipe(map((results: any) => {
+          if (results.userCard.data[0]) {
+            this.followListData[i]["img"] = results.userCard.data[0].profile_image_url;
+          }
+          if (results.stream.data.length > 0) {
             this.followListData[i]["live"] = true;
-            this.followListData[i]["viewer"] = response.data[0]["viewer_count"];
+            this.followListData[i]["viewer"] = results.stream.data[0]["viewer_count"];
           } else {
             this.followListData[i]["live"] = false;
           }
-        })
+          return this.followListData[i];
+        }));
+      });
 
-      }
+      forkJoin(detailRequests).subscribe(() => {
+        this.isLoadingFollowList.update((x: boolean) => x = false);
+        this.followListData.sort( ((a: any,b: any) => Number(b.live) - Number(a.live)));
+      });
     });
-
   }
 
   nextPageFollowList() {
