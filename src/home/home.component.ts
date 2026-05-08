@@ -38,8 +38,8 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: Emote autocomplete
 // TODO: check if emote hovering in chat is at bottom
 // TODO: chat animations
+// TODO: Indicator showing the connection status
 
-// https://betterttv.com/developers/api
 // BUG: when mentioned message gets removed for some reason
 
 @Component({
