@@ -8,42 +8,7 @@
 }
 
 
-.user-card {
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    max-width: 100%;
-    overflow: hidden;
-}
-
-.items {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.top {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-}
-
-.top img {
-    margin-right: 15px;
-    border-radius: 50%;
-    float:left;
-}
-
-.extra-info {
-    margin-top: -20px;
-}
-
-.desc {
-    overflow-x: auto;
-    margin-top: 10px;
-}
-
-.desc p {
-    margin-top: 0px;
+.user-table table{
 }
 
 .buttons {
@@ -53,14 +18,12 @@
     margin-top: 20px;
 }
 
-.buttons button {
-    background-color: var(--material-background);
-    padding: 10px;
-    border: 1px solid white;
+button {
+    background-color: var(--ghost);
 }
 
-.buttons button:hover {
-    background-color: var(--material-primary);
+button:hover {
+    background-color: var(--primary);
 }
 
 .logout-text {

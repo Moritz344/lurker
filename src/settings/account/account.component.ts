@@ -1,20 +1,24 @@
 import { Component, OnInit } from "@angular/core";
 import { SettingsService } from "../../services/settings.service";
 import { TwitchChatService } from "../../services/twitchChat.service";
+import { FormsModule } from "@angular/forms";
 import { RouterOutlet, ActivatedRoute, Router } from "@angular/router";
+
+// TODO: implement adding multiple accounts / removing accounts
 
 @Component({
   selector: "app-account",
-  imports: [],
+  imports: [FormsModule],
   templateUrl: "./account.component.html",
   styleUrl: "./account.component.css",
 })
 export class AccountComponent implements OnInit {
-  username: string = "";
-  account_description: any;
-  account_profile_picture: any;
-  account_view_count: any;
-  account_created_at: any;
+  public username: string = "";
+  public account_description: any;
+  public account_profile_picture: any;
+  public account_view_count: any;
+  public account_created_at: any;
+  public currentSelected: any;
 
   constructor(
     private settings: SettingsService,
@@ -36,6 +40,12 @@ export class AccountComponent implements OnInit {
   onLogin() {
     this.router.navigate(["auth"]);
   }
+
+
+  onAddAccount() {
+  }
+
+  onRemoveAccount() {}
 
   onLogout() {
     this.chat.Userlogout();
