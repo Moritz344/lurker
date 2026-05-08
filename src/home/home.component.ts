@@ -90,7 +90,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     reply: { name: string; msg: string } | null;
     msgId: string
   }[] = [];
-  public betterttvGlobal: any;
   public isConnected: boolean = true;
 
   public showUserInChat: boolean = false;
@@ -124,17 +123,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     viewer_count: "",
   };
 
-  userData: any;
+  public userData: any;
 
-  globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
-  channelEmojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
-  showVerticalMenuOptions: boolean = false;
-  channelNameHover: boolean = false;
-  zoomLevel: number = 1;
+  public globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
+  public channelEmojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
+  public betterttvGlobal: { name: string; url: string; url_2: string,format: string }[] = [];
+  public betterttvChannel: { name: string; url: string; url_2: string,format: string }[] = [];
 
-  isReplying: boolean = false;
+  public showVerticalMenuOptions: boolean = false;
+  public channelNameHover: boolean = false;
+  public zoomLevel: number = 1;
 
-  loginStatus: boolean = true;
+  public isReplying: boolean = false;
+
+  public loginStatus: boolean = true;
 
   applyUserSettings() {
     const settings: any = localStorage.getItem("settings");
@@ -179,13 +181,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  initBetterTTVChannelEmojisForChat() {
+      const broadcaster_id: any = localStorage.getItem("broadcaster_id");
+      this.chat.getBetterTTVChannel(broadcaster_id).subscribe( (response: any) => {
+        this.betterttvChannel = response.channelEmotes.map((x: any) => ({
+          name: x.code,
+          url: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
+          url_2: "https://cdn.betterttv.net/emote/" + x.id + "/2x." + x.imageType,
+          format: "betterttv"
+        }));
+    });
+  }
+
   initBetterTTVGlobalEmojisForChat() {
     this.chat.getBetterTTVGlobal().subscribe( (response: any) => {
         this.betterttvGlobal = response.map((emote: any) => ({
         name: emote.code,
         url: "https://cdn.betterttv.net/emote/" + emote.id + "/1x." + emote.imageType,
         url_2: "https://cdn.betterttv.net/emote/" + emote.id + "/2x." + emote.imageType,
-        format: "betterttv" 
+        format: "betterttv"
       }));
     })
   }
@@ -347,6 +361,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   onSwitchChannel() {
     console.log("switched channel");
     this.initChannelEmojisForChat();
+    this.initBetterTTVChannelEmojisForChat();
   }
 
   saveCurrentBroadCasterId() {
