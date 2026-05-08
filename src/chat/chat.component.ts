@@ -184,7 +184,6 @@ export class ChatComponent implements OnInit {
     if (this.foundEmotes) {
       this.processedMessageEmoji = parts.map((word) => {
         this.emojiIndex = this.emojis.findIndex((emoji) => emoji.name === word);
-        console.log(this.foundEmotes);
         if (this.emojiIndex !== -1) {
           let formatInEmojiUrl = this.emojis[this.emojiIndex].url.split("/");
           let emojiUrl = "";
@@ -203,7 +202,6 @@ export class ChatComponent implements OnInit {
               emojiUrl = this.emojis[this.emojiIndex].url;
           }
 
-              console.log(emojiUrl);
           return `<img src="${emojiUrl}">`;
         }
         return word;
@@ -211,7 +209,6 @@ export class ChatComponent implements OnInit {
 
       this.emoteMessage = this.processedMessageEmoji;
       this.emoteMessage.shift();
-      console.log(this.emoteMessage);
       for (let i = 0; i < this.emoteMessage.length; i++) {
         if (this.emoteMessage[i].includes("<img")) {
           this.emoteHTML.push(this.emoteMessage[i]);
