@@ -42,6 +42,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
   @Output() disconnect = new EventEmitter<void>();
   @Output() connect = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
+  @Output() switchChannel = new EventEmitter<void>();
 
   public currentChannel: string = "";
   public showLoginButton: boolean = true;
@@ -65,11 +66,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
   public loginStatus: boolean = true;
 
   chatSettings: any;
-  channelBadgeInfo: { bits: any; subscriber: any; global: any } = {
-    bits: "",
-    subscriber: "",
-    global: "",
-  };
 
   streamInfoToShow: {
     title: string;
@@ -239,6 +235,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
       .getBroadCasterId(token, this.currentChannel)
       .subscribe((id: string) => {
         localStorage.setItem("broadcaster_id", id);
+        this.switchChannel.emit();
       });
   }
 
@@ -248,35 +245,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.chat.connect(token, username, channel);
   }
 
-  async getBadgesForChannel() {
-    const token = await this.settings.getToken();
-    let subscriberBadges: string[];
-    let bitsBadges: string[];
-
-    this.settings
-      .getBroadCasterId(token, this.currentChannel)
-      .subscribe((broadcaster_id: string) => {
-        this.chat
-          .getChannelBadges(broadcaster_id, token)
-          .subscribe((response: any) => {
-            if (response.data.length > 0) {
-              for (const badge of response.data) {
-                if (badge.set_id === "subscriber")
-                  subscriberBadges = badge.versions;
-                else if (badge.set_id === "bits") bitsBadges = badge.versions;
-              }
-            }
-            const global_badges = JSON.parse(
-              localStorage.getItem("global_badges") || "[]",
-            );
-            this.channelBadgeInfo = {
-              subscriber: subscriberBadges,
-              bits: bitsBadges,
-              global: global_badges,
-            };
-          });
-      });
-  }
 
   onChatterList() {
     this.settings.openChatterList();

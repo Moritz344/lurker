@@ -45,6 +45,7 @@
   align-items: center;
   gap: 5px;
   overflow-x: auto;
+  -webkit-app-region: no-drag;
 }
 
 .icon-btn {
