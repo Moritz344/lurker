@@ -199,9 +199,11 @@ export class ChatComponent implements OnInit {
             if (emojiFormat.includes('animated')) {
               formatInEmojiUrl[6] = 'animated';
               emojiUrl = formatInEmojiUrl.join("/");
+              this.emojis[this.emojiIndex].url = emojiUrl;
             } else {
               formatInEmojiUrl[6] = 'static';
               emojiUrl = formatInEmojiUrl.join("/");
+              this.emojis[this.emojiIndex].url = emojiUrl;
             }
           } else {
               emojiUrl = this.emojis[this.emojiIndex].url;
@@ -229,8 +231,9 @@ export class ChatComponent implements OnInit {
   OnMouseEnterGlobal(item: any, index: number) {
     this.showGlobalEmojiDesc = true;
     this.hoverEmoji = item;
-    this.currentHoverEmoteName = this.foundEmotes[0];
-    let emojiItem = this.emojis.find( (x: any) => x.name == this.currentHoverEmoteName);
+    const regex = /<img\s+src="([^"]+)"/;
+    const match = item.match(regex)[1];
+    let emojiItem = this.emojis.find( (x: any) => x.url == match);
 
     this.currentHoverEmote = {
       title: emojiItem!.name,
