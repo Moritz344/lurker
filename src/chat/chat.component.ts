@@ -191,19 +191,27 @@ export class ChatComponent implements OnInit {
         this.emojiIndex = this.emojis.findIndex((emoji) => emoji.name === word);
         if (this.emojiIndex !== -1) {
           let formatInEmojiUrl = this.emojis[this.emojiIndex].url.split("/");
+          let formatInEmojiUrl_2 = this.emojis[this.emojiIndex].url_2.split("/");
           let emojiUrl = "";
+          let emojiUrl_2 = "";
 
           const emojiFormat = this.emojis[this.emojiIndex].format;
 
           if (emojiFormat != "betterttv") {
             if (emojiFormat.includes('animated')) {
               formatInEmojiUrl[6] = 'animated';
+              formatInEmojiUrl_2[6] = 'animated';
               emojiUrl = formatInEmojiUrl.join("/");
+              emojiUrl_2 = formatInEmojiUrl_2.join("/");
               this.emojis[this.emojiIndex].url = emojiUrl;
+              this.emojis[this.emojiIndex].url_2 = emojiUrl_2;
             } else {
+              formatInEmojiUrl_2[6] = 'static';
               formatInEmojiUrl[6] = 'static';
               emojiUrl = formatInEmojiUrl.join("/");
+              emojiUrl_2 = formatInEmojiUrl_2.join("/");
               this.emojis[this.emojiIndex].url = emojiUrl;
+              this.emojis[this.emojiIndex].url_2 = emojiUrl_2;
             }
           } else {
               emojiUrl = this.emojis[this.emojiIndex].url;
@@ -228,12 +236,13 @@ export class ChatComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  OnMouseEnterGlobal(item: any, index: number) {
+  onHoverEmote(item: any, index: number) {
     this.showGlobalEmojiDesc = true;
     this.hoverEmoji = item;
     const regex = /<img\s+src="([^"]+)"/;
     const match = item.match(regex)[1];
     let emojiItem = this.emojis.find( (x: any) => x.url == match);
+
 
     this.currentHoverEmote = {
       title: emojiItem!.name,

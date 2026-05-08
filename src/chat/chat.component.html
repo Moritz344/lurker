@@ -3,7 +3,7 @@
     <span class="reply-msg">Answer To {{ reply.name }}: {{ reply.msg }}</span>
   </div>
 }
-<div class="container" (mouseenter)="onMessageHover()" (mouseleave)="onLeaveMessageHover()" #container [class.mention]="isMention">
+<div class="container"  (mouseenter)="onMessageHover()" (mouseleave)="onLeaveMessageHover()" #container [class.mention]="isMention">
 
       @if (showBadge) {
         <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverBadgeY+ 'px', left: hoverBadgeX + 'px' }">
@@ -38,7 +38,7 @@
             @for (part of emoteMessage; track $index) {
               @if (part.includes('img')) {
                 <span
-                (mouseenter)="OnMouseEnterGlobal(part, $index)"
+                (mouseenter)="onHoverEmote(part, $index)"
                 (mousemove)="updateHoverPosition($event,'emoji',hoverEmojiGlobalX,hoverEmojiGlobalY)"
                 (mouseleave)="OnMouseLeaveGlobal()"
                 [innerHTML]="part"></span>
@@ -47,7 +47,7 @@
             }
           }
         } @else {
-           <span class="msg">{{ currentMessage }} </span>
+           <span  class="msg">{{ currentMessage }} </span>
          }
            @if (isHoveringMessage && !isOwnMessage) {
             <button (click)="onReplyToMessage()" title="Reply to this message" class="reply-button"><img width="20" src="reply.svg"></button>
