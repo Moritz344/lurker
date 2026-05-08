@@ -26,7 +26,7 @@ export class EmojiComponent implements OnInit {
   public isLoading: boolean = true;
 
   public betterttvGlobal: any[] = [];
-  public betterttvChannel: any ;
+  public betterttvChannel: any[] = [] ;
 
   constructor(public chat: TwitchChatService,
     public settings: SettingsService) {
@@ -53,17 +53,18 @@ export class EmojiComponent implements OnInit {
       }
     });
   }
-  async initBetterTTVChannel() {
+  initBetterTTVChannel() {
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat.getBetterTTVChannel(id).subscribe( (response: any) => {
       this.betterttvChannel = response.channelEmotes;
-      for (let i=0;this.betterttvChannel.length;i++) {
-        const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/1x." + this.betterttvChannel[i].imageType;
-        const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/2x." + this.betterttvChannel[i].imageType;
-        this.betterttvChannel[i]["img"] = {
-          "1x": url_1x,
-          "2x": url_2x
-        }
+        for (let i=0;i<this.betterttvChannel.length;i++) {
+          const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/1x." + this.betterttvChannel[i].imageType;
+          const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/2x." + this.betterttvChannel[i].imageType;
+          this.betterttvChannel[i]["img"] = {
+            "1x": url_1x,
+            "2x": url_2x
+          }
+
       }
     })
   }

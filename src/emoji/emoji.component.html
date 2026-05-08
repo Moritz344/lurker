@@ -17,18 +17,18 @@
     }
     @if (!isLoading) {
       <div class="tab" animate.enter="enter-animation">
-          @for (x of globalEmotes; track $index) {
-            @if (x['name'].includes(searchValue) || searchValue == '' ) {
-              <button
-                  (mousemove)="updateHoverPositionGlobal($event)"
-                  (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
-                  (mouseleave)="OnMouseLeaveGlobal()"
-                  (click)="onEmote(x['name'])"
-                  >
-                  <img [src]="x['images']['url_1x']"> 
-              </button>
+            @for (x of globalEmotes; track $index) {
+              @if (x['name'].includes(searchValue) || searchValue == '' ) {
+                <button
+                    (mousemove)="updateHoverPositionGlobal($event)"
+                    (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                    (mouseleave)="OnMouseLeaveGlobal()"
+                    (click)="onEmote(x['name'])"
+                    >
+                    <img [src]="x['images']['url_1x']"> 
+                </button>
 
-            }
+              }
           }
       </div>
     }
@@ -42,21 +42,19 @@
 
     @if (!isLoading) {
       <div class="tab" animate.enter="enter-animation">
-          @for (x of channelEmotes; track $index) {
-              @if (x['name'].includes(searchValue) || searchValue == '' ) {
-                <button
-                    (mousemove)="updateHoverPositionGlobal($event)"
-                    (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
-                    (mouseleave)="OnMouseLeaveGlobal()"
-                    (click)="onEmote(x['name'])"
-                    >
-                    <img [src]="x['images']['url_1x']">
-                </button>
+            @for (x of channelEmotes; track $index) {
+                @if (x['name'].includes(searchValue) || searchValue == '' ) {
+                  <button
+                      (mousemove)="updateHoverPositionGlobal($event)"
+                      (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                      (mouseleave)="OnMouseLeaveGlobal()"
+                      (click)="onEmote(x['name'])"
+                      >
+                      <img [src]="x['images']['url_1x']">
+                  </button>
 
-                }
-            }
-
-            <img [src]="channelEmotes.template">
+                  }
+          }
 
     </div>
     @if (channelEmotes && channelEmotes.length == 0) {
