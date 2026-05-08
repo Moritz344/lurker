@@ -19,7 +19,7 @@
 }
 
 @if (isReplying) {
-    <div class="reply-container">
+    <div class="reply-container" animate.enter="enter-animation" animate.leave="leave-animation">
       <button (click)="onCancelReply()" style="position: absolute; top: 4px;right: 0px"><img src="close.svg"></button>
       <span style="font-size: 19px;color: var(--text-muted)">Antwort an: {{ replyData.name }} </span>
       <br>
