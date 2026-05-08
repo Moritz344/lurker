@@ -22,6 +22,7 @@ export class ChatComponent implements OnInit {
   @Input() emojis: { name: string; url: string; url_2: string,format: string[] | string }[] = [];
   @Input() emojisChannel: any[] = [];
   @Input() betterttvGlobalEmotes: { name: string; url: string; url_2: string,format: string }[] = [];
+  @Input() betterttvChannelEmotes: { name: string; url: string; url_2: string,format: string }[] = [];
   @Input() reply: any;
   @Input() id: string = "";
   @Output() onReply = new EventEmitter<{name: string,message: string,id: string,color: string}>;
@@ -174,7 +175,11 @@ export class ChatComponent implements OnInit {
       this.emojiSet.add(emoji.name);
     }
 
-    this.emojis = this.emojis.concat(this.emojisChannel,this.betterttvGlobalEmotes)
+    for (const emoji of this.betterttvChannelEmotes) {
+      this.emojiSet.add(emoji.name);
+    }
+
+    this.emojis = this.emojis.concat(this.emojisChannel,this.betterttvGlobalEmotes,this.betterttvChannelEmotes)
   }
 
   checkMessage() {
