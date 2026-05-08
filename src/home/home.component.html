@@ -31,7 +31,7 @@
     </div>
 }
 
-<app-topbar (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
+<app-topbar (switchChannel)="onSwitchChannel()" (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
 <div class="container" (click)="focusEntry()">
 
    <div class="chat-container" (mouseup)="onMouseUp()" (mousedown)="onMouseDown()" (wheel)="onScroll($event)" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">

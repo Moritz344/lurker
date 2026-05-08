@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   userData: any;
 
   globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
-  channelEmojis: any;
+  channelEmojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
   showVerticalMenuOptions: boolean = false;
   channelNameHover: boolean = false;
   zoomLevel: number = 1;
@@ -344,12 +344,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showVerticalMenuOptions = false;
   }
 
-  async saveCurrentBroadCasterId() {
+  onSwitchChannel() {
+    console.log("switched channel");
+    this.initChannelEmojisForChat();
+  }
+
+  saveCurrentBroadCasterId() {
     this.settings
       .getBroadCasterId(this.userData.token, this.currentChannel)
       .subscribe((id) => {
         localStorage.setItem("broadcaster_id", id);
-        this.initChannelEmojisForChat();
       });
   }
 
@@ -696,10 +700,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async initializeLoggedInFeatures() {
     await this.setCurrentChannel();
-    await this.initChannelEmojisForChat();
-    await this.initBetterTTVGlobalEmojisForChat();
-    await this.initGlobalEmojisForChat();
-    await this.saveCurrentBroadCasterId();
+    this.saveCurrentBroadCasterId();
+    this.initBetterTTVGlobalEmojisForChat();
+    this.initGlobalEmojisForChat();
     await this.initChatSettings();
     await this.initBadges();
     await this.loadChatMessages(this.currentChannel);
