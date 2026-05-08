@@ -357,7 +357,12 @@ export class TwitchChatService implements OnDestroy {
 
   getBetterTTVChannel(user_id: string) {
     const url = "https://api.betterttv.net/3/cached/users/twitch/" + user_id;
-    return this.http.get(url);
+    return this.http.get(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.log("Channel not found for BetterTTV",error);
+        return throwError( () => error);
+      })
+    );
   }
 
   getChannelEmotes(broadcaster_id: string, token: string) {
