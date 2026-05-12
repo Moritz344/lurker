@@ -350,6 +350,16 @@ export class TwitchChatService implements OnDestroy {
     return this.http.get(url, { headers });
   }
 
+  get7tvChannel(id: string) {
+    const url = "https://api.7tv.app/v3/users/twitch/" + id; 
+    return this.http.get(url);
+  }
+
+  get7tvGlobal() {
+    const url = "https://7tv.io/v3/emote-sets/global";
+    return this.http.get(url);
+  }
+
   getBetterTTVGlobal() {
     const url = "https://api.betterttv.net/3/cached/emotes/global";
     return this.http.get(url,);

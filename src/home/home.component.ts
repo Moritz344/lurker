@@ -127,9 +127,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
   public channelEmojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
+
   public betterttvGlobal: { name: string; url: string; url_2: string,format: string }[] = [];
   public betterttvChannel: { name: string; url: string; url_2: string,format: string }[] = [];
 
+  public seventvChannel: { name: string; url: string; url_2: string,format: string }[] = [];
+
+  public seventvGlobal: { name: string; url: string; url_2: string,format: string }[] = [];
   public showVerticalMenuOptions: boolean = false;
   public channelNameHover: boolean = false;
   public zoomLevel: number = 1;
@@ -142,6 +146,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
   }
+
+  
 
   onOpenFollowerList() {
     this.dialog.open(DialogBoxComponent, {
@@ -166,6 +172,30 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.userChatMessage += event.newValue || "";
     }
   };
+
+  init7tvChannelEmojisForChat() {
+    const id: any = localStorage.getItem("broadcaster_id");
+    this.chat.get7tvChannel(id).subscribe( (response: any) => {
+      this.seventvChannel = response.emote_set.emotes.map( (x: any) => ({
+        name: x.name,
+        url: "https:" + x.data.host.url + "/1x.webp" ,
+        url_2: "https:" + x.data.host.url + "/2x.webp" ,
+        format: "7tv",
+      }));
+
+    })
+  }
+
+  init7tvGlobalEmojisForChat() {
+    this.chat.get7tvGlobal().subscribe( (response: any) => {
+      this.seventvGlobal = response.emotes.map( (x: any) => ({
+        name: x.name,
+        url:  "https:" + x.data.host.url + "/" + x.data.host.files[0].name,
+        url_2:  "https:" + x.data.host.url + "/" + x.data.host.files[1].name,
+        format: "7tv"
+      }));
+    });
+  }
 
   initChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
@@ -362,6 +392,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log("switched channel");
     this.initChannelEmojisForChat();
     this.initBetterTTVChannelEmojisForChat();
+    this.init7tvChannelEmojisForChat();
   }
 
   saveCurrentBroadCasterId() {
@@ -717,6 +748,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.setCurrentChannel();
     this.saveCurrentBroadCasterId();
     this.initBetterTTVGlobalEmojisForChat();
+    this.init7tvGlobalEmojisForChat();
     this.initGlobalEmojisForChat();
     await this.initChatSettings();
     await this.initBadges();
