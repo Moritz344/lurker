@@ -19,8 +19,8 @@ an opensource app for listening and writing twitch chat messages.
 
 # TODOS
 - [x] Tabsystem (kinda)
-- [ ] Support 7tv Emotes
-- [ ] Support Betterttv Emotes
+- [x] Support 7tv Emotes
+- [x] Support Betterttv Emotes
 - [ ] Whispers
 - [ ] Emote autocomplete
 - [ ] Search Chat 
