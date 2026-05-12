@@ -6,8 +6,6 @@
   <div class="tabs">
     <button [class.active]="currentTab == 'global'"         (click)="onTab('global')">Global</button>
     <button [class.active]="currentTab == 'channel'" (click)="onTab('channel')">Channel</button>
-    <button [class.active]="currentTab == 'betterttv-global' "     (click)="onTab('betterttv-global')">BetterTTV (Global)</button>
-    <button [class.active]="currentTab == 'betterttv-channel' "     (click)="onTab('betterttv-channel')">BetterTTV (Channel)</button>
   </div>
   @if (currentTab == "global") {
     @if (isLoading) {
@@ -16,16 +14,47 @@
       </div>
     }
     @if (!isLoading) {
+    <h1 class="header">BetterTTV Global Emotes</h1>
+    <div class="tab" animate.enter="enter-animation" >
+      @for (emote of betterttvGlobal;track $index) {
+        @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
+        <button
+         (mousemove)="updateHoverPositionGlobal($event)"
+         (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
+         (mouseleave)="OnMouseLeaveGlobal()"
+         (click)="onEmote(emote.name)">
+          <img [src]="emote.url_1x">
+        </button>
+        }
+      }
+    </div>
+
+    <h1 class="header">7tv Global Emotes</h1>
+    <div class="tab" animate.enter="enter-animation" >
+      @for (emote of seventvGlobal;track $index) {
+        @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
+        <button
+         (mousemove)="updateHoverPositionGlobal($event)"
+         (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
+         (mouseleave)="OnMouseLeaveGlobal()"
+         (click)="onEmote(emote.name)">
+          <img [src]="emote.url_1x">
+        </button>
+        }
+      }
+    </div>
+
+    <h1 class="header">Twitch Global Emotes</h1>
       <div class="tab" animate.enter="enter-animation">
-            @for (x of globalEmotes; track $index) {
-              @if (x['name'].includes(searchValue) || searchValue == '' ) {
+            @for (emote of globalEmotes; track $index) {
+              @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
                 <button
                     (mousemove)="updateHoverPositionGlobal($event)"
-                    (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
+                    (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
                     (mouseleave)="OnMouseLeaveGlobal()"
-                    (click)="onEmote(x['name'])"
+                    (click)="onEmote(emote.name)"
                     >
-                    <img [src]="x['images']['url_1x']"> 
+                    <img [src]="emote.url_1x"> 
                 </button>
 
               }
@@ -41,65 +70,81 @@
     }
 
     @if (!isLoading) {
-      <div class="tab" animate.enter="enter-animation">
-            @for (x of channelEmotes; track $index) {
-                @if (x['name'].includes(searchValue) || searchValue == '' ) {
-                  <button
-                      (mousemove)="updateHoverPositionGlobal($event)"
-                      (mouseenter)="OnMouseEnterGlobal(x['name'],x['images']['url_1x'])"
-                      (mouseleave)="OnMouseLeaveGlobal()"
-                      (click)="onEmote(x['name'])"
-                      >
-                      <img [src]="x['images']['url_1x']">
-                  </button>
+      <h1 class="header">BetterTTV Channel Emotes</h1>
+       @if (betterttvChannel.length > 0) {
+       <div class="tab" animate.enter="enter-animation">
+           @for (emote of betterttvChannel; track $index) {
+              @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
+                 <button
+                     (mousemove)="updateHoverPositionGlobal($event)"
+                     (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
+                     (mouseleave)="OnMouseLeaveGlobal()"
+                     (click)="onEmote(emote.name)">
+                     <img [src]="emote.url_1x">
+                 </button>
 
-                  }
-          }
+                 }
 
-    </div>
-    @if (channelEmotes && channelEmotes.length == 0) {
-        <span style="display:flex;justify-content: center;margin-top: 180px;color: var(--text-muted)">This channel has no channel emotes!</span>
-    }
-  }
-  }@else if (currentTab == 'betterttv-global') {
-    <div class="tab" animate.enter="enter-animation" >
-      @for (emote of betterttvGlobal;track $index) {
-        @if (emote['code'].includes(searchValue) || searchValue == '' ) {
-        <button
-         (mousemove)="updateHoverPositionGlobal($event)"
-         (mouseenter)="OnMouseEnterGlobal(emote.code,emote['img']['2x'])"
-         (mouseleave)="OnMouseLeaveGlobal()"
-         (click)="onEmote(emote.code)">
-          <img [src]="emote.img['1x']">
-        </button>
-        }
-      }
-    </div>
-  } @else if (currentTab == 'betterttv-channel'){
-      @if (betterttvChannel.length > 0) {
-        <div class="tab" animate.enter="enter-animation">
-        @for (emote of betterttvChannel; track $index) {
-          @if (emote.code.includes(searchValue) || searchValue == '') {
-            <button
-             (mousemove)="updateHoverPositionGlobal($event)"
-             (mouseenter)="OnMouseEnterGlobal(emote.code,emote['img']['2x'])"
-             (mouseleave)="OnMouseLeaveGlobal()"
-             (click)="onEmote(emote.code)">
-              <img [src]="emote.img['1x']">
-            </button>
-          }
-        }
+           }
 
       </div>
       }@else {
-        <span style="display:flex;justify-content: center;margin-top: 180px;color: var(--text-muted)">This channel has no BetterTTV Channel Emotes!</span>
+            <span class="header">This channel has no BetterTTV channel emotes </span>
       }
+
+       <h1 class="header">7tv Channel Emotes</h1>
+       @if (seventvChannel.length > 0) {
+       <div class="tab" animate.enter="enter-animation">
+           @for (emote of seventvChannel; track $index) {
+              @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
+                 <button
+                     (mousemove)="updateHoverPositionGlobal($event)"
+                     (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
+                     (mouseleave)="OnMouseLeaveGlobal()"
+                     (click)="onEmote(emote.name)">
+                     <img [src]="emote.url_1x">
+                 </button>
+
+                 }
+
+           }
+
+      </div>
+      }@else {
+            <span class="header">This channel has no 7tv channel emotes </span>
+      }
+
+
+      <h1 class="header">Twitch Channel Emotes</h1>
+            @if (channelEmotes.length > 0) {
+              <div class="tab" animate.enter="enter-animation">
+                  @for (emote of channelEmotes; track $index) {
+                     @if (emote.name && emote.name.includes(searchValue) || searchValue == '' ) {
+                        <button
+                            (mousemove)="updateHoverPositionGlobal($event)"
+                            (mouseenter)="OnMouseEnterGlobal(emote.name,emote.url_2x)"
+                            (mouseleave)="OnMouseLeaveGlobal()"
+                            (click)="onEmote(emote.name)">
+                            <img [src]="emote.url_1x">
+                        </button>
+
+                        }
+
+                  }
+
+            </div>
+          } @else {
+            <span class="header">This channel has no Twitch channel emotes </span>
+          }
+
+
+    }
   }
 
   @if(showEmojiDesc) {
     <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
       <div class="hover-items">
-        <img width="40" height="30" [src]="hoverEmojiUrl"> 
+        <img [src]="hoverEmojiUrl"> 
         <span>{{ hoverEmojiName }}</span> 
       </div>
     </div>

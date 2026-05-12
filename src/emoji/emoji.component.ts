@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { SettingsService } from '../services/settings.service';
 import { MenubarComponent } from '../menubar/menubar.component';
 
+// TODO: Show loading animation for every emoji group
+// TODO: lazy load emojis => show button Load more
+
 @Component({
   selector: 'app-emoji',
   imports: [CommonModule, FormsModule,MenubarComponent],
@@ -28,11 +31,16 @@ export class EmojiComponent implements OnInit {
   public betterttvGlobal: any[] = [];
   public betterttvChannel: any[] = [] ;
 
+  public seventvGlobal: any[] = [];
+  public seventvChannel: any[] = [];
+
   constructor(public chat: TwitchChatService,
     public settings: SettingsService) {
     this.initGlobalEmotesData();
     this.initChannelEmotes();
     this.initBetterTTVGlobal();
+    this.init7tvGlobal();
+    this.init7tvChannel();
     this.initBetterTTVChannel();
   }
 
@@ -42,59 +50,85 @@ export class EmojiComponent implements OnInit {
 
   initBetterTTVGlobal() {
     this.chat.getBetterTTVGlobal().subscribe( (response: any) => {
-      this.betterttvGlobal = response;
-      for (let i=0;i<this.betterttvGlobal.length;i++) {
-        const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvGlobal[i].id + "/1x." + this.betterttvGlobal[i].imageType;
-        const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvGlobal[i].id + "/2x." + this.betterttvGlobal[i].imageType;
-        this.betterttvGlobal[i]["img"] = {
-          "1x": url_1x,
-          "2x": url_2x
-        }
-      }
+      this.betterttvGlobal = response.map( (x: any) => ({
+        name: x.code,
+        url_1x: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
+        url_2x: "https://cdn.betterttv.net/emote/" + x.id + "/2x." + x.imageType
+      }));
     });
   }
+
+  init7tvChannel() {
+    const id: any = localStorage.getItem("broadcaster_id");
+    this.chat.get7tvChannel(id).subscribe( (response: any) => {
+      console.log(response);
+      this.seventvChannel = response.emote_set.emotes.map( (x: any) => ({
+        name: x.name,
+        url_1x:  "https:" + x.data.host.url + "/" + x.data.host.files[0].name,
+        url_2x:  "https:" + x.data.host.url + "/" + x.data.host.files[1].name,
+      }));
+    });
+
+  }
+
+  init7tvGlobal() {
+    this.chat.get7tvGlobal().subscribe( (response: any) => {
+      this.seventvGlobal = response.emotes.map( (x: any) => ({
+        name: x.name,
+        url_1x:  "https:" + x.data.host.url + "/" + x.data.host.files[0].name,
+        url_2x:  "https:" + x.data.host.url + "/" + x.data.host.files[1].name,
+      }));
+    });
+
+  }
+
   initBetterTTVChannel() {
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat.getBetterTTVChannel(id).subscribe( (response: any) => {
-      this.betterttvChannel = response.channelEmotes;
-        for (let i=0;i<this.betterttvChannel.length;i++) {
-          const url_1x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/1x." + this.betterttvChannel[i].imageType;
-          const url_2x = "https://cdn.betterttv.net/emote/" + this.betterttvChannel[i].id + "/2x." + this.betterttvChannel[i].imageType;
-          this.betterttvChannel[i]["img"] = {
-            "1x": url_1x,
-            "2x": url_2x
-          }
-
-      }
-    })
+      this.betterttvChannel = response.channelEmotes.map( (x: any) => ({
+        name: x.code,
+        url_1x: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
+        url_2x: "https://cdn.betterttv.net/emote/" + x.id + "/2x." + x.imageType
+      }));
+    });
   }
 
   async initChannelEmotes() {
     this.isLoading = true;
-    const token = await this.settings.getToken();
     const id: any = localStorage.getItem("broadcaster_id");
-    this.chat.getChannelEmotes(id, token).subscribe((response: any) => {
-      this.channelEmotes = response.data;
+    const token = await this.settings.getToken();
+
+    this.chat.getChannelEmotes(id,token).subscribe((response: any) => {
+      this.channelEmotes = response.data.map( (x: any) => ({
+        name: x.name,
+        url_1x: x.images.url_1x,
+        url_2x: x.images.url_2x,
+        format: x.format
+      }));
       this.checkForAnimatedFormatAndSetIt(this.channelEmotes);
       this.isLoading = false;
     });
   }
 
   checkForAnimatedFormatAndSetIt(emojiArray: any) {
-      for (let i=0;i<emojiArray.length;i++) {
-        const emote = emojiArray[i];
-        if (emote["format"].includes('animated')) {
-          const parts = emote.images.url_1x.split('/');
-          parts[6] = 'animated';
-          emote.images.url_1x = parts.join('/');
-        }
+    for (const emote of emojiArray) {
+      if (emote.format.includes('animated')) {
+        const parts = emote.url_1x.split('/');
+        parts[6] = 'animated';
+        emote.url_1x = parts.join('/');
       }
+    }
   }
 
   async initGlobalEmotesData() {
     const token = await this.settings.getToken();
     this.chat.getGlobalEmotes(token).subscribe((response: any) => {
-      this.globalEmotes = response.data;
+      this.globalEmotes = response.data.map( (x: any) => ({
+        name: x.name,
+        url_1x: x.images.url_1x,
+        url_2x: x.images.url_2x,
+        format: x.format
+      }));
       this.checkForAnimatedFormatAndSetIt(this.globalEmotes);
       this.isLoading = false;
     });
@@ -147,7 +181,7 @@ export class EmojiComponent implements OnInit {
 
   updateHoverPositionGlobal(event: MouseEvent) {
     const offsetX = 50;
-    const offsetY = 100;
+    const offsetY = 130;
 
     this.hoverX = event.pageX - offsetX;
     this.hoverY = event.pageY - offsetY;
