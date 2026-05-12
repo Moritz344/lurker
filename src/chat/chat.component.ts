@@ -25,36 +25,38 @@ export class ChatComponent implements OnInit {
   @Input() betterttvChannelEmotes: { name: string; url: string; url_2: string,format: string }[] = [];
   @Input() reply: any;
   @Input() id: string = "";
+  @Input() seventvChannelEmotes: { name: string,url: string,url_2: string,format: string}[] = [];
+  @Input() seventvGlobalEmotes: { name: string,url: string,url_2: string,format: string}[] = [];
   @Output() onReply = new EventEmitter<{name: string,message: string,id: string,color: string}>;
   @ViewChild("container") containerDiv!: ElementRef;
 
-  title = "Lurker";
-  currentDate: string = "";
-  currentName: string = "";
-  currentMessage: string = "";
-  currentBadges: any;
-  emojiSet: Set<string> = new Set();
-  foundEmotes: any;
-  emojiIndex: number = 0;
-  emoteMessage: string[] = [];
-  userColor: string = "white";
-  emoteHTML: string[] = [];
-  currentEmoteHoverIndex: number = 0;
-  currentHoverEmoteName = "";
+  public title = "Lurker";
+  public currentDate: string = "";
+  public currentName: string = "";
+  public currentMessage: string = "";
+  public currentBadges: any;
+  public emojiSet: Set<string> = new Set();
+  public foundEmotes: any;
+  public emojiIndex: number = 0;
+  public emoteMessage: string[] = [];
+  public userColor: string = "white";
+  public emoteHTML: string[] = [];
+  public currentEmoteHoverIndex: number = 0;
+  public currentHoverEmoteName = "";
 
-  showGlobalEmojiDesc: boolean = false;
-  hoverEmojiGlobalX = 0;
-  hoverEmojiGlobalY = 0;
-  processedMessageEmoji: string[] = [];
-  hoverEmoji: string = "";
-  userToListenTo: string = "";
-  isHoveringMessage: boolean = false;
+  public showGlobalEmojiDesc: boolean = false;
+  public hoverEmojiGlobalX = 0;
+  public hoverEmojiGlobalY = 0;
+  public processedMessageEmoji: string[] = [];
+  public hoverEmoji: string = "";
+  public userToListenTo: string = "";
+  public isHoveringMessage: boolean = false;
 
-  showBadge: boolean = false;
-  hoverBadgeX = 0;
-  hoverBadgeY = 0;
-  currentHoverBadge: { title: string; img: SafeUrl } = { title: "", img: "" };
-  currentHoverEmote: { title: string; img: SafeUrl } = { title: "", img: "" };
+  public showBadge: boolean = false;
+  public hoverBadgeX = 0;
+  public hoverBadgeY = 0;
+  public currentHoverBadge: { title: string; img: SafeUrl } = { title: "", img: "" };
+  public currentHoverEmote: { title: string; img: SafeUrl } = { title: "", img: "" };
 
   isReply: boolean = false;
   isMention: boolean = false;
@@ -179,7 +181,15 @@ export class ChatComponent implements OnInit {
       this.emojiSet.add(emoji.name);
     }
 
-    this.emojis = this.emojis.concat(this.emojisChannel,this.betterttvGlobalEmotes,this.betterttvChannelEmotes)
+    for (const emoji of this.seventvChannelEmotes) {
+      this.emojiSet.add(emoji.name);
+    }
+
+    for (const emoji of this.seventvGlobalEmotes) {
+      this.emojiSet.add(emoji.name);
+    }
+
+    this.emojis = this.emojis.concat(this.emojisChannel,this.betterttvGlobalEmotes,this.betterttvChannelEmotes,this.seventvChannelEmotes,this.seventvGlobalEmotes);
   }
 
   checkMessage() {
@@ -197,7 +207,7 @@ export class ChatComponent implements OnInit {
 
           const emojiFormat = this.emojis[this.emojiIndex].format;
 
-          if (emojiFormat != "betterttv") {
+          if (emojiFormat != "betterttv" && emojiFormat != "7tv") {
             if (emojiFormat.includes('animated')) {
               formatInEmojiUrl[6] = 'animated';
               formatInEmojiUrl_2[6] = 'animated';
