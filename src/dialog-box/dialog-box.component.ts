@@ -57,6 +57,12 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
   }
 
   onTabChange() {
+    let tabs = this.tab.getTabs();
+    let alreadyExists = tabs.some( (x: any) => x.name == this.tabName);
+    if (alreadyExists) {
+      this.settings.showWarning("You already have a tab with this streamer's chat!","Info");
+      return;
+    }
     this.tab.addTab({ name: this.tabName,connected: false });
     this.onClose();
   }
@@ -133,13 +139,13 @@ export class DialogBoxComponent implements OnInit, AfterViewInit {
 
   onChannelNameSave() {
     if (this.inputValue.length < 4) {
-      this.settings.showWarning("The channel name must be more then 4 character's!","Invalid Input");
+      this.settings.showWarning("The channel name must be more then 4 character's!","Info");
       return;
 
     }
 
     if (this.currentChannel == this.inputValue) {
-      this.settings.showWarning("You are already connected with " + this.inputValue + "'s chat!","Already Connected");
+      this.settings.showWarning("You are already connected with " + this.inputValue + "'s chat!","Info");
       return;
     }
 
