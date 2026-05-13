@@ -42,9 +42,8 @@
 
 .tabs {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   gap: 5px;
-  overflow-x: auto;
   -webkit-app-region: no-drag;
 }
 

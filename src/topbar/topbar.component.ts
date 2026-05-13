@@ -179,9 +179,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onDisconnect() {
-    this.isConnected = false;
-    this.disconnect.emit();
-    this.chat.disconnect();
+    this.isConnected = !this.isConnected;
+    if (this.isConnected == false) {
+      this.disconnect.emit();
+      this.chat.disconnect();
+    } else {
+      this.onConnect();
+    }
   }
 
   onConnect() {
@@ -274,8 +278,9 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   onAddButton() {
+    console.log(this.currentTabs);
     if (this.currentTabs.length >= 3) {
-      this.settings.showWarning("You can only have 3 Tabs max!","Tabs");
+      this.settings.showWarning("You can only have 3 Tabs max!","Info");
       return;
     }
     this.dialog.open(DialogBoxComponent, {

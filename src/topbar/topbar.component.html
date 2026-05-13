@@ -3,12 +3,12 @@
     <button (click)="onSettings()" title="Settings">
       <img src="settings.svg" />
     </button>
-    <div class="tabs">
-      @for (tab of currentTabs; track $index) {
-        <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
-      }
+      <div class="tabs">
+            @for (tab of currentTabs; track $index) {
+              <app-tab (remove)="onRemoveTab($event)" (tabChange)="onChangeTab($event)" [data]="tab"></app-tab>
+            }
+       </div>
       <button (click)="onAddButton()" title="Add streamer"><img src="add.svg"></button>
-    </div>
   </div>
 
   <div class="header-center">
@@ -20,7 +20,7 @@
     </span>
     @if (loginStatus) {
       @if (channelNameHover && streamInfoToShow) {
-        <div class="stream-info">
+        <div class="stream-info" animate.enter="enter-animation" animate.leave="leave-animation">
           <img [src]="streamInfoToShow.thumbnail" />
           @if (streamInfoToShow.viewer_count) {
             <span style="position: absolute;top:10px;right: 10px;background:var(--black-low)"> 🔴 {{ streamInfoToShow.viewer_count }}</span>
@@ -110,3 +110,5 @@
     }
   </div>
 }
+
+
