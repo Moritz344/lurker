@@ -31,6 +31,12 @@
     </div>
 }
 
+@if (scrolledUp()) {
+  <button (click)="onMoreMessages()" class="scrolled-up-container" animate.enter="enter-animation" animate.leave="leave-animation">
+    <span class="scrolled-up-text" >More Messages below!</span>
+  </button>
+}
+
 <app-topbar (switchChannel)="onSwitchChannel()" (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
 <div class="container" (click)="focusEntry()">
 

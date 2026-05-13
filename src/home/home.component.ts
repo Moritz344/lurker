@@ -1,5 +1,6 @@
 import {
   Component,
+  signal,
   OnInit,
   ViewChild,
   ElementRef,
@@ -39,6 +40,7 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: check if emote hovering in chat is at bottom
 // TODO: chat animations
 // TODO: Indicator showing the connection status
+// TODO: if scrolled up show messagebox => Show New Messages
 
 // BUG: when mentioned message gets removed for some reason
 
@@ -76,6 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private currChannelSub?: Subscription;
   private currentTabSub?: Subscription;
   public streamerData: any;
+  public scrolledUp = signal(false);
   public chatterInfo: {
     color: string;
     badges: string[];
@@ -147,7 +150,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const settingsJson = JSON.parse(settings);
   }
 
-  
 
   onOpenFollowerList() {
     this.dialog.open(DialogBoxComponent, {
@@ -214,6 +216,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   initBetterTTVChannelEmojisForChat() {
       const broadcaster_id: any = localStorage.getItem("broadcaster_id");
       this.chat.getBetterTTVChannel(broadcaster_id).subscribe( (response: any) => {
+        if (response.length == 0) {
+          this.betterttvChannel = [];
+          return;
+        }
         this.betterttvChannel = response.channelEmotes.map((x: any) => ({
           name: x.code,
           url: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
@@ -389,6 +395,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSwitchChannel() {
+    this.scrolledUp.set(false);
     console.log("switched channel");
     this.initChannelEmojisForChat();
     this.initBetterTTVChannelEmojisForChat();
@@ -596,6 +603,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  onMoreMessages() {
+    this.scrollAuto = true;
+    this.scrollToBottom();
+    this.scrolledUp.set(false);
+  }
+
   scrollToBottom() {
     if (this.scrollAuto) {
       const chat = this.chatBox.nativeElement;
@@ -619,6 +632,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const chat = this.chatBox.nativeElement;
     const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
 
+    if (!atBottom) {
+      this.scrolledUp.set(true);
+    } else {
+      this.scrolledUp.set(false);
+    }
+
     if (event.deltaY < 0) {
       this.scrollAuto = false;
     } else if (atBottom) {
@@ -628,7 +647,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onMouseUp() {
     this.userScrolling = false;
-    this.scrollAuto = true;
+    this.scrollAuto = false;
   }
 
   onMouseDown() {
