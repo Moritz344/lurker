@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  HostListener,
   OnDestroy,
   AfterViewInit,
 } from "@angular/core";
@@ -175,6 +174,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
+
   init7tvChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
     this.chat.get7tvChannel(id).subscribe( (response: any) => {
@@ -251,11 +251,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           format: emote.format
         }));
       });
-  }
-
-  async initBadges() {
-    await this.getGlobalBadges();
-    await this.getBadgesForChannel();
   }
 
   async initChatSettings() {
@@ -400,6 +395,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initChannelEmojisForChat();
     this.initBetterTTVChannelEmojisForChat();
     this.init7tvChannelEmojisForChat();
+    this.getBadgesForChannel();
   }
 
   saveCurrentBroadCasterId() {
@@ -770,12 +766,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.init7tvGlobalEmojisForChat();
     this.initGlobalEmojisForChat();
     await this.initChatSettings();
-    await this.initBadges();
+    await this.getGlobalBadges();
     await this.loadChatMessages(this.currentChannel);
     const emoji: any = localStorage.getItem("emoji");
     window.addEventListener("storage", this.handleStorageChange);
 
-    //this.applyUserSettings();
     this.settings.getUserId(this.userData.token).subscribe((id) => {
       this.settings.setUserId(id);
     });
