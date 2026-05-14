@@ -110,6 +110,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     } else if (event.ctrlKey && event.key == "d") {
       this.onDisconnect();
     } else if (event.ctrlKey && event.key == "r") {
+      event.preventDefault();
       this.onReconnect();
     } else if (event.ctrlKey && event.key == "q") {
       this.onExit();
@@ -175,6 +176,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     const token = await this.settings.getToken();
     const username = await this.settings.getStoredUsername();
     const channel: any = localStorage.getItem("channel");
+    this.clearChat.emit();
     this.chat.connect(token, username, channel);
   }
 
