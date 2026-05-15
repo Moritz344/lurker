@@ -764,9 +764,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.initChatSettings();
     await this.getGlobalBadges();
     await this.loadChatMessages(this.currentChannel);
-    setTimeout( () => {
-      this.sendTestMessages();
-    },100);
+    //setTimeout( () => {
+    //  this.sendTestMessages();
+    //},100);
     const emoji: any = localStorage.getItem("emoji");
     window.addEventListener("storage", this.handleStorageChange);
 
