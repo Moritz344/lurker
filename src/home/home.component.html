@@ -10,7 +10,7 @@
 }
 
 @if (showUserInChat && chatterData && chatterData.length > 0) {
-    <div #chatter animate.enter="enter-animation" animate.leave="leave-animation" class="chatter-container" >
+    <div #chatter animate.enter="enter-animation" class="chatter-container" >
         @for (chatter of chatterData; track $index) {
           <button [ngClass]="{ 'chatter-select': selectedChatter == $index }" (click)="onPasteUserInInput(chatter.user_name)">{{ chatter.user_name }}</button>
         }
@@ -19,7 +19,7 @@
 }
 
 @if (isReplying) {
-    <div class="reply-container" animate.enter="enter-animation" animate.leave="leave-animation">
+    <div class="reply-container" animate.enter="enter-animation" >
       <button (click)="onCancelReply()" style="position: absolute; top: 4px;right: 0px"><img src="close.svg"></button>
       <span style="font-size: 19px;color: var(--text-muted)">Antwort an: {{ replyData.name }} </span>
       <br>
@@ -31,7 +31,7 @@
     </div>
 }
 
-@if (scrolledUp()) {
+@if (userScrolling) {
   <button (click)="onMoreMessages()" class="scrolled-up-container" animate.enter="enter-animation" animate.leave="leave-animation">
     <span class="scrolled-up-text" >More Messages below!</span>
   </button>
@@ -40,7 +40,7 @@
 <app-topbar (switchChannel)="onSwitchChannel()" (click)="focusEntry()" (connect)="onConnect()" (disconnect)="onDisconnect()" (clearChat)="onClearChat()" (logout)="onLogout()"></app-topbar>
 <div class="container" (click)="focusEntry()">
 
-   <div class="chat-container" (mouseup)="onMouseUp()" (mousedown)="onMouseDown()" (wheel)="onScroll($event)" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
+   <div class="chat-container" (mouseup)="onMouseUp()"  (wheel)="onScroll($event)" (click)="onDisableVerticalMenu()" #chat [style.font-size]="(zoomLevel * 16) + 'px'">
         @for (msg of messageObjects; track $index) {
               <app-chat
                 [reply]="msg.reply"

@@ -39,8 +39,9 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: check if emote hovering in chat is at bottom
 // TODO: chat animations
 // TODO: Indicator showing the connection status
-// TODO: if scrolled up show messagebox => Show New Messages
 
+// BUG: weird ui bugs when hovering messages 
+// BUG: when using the scrollbar message box not showing
 // BUG: when mentioned message gets removed for some reason
 
 @Component({
@@ -348,15 +349,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private dialog: MatDialog,
   ) {}
 
-  scrollChatbox() {
-    setInterval(() => {
-      if (this.scrollAuto) {
-        const element = this.chatBox.nativeElement;
-        element.scrollTop = element.scrollHeight;
-      }
-    }, 10);
-  }
-
   onChatterList() {
     this.settings.openChatterList();
   }
@@ -600,15 +592,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onMoreMessages() {
-    this.scrollAuto = true;
+    this.userScrolling = false;
     this.scrollToBottom();
     this.scrolledUp.set(false);
   }
 
   scrollToBottom() {
-    if (this.scrollAuto) {
+    if (!this.userScrolling) {
       const chat = this.chatBox.nativeElement;
-      chat.scrollTop = chat.scrollHeight;
+      chat.scrollTop = chat.scrollHeight ;
     }
   }
 
@@ -627,29 +619,27 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const chat = this.chatBox.nativeElement;
     const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
-
-    if (!atBottom) {
-      this.scrolledUp.set(true);
+    if (atBottom) {
+      this.userScrolling = false;
     } else {
-      this.scrolledUp.set(false);
+      this.userScrolling = true;
     }
-
-    if (event.deltaY < 0) {
-      this.scrollAuto = false;
-    } else if (atBottom) {
-      this.scrollAuto = true;
-    }
+ 
   }
+
 
   onMouseUp() {
-    this.userScrolling = false;
-    this.scrollAuto = false;
+    const chat = this.chatBox.nativeElement;
+    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+    if (atBottom) {
+      this.userScrolling = false;
+    } else {
+      this.userScrolling = true;
+    }
+ 
   }
 
-  onMouseDown() {
-    this.userScrolling = true;
-    this.scrollAuto = false;
-  }
+
 
   onDisconnect() {
     this.isConnected = false;
@@ -660,14 +650,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async loadChatMessages(channel: string) {
     this.isConnected = true;
-    this.scrollToBottom();
 
     if (this.userData.token && this.userData.username) {
       this.chat.connect(this.userData.token, this.userData.username, channel);
       if (!this.sub || this.sub.closed) {
-        this.sub = this.chat.messages$.subscribe((msgObj) => {
+          this.sub = this.chat.messages$.subscribe((msgObj) => {
           this.messageObjects.push(msgObj);
           this.getImageForBadge(msgObj);
+          this.scrollToBottom();
         });
       }
     }
@@ -759,6 +749,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
+  async sendTestMessages() {
+    for (let i=0;i<20;i++) {
+      this.messageObjects.push({ badgeImages: [],badges: [],color: "#00FF7F",msgId: "35d3c234-4e3d-4d03-b237-ed830ee36709",reply: null,text: "pennti: testing shit"});
+    }
+  }
+
   async initializeLoggedInFeatures() {
     await this.setCurrentChannel();
     this.saveCurrentBroadCasterId();
@@ -768,13 +764,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.initChatSettings();
     await this.getGlobalBadges();
     await this.loadChatMessages(this.currentChannel);
+    setTimeout( () => {
+      this.sendTestMessages();
+    },100);
     const emoji: any = localStorage.getItem("emoji");
     window.addEventListener("storage", this.handleStorageChange);
 
     this.settings.getUserId(this.userData.token).subscribe((id) => {
       this.settings.setUserId(id);
     });
-    this.scrollChatbox();
+
 
     this.currChannelSub = this.settings
       .getCurrentChannel()
