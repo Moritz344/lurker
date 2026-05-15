@@ -142,7 +142,7 @@
   }
 
   @if(showEmojiDesc) {
-    <div class="hover-container" animate.enter="enter-animation" animate.leave="leave-animation" [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
+    <div #hoverContainer class="hover-container"  [ngStyle]="{ top: hoverY + 'px', left: hoverX  + 'px' }">
       <div class="hover-items">
         <img [src]="hoverEmojiUrl"> 
         <span>{{ hoverEmojiName }}</span> 

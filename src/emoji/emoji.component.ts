@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { TwitchChatService } from '../services/twitchChat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { MenubarComponent } from '../menubar/menubar.component';
   styleUrl: './emoji.component.css'
 })
 export class EmojiComponent implements OnInit {
+  @ViewChild("hoverContainer") hoverContainer: any;
   public currentTab: string = "global";
   public globalEmotes: any;
   public searchValue: string = "";
@@ -180,20 +181,30 @@ export class EmojiComponent implements OnInit {
   }
 
   updateHoverPositionGlobal(event: MouseEvent) {
-    const offsetX = 50;
-    const offsetY = 130;
+    const offsetX = 60;
+    const offsetY = 20;
 
-    this.hoverX = event.pageX - offsetX;
-    this.hoverY = event.pageY - offsetY;
+    const spaceRight = window.innerWidth - event.pageX;
+    const spaceBelow = window.innerHeight - event.pageY;
 
+    this.hoverX = event.pageX + offsetX;
+    this.hoverY = event.pageY + offsetY;
 
-    if (this.hoverX >= 500) {
-      this.hoverX -= 50;
+    const rect = this.hoverContainer.nativeElement.getBoundingClientRect();
+
+    if (spaceRight >= rect.width + offsetX) {
+      this.hoverX = event.pageX + offsetX;
+    } else {
+      this.hoverX = event.pageX - rect.width - offsetX;
     }
 
-    if (this.hoverX <= 0) {
-      this.hoverX += 50;
+    if (spaceBelow >= rect.height + offsetY) {
+      this.hoverY = event.pageY + offsetY;
+    } else {
+      this.hoverY = event.pageY - rect.height - offsetY;
     }
+
+
 
   }
 
