@@ -362,7 +362,7 @@ export class TwitchChatService implements OnDestroy {
 
   getBetterTTVGlobal() {
     const url = "https://api.betterttv.net/3/cached/emotes/global";
-    return this.http.get(url,);
+    return this.http.get(url);
   }
 
   getBetterTTVChannel(user_id: string) {
