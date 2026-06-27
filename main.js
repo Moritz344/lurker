@@ -17,8 +17,6 @@ let openChatterList;
 
 let store;
 
-// https://stackoverflow.com/questions/35876939/frameless-window-with-controls-in-electron-windows
-
 async function initStore() {
   const StoreModule = await import("electron-store");
   store = new StoreModule.default();
@@ -133,13 +131,18 @@ async function createWindow() {
     client.on("ready", () => {
       client.setActivity({
         state: "",
-        details: "lurking in twitch chat",
+        details: "lurking",
+        largeImageKey: "logo",
         startTimestamp: Date.now(),
-        largeImageKey: "app_icon",
       });
       console.log("Discord RPC connected!");
     });
-    client.login({ clientId: "1497569565977214986" });
+    client.on("close", () => {
+      console.log("Discord RPC connection closed");
+    });
+    client.login({ clientId: "1497569565977214986" }).catch((err) => {
+      console.error("Discord RPC login failed:", err.message);
+    });
   });
 
   ipcMain.handle("get-username", () => {
