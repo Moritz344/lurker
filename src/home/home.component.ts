@@ -40,8 +40,7 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: chat animations
 // TODO: Indicator showing the connection status
 
-// BUG: weird ui bugs when hovering messages 
-// BUG: when using the scrollbar message box not showing
+// BUG: weird ui bugs when hovering messages
 // BUG: when mentioned message gets removed for some reason
 
 @Component({
@@ -88,10 +87,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public messageObjects: {
     text: string;
     badges: string[];
-    badgeImages: { img:string,title: string}[],
+    badgeImages: { img: string; title: string }[];
     color: string;
     reply: { name: string; msg: string } | null;
-    msgId: string
+    msgId: string;
   }[] = [];
   public isConnected: boolean = true;
 
@@ -128,15 +127,45 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public userData: any;
 
-  public globalEmojiNames: { name: string; url: string; url_2: string,format: string[] }[] = [];
-  public channelEmojis: { name: string; url: string; url_2: string,format: string[] }[] = [];
+  public globalEmojiNames: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string[];
+  }[] = [];
+  public channelEmojis: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string[];
+  }[] = [];
 
-  public betterttvGlobal: { name: string; url: string; url_2: string,format: string }[] = [];
-  public betterttvChannel: { name: string; url: string; url_2: string,format: string }[] = [];
+  public betterttvGlobal: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string;
+  }[] = [];
+  public betterttvChannel: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string;
+  }[] = [];
 
-  public seventvChannel: { name: string; url: string; url_2: string,format: string }[] = [];
+  public seventvChannel: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string;
+  }[] = [];
 
-  public seventvGlobal: { name: string; url: string; url_2: string,format: string }[] = [];
+  public seventvGlobal: {
+    name: string;
+    url: string;
+    url_2: string;
+    format: string;
+  }[] = [];
   public showVerticalMenuOptions: boolean = false;
   public channelNameHover: boolean = false;
   public zoomLevel: number = 1;
@@ -149,7 +178,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const settings: any = localStorage.getItem("settings");
     const settingsJson = JSON.parse(settings);
   }
-
 
   onOpenFollowerList() {
     this.dialog.open(DialogBoxComponent, {
@@ -175,27 +203,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-
   init7tvChannelEmojisForChat() {
     const id: any = localStorage.getItem("broadcaster_id");
-    this.chat.get7tvChannel(id).subscribe( (response: any) => {
-      this.seventvChannel = response.emote_set.emotes.map( (x: any) => ({
+    this.chat.get7tvChannel(id).subscribe((response: any) => {
+      this.seventvChannel = response.emote_set.emotes.map((x: any) => ({
         name: x.name,
-        url: "https:" + x.data.host.url + "/1x.webp" ,
-        url_2: "https:" + x.data.host.url + "/2x.webp" ,
+        url: "https:" + x.data.host.url + "/1x.webp",
+        url_2: "https:" + x.data.host.url + "/2x.webp",
         format: "7tv",
       }));
-
-    })
+    });
   }
 
   init7tvGlobalEmojisForChat() {
-    this.chat.get7tvGlobal().subscribe( (response: any) => {
-      this.seventvGlobal = response.emotes.map( (x: any) => ({
+    this.chat.get7tvGlobal().subscribe((response: any) => {
+      this.seventvGlobal = response.emotes.map((x: any) => ({
         name: x.name,
-        url:  "https:" + x.data.host.url + "/" + x.data.host.files[0].name,
-        url_2:  "https:" + x.data.host.url + "/" + x.data.host.files[1].name,
-        format: "7tv"
+        url: "https:" + x.data.host.url + "/" + x.data.host.files[0].name,
+        url_2: "https:" + x.data.host.url + "/" + x.data.host.files[1].name,
+        format: "7tv",
       }));
     });
   }
@@ -205,51 +231,59 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chat
       .getChannelEmotes(id, this.userData.token)
       .subscribe((response: any) => {
-        this.channelEmojis = response.data.map( (emote: any) => ({
+        this.channelEmojis = response.data.map((emote: any) => ({
           name: emote.name,
           url: emote.images.url_1x,
           url_2: emote.images.url_2x,
-          format: emote.format
+          format: emote.format,
         }));
       });
   }
 
   initBetterTTVChannelEmojisForChat() {
-      const broadcaster_id: any = localStorage.getItem("broadcaster_id");
-      this.chat.getBetterTTVChannel(broadcaster_id).subscribe( (response: any) => {
-        if (response.length == 0) {
-          this.betterttvChannel = [];
-          return;
-        }
-        this.betterttvChannel = response.channelEmotes.map((x: any) => ({
-          name: x.code,
-          url: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
-          url_2: "https://cdn.betterttv.net/emote/" + x.id + "/2x." + x.imageType,
-          format: "betterttv"
-        }));
+    const broadcaster_id: any = localStorage.getItem("broadcaster_id");
+    this.chat.getBetterTTVChannel(broadcaster_id).subscribe((response: any) => {
+      if (response.length == 0) {
+        this.betterttvChannel = [];
+        return;
+      }
+      this.betterttvChannel = response.channelEmotes.map((x: any) => ({
+        name: x.code,
+        url: "https://cdn.betterttv.net/emote/" + x.id + "/1x." + x.imageType,
+        url_2: "https://cdn.betterttv.net/emote/" + x.id + "/2x." + x.imageType,
+        format: "betterttv",
+      }));
     });
   }
 
   initBetterTTVGlobalEmojisForChat() {
-    this.chat.getBetterTTVGlobal().subscribe( (response: any) => {
-        this.betterttvGlobal = response.map((emote: any) => ({
+    this.chat.getBetterTTVGlobal().subscribe((response: any) => {
+      this.betterttvGlobal = response.map((emote: any) => ({
         name: emote.code,
-        url: "https://cdn.betterttv.net/emote/" + emote.id + "/1x." + emote.imageType,
-        url_2: "https://cdn.betterttv.net/emote/" + emote.id + "/2x." + emote.imageType,
-        format: "betterttv"
+        url:
+          "https://cdn.betterttv.net/emote/" +
+          emote.id +
+          "/1x." +
+          emote.imageType,
+        url_2:
+          "https://cdn.betterttv.net/emote/" +
+          emote.id +
+          "/2x." +
+          emote.imageType,
+        format: "betterttv",
       }));
-    })
+    });
   }
 
   initGlobalEmojisForChat() {
     this.chat
       .getGlobalEmotes(this.userData.token)
       .subscribe((response: any) => {
-        this.globalEmojiNames = response.data.map( (emote: any) => ({
+        this.globalEmojiNames = response.data.map((emote: any) => ({
           name: emote.name,
           url: emote.images.url_1x,
           url_2: emote.images.url_2x,
-          format: emote.format
+          format: emote.format,
         }));
       });
   }
@@ -427,11 +461,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           return;
         }
         if (user_id == broadcaster_id) {
-         this.chat
-           .getChatters(broadcaster_id, user_id, token)
-           .subscribe((response: any) => {
-             this.chatterData = response.data;
-           });
+          this.chat
+            .getChatters(broadcaster_id, user_id, token)
+            .subscribe((response: any) => {
+              this.chatterData = response.data;
+            });
           return;
         }
         this.settings
@@ -444,20 +478,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             const data = response.data;
             for (let i = 0; i < data.length; i++) {
-              if (user_id == data[i].user_id ) {
+              if (user_id == data[i].user_id) {
                 this.chat
                   .getChatters(broadcaster_id, user_id, token)
                   .subscribe((response: any) => {
                     this.chatterData = response.data;
                   });
-                  break;
+                break;
               }
             }
           });
       });
   }
 
-  onReplyingToMessage(data: { id: string,name: string,message: string,color: string}) {
+  onReplyingToMessage(data: {
+    id: string;
+    name: string;
+    message: string;
+    color: string;
+  }) {
     this.replyData = data;
     this.replyData.message = this.replyData.message.split(":")[1];
     this.isReplying = true;
@@ -492,12 +531,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       if (event.key == "Enter") {
+        if (
+          this.userChatMessage.includes(
+            this.chatterData[this.selectedChatter].user_name,
+          )
+        ) {
+          this.showUserInChat = false;
+          return;
+        }
         this.userChatMessage +=
           this.chatterData[this.selectedChatter].user_name;
         this.showUserInChat = false;
       }
 
-      event.preventDefault();
       return;
     }
     this.showUserInChat = false;
@@ -530,18 +576,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.accessToken = token;
 
     if (this.userChatMessage.length >= 500) {
-      this.settings.showWarning("Too Many Characters!","");
+      this.settings.showWarning("Too Many Characters!", "");
       this.userChatMessage = "";
       this.entry.nativeElement.style.height = "30px";
       return;
     }
 
-
     if (this.userChatMessage != "") {
       event.preventDefault();
       this.settings.checkAccessTokenValidity(token).subscribe((result) => {
         if (!result) {
-          this.settings.showWarning("Your token is not valid. Please login again.","Invalid Token")
+          this.settings.showWarning(
+            "Your token is not valid. Please login again.",
+            "Invalid Token",
+          );
           return;
         }
       });
@@ -561,7 +609,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     broadcasterId,
                     this.userChatMessage,
                     token,
-                    (this.replyData) ? this.replyData.id : ""
+                    this.replyData ? this.replyData.id : "",
                   );
                 }),
               );
@@ -600,7 +648,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   scrollToBottom() {
     if (!this.userScrolling) {
       const chat = this.chatBox.nativeElement;
-      chat.scrollTop = chat.scrollHeight ;
+      chat.scrollTop = chat.scrollHeight;
     }
   }
 
@@ -618,28 +666,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     const chat = this.chatBox.nativeElement;
-    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+    const atBottom =
+      chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
     if (atBottom) {
       this.userScrolling = false;
     } else {
       this.userScrolling = true;
     }
- 
   }
-
 
   onMouseUp() {
     const chat = this.chatBox.nativeElement;
-    const atBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
+    const atBottom =
+      chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 1;
     if (atBottom) {
       this.userScrolling = false;
     } else {
       this.userScrolling = true;
     }
- 
   }
-
-
 
   onDisconnect() {
     this.isConnected = false;
@@ -654,7 +699,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.userData.token && this.userData.username) {
       this.chat.connect(this.userData.token, this.userData.username, channel);
       if (!this.sub || this.sub.closed) {
-          this.sub = this.chat.messages$.subscribe((msgObj) => {
+        this.sub = this.chat.messages$.subscribe((msgObj) => {
           this.messageObjects.push(msgObj);
           this.getImageForBadge(msgObj);
           this.scrollToBottom();
@@ -664,9 +709,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   adjustTextareaHeight() {
-    this.entry.nativeElement.style.height = '30px';
+    this.entry.nativeElement.style.height = "30px";
     if (this.userChatMessage.length >= 106) {
-      this.entry.nativeElement.style.height = this.entry.nativeElement.scrollHeight + 'px';
+      this.entry.nativeElement.style.height =
+        this.entry.nativeElement.scrollHeight + "px";
     }
   }
 
@@ -750,8 +796,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async sendTestMessages() {
-    for (let i=0;i<20;i++) {
-      this.messageObjects.push({ badgeImages: [],badges: [],color: "#00FF7F",msgId: "35d3c234-4e3d-4d03-b237-ed830ee36709",reply: null,text: "pennti: testing shit"});
+    for (let i = 0; i < 20; i++) {
+      this.messageObjects.push({
+        badgeImages: [],
+        badges: [],
+        color: "#00FF7F",
+        msgId: "35d3c234-4e3d-4d03-b237-ed830ee36709",
+        reply: null,
+        text: "pennti: testing ",
+      });
     }
   }
 
@@ -773,7 +826,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.settings.getUserId(this.userData.token).subscribe((id) => {
       this.settings.setUserId(id);
     });
-
 
     this.currChannelSub = this.settings
       .getCurrentChannel()
@@ -812,7 +864,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             .checkAccessTokenValidity(this.accessToken)
             .subscribe((result) => {
               if (!result) {
-                this.settings.showWarning("Your token is not valid. Please login again.","Invalid Token")
+                this.settings.showWarning(
+                  "Your token is not valid. Please login again.",
+                  "Invalid Token",
+                );
                 this.logout();
               }
             });
