@@ -21,6 +21,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   logout: () => ipcRenderer.invoke("logout"),
   copyTextToClipboard: (text) => ipcRenderer.invoke("copy-to-clipboard", text),
   getVersion: () => ipcRenderer.invoke("get-version"),
-  discordRpc: () => ipcRenderer.invoke("discord-rpc"),
   showWarning: (msg,title) => ipcRenderer.invoke("show-warning-box",msg,title),
 });
