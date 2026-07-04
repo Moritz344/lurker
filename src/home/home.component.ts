@@ -359,7 +359,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.settings.initDiscordRPC();
     this.checkIfLoggedIn();
   }
 
