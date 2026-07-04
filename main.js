@@ -8,7 +8,6 @@ const {
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const rpc = require("discord-rpc");
 const { exec } = require("child_process");
 
 let openUserCardWindow;
@@ -120,30 +119,6 @@ async function createWindow() {
         buttons: ["Close"],
       });
   })
-
-  ipcMain.handle("discord-rpc", async () => {
-    const client = new rpc.Client({ transport: "websocket" });
-    const running = await isDiscordRunning();
-    if (!running) {
-      console.log("Discord is not running. Not connecting to RPC.");
-      return;
-    }
-    client.on("ready", () => {
-      client.setActivity({
-        state: "",
-        details: "lurking",
-        largeImageKey: "logo",
-        startTimestamp: Date.now(),
-      });
-      console.log("Discord RPC connected!");
-    });
-    client.on("close", () => {
-      console.log("Discord RPC connection closed");
-    });
-    client.login({ clientId: "1497569565977214986" }).catch((err) => {
-      console.error("Discord RPC login failed:", err.message);
-    });
-  });
 
   ipcMain.handle("get-username", () => {
     let userData = store.get("userData");
