@@ -36,11 +36,6 @@ export class TwitchChatService implements OnDestroy {
     this.socket = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
 
     this.socket.addEventListener("open", () => {
-      //console.log("Twitch Chat verbunden");
-      //console.log("oauth:", token);
-      //console.log("user:", username);
-      //console.log("channel:", channel);
-
       this.socket!.send(`PASS oauth:${token}`);
       this.socket!.send(`NICK ${username}`);
       this.socket!.send(`JOIN #${channel}`);
