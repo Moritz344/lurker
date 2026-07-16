@@ -74,28 +74,35 @@ export class ChatComponent implements OnInit {
   ) {
   }
 
-  checkIfMentions(msg: string) {
-    const username: any = localStorage.getItem("username");
+  async checkIfMentions(msg: string) {
+    const username = await this.settings.getStoredUsername();
     if (msg.includes("@" + username)) {
       this.isMention = true;
     }
   }
 
+  async checkForOwnMessage() {
+    const username = await this.settings.getStoredUsername();
+    if (this.currentName == username) {
+      this.isOwnMessage = true;
+    }
+  }
+
   async init() {
     this.checkMessage();
-    const splitMessage = this.message.split(":");
-    this.checkIfMentions(splitMessage[1]);
-    this.currentName = splitMessage[0];
-    this.currentMessage = splitMessage[1];
+    const colonIndex = this.message.indexOf(':');
+    this.currentName = this.message.substring(0, colonIndex);
+    this.currentMessage = this.message.substring(colonIndex + 1);
+    this.checkIfMentions(this.currentMessage);
+
+
     this.currentBadges = {
       images: this.badges.badgeImages,
       title: this.badges.badges,
     };
 
-    const username = await this.settings.getStoredUsername();
-    if (this.currentName == username) {
-      this.isOwnMessage = true;
-    }
+    this.checkForOwnMessage();
+
 
     if (this.reply) {
       this.isReply = true;
@@ -103,7 +110,7 @@ export class ChatComponent implements OnInit {
     }
 
 
-    let state = this.settings.getUserColorStatus();
+    const state = this.settings.getUserColorStatus();
     if (state == "disabled") {
       this.userColor = "white";
     } else {
@@ -243,7 +250,7 @@ export class ChatComponent implements OnInit {
   }
 
   sanitizeHtml(html: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+    return this.sanitizer.bypassSecurityTrustUrl(html);
   }
 
   onHoverEmote(item: any, index: number) {
@@ -253,10 +260,9 @@ export class ChatComponent implements OnInit {
     const match = item.match(regex)[1];
     let emojiItem = this.emojis.find( (x: any) => x.url == match);
 
-
     this.currentHoverEmote = {
       title: emojiItem!.name,
-      img: this.sanitizer.bypassSecurityTrustUrl(emojiItem!.url_2),
+      img: this.sanitizeHtml(emojiItem!.url_2),
     };
   }
 
