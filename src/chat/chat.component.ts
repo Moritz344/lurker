@@ -91,8 +91,8 @@ export class ChatComponent implements OnInit {
   async init() {
     this.checkMessage();
     const colonIndex = this.message.indexOf(':');
-    this.currentName = this.message.substring(0, colonIndex);
-    this.currentMessage = this.message.substring(colonIndex + 1);
+    this.currentName = this.message.slice(0, colonIndex);
+    this.currentMessage = this.message.slice(colonIndex + 1);
     this.checkIfMentions(this.currentMessage);
 
 
