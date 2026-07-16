@@ -25,7 +25,6 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: channel points
 // TODO: work on perfomance
 // TODO: show for how long the stream is going for if possible
-// TODO: show replys
 // TODO: update viewer count
 // TODO: show custom rewards
 // TODO: Timeout/Ban
@@ -36,12 +35,8 @@ import { ToastComponent } from "../toast/toast.component";
 // TODO: Add and remove accounts in Settings > Account
 // TODO: Chat Search
 // TODO: Emote autocomplete
-// TODO: check if emote hovering in chat is at bottom
 // TODO: chat animations
 // TODO: Indicator showing the connection status
-
-// BUG: weird ui bugs when hovering messages
-// BUG: when mentioned message gets removed for some reason
 
 @Component({
   selector: "app-root",
@@ -416,7 +411,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onSwitchChannel() {
     this.scrolledUp.set(false);
-    console.log("switched channel");
     this.initChannelEmojisForChat();
     this.initBetterTTVChannelEmojisForChat();
     this.init7tvChannelEmojisForChat();
