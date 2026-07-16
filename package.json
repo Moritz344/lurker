@@ -1,6 +1,6 @@
 {
   "name": "lurker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "author": "Moritz moritzmaier353@gmail.com",
   "description": "opensource twitch chat client",
@@ -10,7 +10,8 @@
     "electron-dev": "cross-env ELECTRON_DEV=true electron .",
     "build": "ng build",
     "build:electron": "ng build && electron-builder --linux AppImage",
-    "electron-prod": "ng build && electron ."
+    "electron-prod": "ng build && electron .",
+    "release": "standard-version"
   },
   "build": {
     "files": [
