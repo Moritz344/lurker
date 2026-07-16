@@ -33,7 +33,3 @@ an opensource app for listening and writing twitch chat messages.
 - [x] Switch between streamer
 - [x] Change and see user chat color
 
-# Author
-- Moritz344
-
-
