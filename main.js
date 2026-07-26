@@ -202,8 +202,8 @@ async function createWindow() {
 
   ipcMain.handle("open-settings", (_, data) => {
     openSettingsWindow = new BrowserWindow({
-      width: 900,
-      height: 650,
+      width: 800,
+      height: 600,
       frame: false,
       parent: win,
       modal: true,
