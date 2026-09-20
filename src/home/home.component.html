@@ -69,7 +69,7 @@
           (keydown)="onSendMessage($event)"
           (input)="adjustTextareaHeight()"
       ></textarea>
-      <button (click)="onEmojiPicker()" class="emoji"><img width="20" height="20" src="emoji.svg"></button>
+      <button [disabled]="!loginStatus" (click)="onEmojiPicker()" class="emoji"><img width="20" height="20" src="emoji.svg"></button>
 
   </div>
 

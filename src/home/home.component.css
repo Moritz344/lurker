@@ -125,6 +125,13 @@ a {
   bottom: 7px;
 }
 
+.emoji button:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+
+}
+
 .emoji:hover {
   background-color: var(--ghost);
 }
