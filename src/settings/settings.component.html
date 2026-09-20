@@ -10,6 +10,7 @@
 
     <div class="options">
         <button
+            [disabled]="hideMenuOptionsForLoggedInUser == true"
             [class.active]="settingsOption === 'general' "
             (click)="onSettings('general')"
         >
@@ -22,6 +23,7 @@
             <span>Hotkeys</span>
         </button>
         <button
+            [disabled]="hideMenuOptionsForLoggedInUser == true"
             [class.active]="settingsOption === 'account' "
             (click)="onSettings('account')"
         >

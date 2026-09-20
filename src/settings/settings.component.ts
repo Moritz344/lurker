@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component,inject } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
 import { SettingsService } from "../services/settings.service";
@@ -24,8 +24,16 @@ import { MenubarComponent } from "../menubar/menubar.component";
 export class SettingsComponent {
   currentChannel: string = "";
   settingsOption: string = "general";
+  public hideMenuOptionsForLoggedInUser = false; 
 
-  constructor(private settings: SettingsService) {}
+  constructor(private settings: SettingsService) {
+    this.settings.getLoginStatus().subscribe((isLoggedIn) => {
+        this.hideMenuOptionsForLoggedInUser = !isLoggedIn;
+        if (this.hideMenuOptionsForLoggedInUser) {
+          this.settingsOption = "about"
+        }
+    });
+  }
 
   onSwitch() {
     this.settings.setCurrentChannel(this.currentChannel);

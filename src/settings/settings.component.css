@@ -8,6 +8,12 @@
     flex-direction: row;
 }
 
+.options button:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 app-menubar{
   position: absolute;
   right: 0px;
